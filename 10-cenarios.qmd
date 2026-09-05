@@ -1,0 +1,106 @@
+---
+title: "Avaliação de cenários"
+---
+
+Um mapa de acessibilidade descreve a cidade como ela é. O uso mais interessante da ferramenta,
+porém, está em perguntar como ela ficaria. Avaliar cenários significa alterar um insumo da rede,
+recalcular tudo e comparar o antes e o depois, procedimento que transforma a análise de
+acessibilidade em instrumento de apoio à decisão. Este capítulo monta um cenário de intervenção em
+Anápolis e mede seus efeitos, com atenção especial a quem ganha e a quem não ganha.
+
+::: {.callout-note}
+## Nesta seção você vai
+
+- estruturar a comparação entre cenário de referência e cenário alternativo
+- construir um cenário alterando a rede ou o serviço de transporte coletivo
+- recalcular a matriz de tempos e os indicadores
+- mapear e tabular as diferenças
+- identificar a distribuição dos ganhos entre grupos sociais
+- reconhecer os limites do que a análise consegue afirmar
+:::
+
+## A lógica do antes e depois
+
+<!-- ESBOÇO: princípio da comparação controlada, em que apenas o elemento de interesse muda entre
+     os dois cenários. Alertar para os erros comuns, mudar mais de um parâmetro ao mesmo tempo,
+     alterar o horário de partida entre cenários e comparar resultados calculados com conjuntos de
+     origens diferentes. Definir o cenário de referência como o do capítulo 9. -->
+
+::: {.callout-important}
+## Uma pasta por cenário
+
+Cada cenário exige sua própria pasta de insumos e sua própria rede construída. Misturar arquivos de
+cenários diferentes no mesmo diretório é a causa mais frequente de resultado inexplicável.
+:::
+
+```
+dados/r5/
+├── base/         cenário de referência
+└── cenario_1/    cenário alternativo
+```
+
+## Construção do cenário
+
+<!-- ESBOÇO: apresentar as duas vias possíveis e escolher uma para a demonstração ao vivo,
+     deixando a outra como exercício. -->
+
+### Alteração do serviço de transporte coletivo
+
+<!-- ESBOÇO: edição do GTFS com o gtfstools, incluindo aumento de frequência de uma linha,
+     prolongamento de itinerário ou criação de uma linha nova. Mostrar a manipulação das tabelas do
+     feed e a gravação do arquivo alterado. Validar o feed resultante antes de usá-lo. -->
+
+```r
+library(gtfstools)
+
+gtfs <- read_gtfs("dados/r5/base/anapolis_gtfs.zip")
+
+# altera a frequência da linha de interesse e grava o feed do cenário
+write_gtfs(gtfs, "dados/r5/cenario_1/anapolis_gtfs.zip")
+```
+
+### Alteração da rede viária
+
+<!-- ESBOÇO: caminho alternativo, com edição da rede em .osm.pbf para representar uma nova conexão,
+     uma ponte ou um trecho de estrutura cicloviária. Comentar o fluxo de edição e a necessidade de
+     conferir a conectividade do resultado. -->
+
+## Recálculo e comparação
+
+<!-- ESBOÇO: montar a rede do cenário, recalcular a matriz de tempos com exatamente os mesmos
+     parâmetros e recalcular os indicadores. Juntar os dois conjuntos de resultados em uma única
+     tabela, com diferença absoluta e diferença relativa por célula. -->
+
+```r
+r5r_cenario <- setup_r5(data_path = "dados/r5/cenario_1")
+
+# mesmos parâmetros do capítulo 8, alterando apenas os insumos
+```
+
+## Mapas e tabelas de diferença
+
+<!-- ESBOÇO: mapa de variação com paleta divergente centrada em zero, que é a leitura mais direta
+     do efeito da intervenção. Tabela síntese com variação média, número de pessoas beneficiadas e
+     magnitude típica do ganho. Cuidado com a escala, porque ganho percentual grande sobre base
+     pequena engana. -->
+
+## Quem ganha e quem perde
+
+<!-- ESBOÇO: cruzar o ganho de acessibilidade com a renda e com a população por célula, respondendo
+     se a intervenção reduz ou amplia a desigualdade de acesso na cidade. Este é o desfecho da
+     oficina, porque articula todo o percurso, do dado censitário ao subsídio à decisão. -->
+
+## Limites da análise
+
+<!-- ESBOÇO: fechar com honestidade metodológica. A análise não considera congestionamento
+     endógeno, mudança de uso do solo induzida pela intervenção, custo monetário da viagem, escolha
+     modal nem capacidade das oportunidades. Indicar o que seria necessário para avançar em cada
+     ponto e apontar leituras. -->
+
+::: {.callout-tip}
+## Para continuar
+
+O material citado na [apresentação](index.qmd) aprofunda todos os temas tratados aqui. O Projeto
+Acesso a Oportunidades, acessível pelo pacote `aopdata`, oferece indicadores prontos para as maiores
+cidades brasileiras e serve de referência para comparação [@pereira_aop_td2772].
+:::

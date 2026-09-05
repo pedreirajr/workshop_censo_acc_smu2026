@@ -1,0 +1,87 @@
+---
+title: "Instalação e ajustes iniciais"
+---
+
+A Parte 2 exige um ambiente mais exigente que a Parte 1. O cálculo de matrizes de tempo de viagem é
+feito pelo R5, um motor de roteamento escrito em Java, e o pacote `r5r` funciona como ponte entre o
+R e esse motor. Isso significa que é preciso ter Java instalado, na versão correta, e memória
+suficiente reservada para a máquina virtual. Este capítulo trata dessa preparação, que costuma ser o
+principal ponto de travamento em oficinas de acessibilidade.
+
+::: {.callout-important}
+## Faça esta instalação antes do evento
+
+A instalação do Java e o primeiro carregamento do R5 levam tempo e dependem de conexão. Chegar com o
+ambiente pronto é a diferença entre acompanhar a prática e assistir a ela.
+:::
+
+::: {.callout-note}
+## Nesta seção você vai
+
+- instalar a versão de Java exigida pelo `r5r`
+- reservar memória adequada para a máquina virtual Java
+- instalar os pacotes da Parte 2
+- verificar o ambiente com um teste de roteamento mínimo
+- reconhecer e resolver os erros mais frequentes
+:::
+
+## Java
+
+<!-- ESBOÇO: qual versão do Java o r5r exige na versão corrente do pacote, onde baixar e como
+     verificar a instalação. Passo a passo separado para Windows, macOS e Linux. Explicar a
+     variável JAVA_HOME e como conferi-la pelo R. VERIFICAR a versão exigida na documentação
+     oficial do r5r antes de escrever esta seção. -->
+
+```r
+# confere qual Java o R está enxergando
+Sys.getenv("JAVA_HOME")
+system("java -version")
+```
+
+## Memória da máquina virtual
+
+<!-- ESBOÇO: a alocação de memória precisa ser definida ANTES de carregar o pacote, porque a JVM
+     inicia uma única vez por sessão. Explicar o cálculo do valor em função da RAM disponível e
+     recomendar um valor de trabalho para Anápolis. -->
+
+```r
+# deve vir antes de library(r5r)
+options(java.parameters = "-Xmx4G")
+library(r5r)
+```
+
+::: {.callout-warning}
+## A ordem importa
+
+Se o `r5r` for carregado antes da linha de `options`, a memória padrão da JVM permanece em vigor e a
+mudança só passa a valer após reiniciar a sessão do R.
+:::
+
+## Instalação dos pacotes
+
+<!-- ESBOÇO: bloco de instalação com uma frase sobre o papel de cada pacote. Comentar que o r5r
+     baixa o arquivo .jar do R5 no primeiro uso. -->
+
+```r
+pacotes <- c(
+  "r5r",           # roteamento multimodal e matrizes de tempo de viagem
+  "accessibility", # cálculo de indicadores de acessibilidade
+  "gtfstools",     # leitura e edição de dados GTFS
+  "aopdata",       # dados do Projeto Acesso a Oportunidades
+  "sf", "dplyr", "ggplot2"
+)
+
+install.packages(setdiff(pacotes, rownames(installed.packages())))
+```
+
+## Teste do ambiente
+
+<!-- ESBOÇO: rodar o exemplo mínimo que acompanha o pacote, com a rede de teste embutida, para
+     confirmar que a JVM sobe e que o roteamento responde. Se este teste passar, o ambiente está
+     pronto para os dados de Anápolis. -->
+
+## Problemas mais comuns
+
+<!-- ESBOÇO: tabela de erro e solução, cobrindo Java ausente ou em versão incompatível, JAVA_HOME
+     apontando para o lugar errado, memória insuficiente na JVM, antivírus bloqueando o download do
+     .jar e caminho com acentos ou espaços atrapalhando o setup_r5. -->

@@ -1,0 +1,93 @@
+---
+title: "Cômputo dos indicadores"
+---
+
+Com a matriz de tempos pronta e as oportunidades localizadas no território, calcular acessibilidade
+vira uma operação direta. A parte difícil está antes e depois, na escolha da medida e na leitura do
+resultado. Medidas diferentes respondem a perguntas diferentes, e um mapa de acessibilidade só
+significa alguma coisa quando se sabe qual pergunta ele responde. Este capítulo apresenta as
+principais famílias de medidas, calcula-as para Anápolis e discute como interpretá-las.
+
+::: {.callout-note}
+## Nesta seção você vai
+
+- distinguir as principais famílias de medidas de acessibilidade
+- calcular indicadores com o pacote `accessibility`
+- escolher limiares de tempo e funções de impedância com critério
+- mapear a acessibilidade por modo e comparar os resultados
+- avaliar a distribuição social da acessibilidade
+:::
+
+## Famílias de medidas
+
+<!-- ESBOÇO: apresentar as quatro famílias com a mesma estrutura, o que a medida pergunta, como se
+     calcula, o que exige de parâmetro e quando usar. Medida cumulativa, quantas oportunidades são
+     alcançáveis em até X minutos. Medida gravitacional, soma ponderada pela impedância. Custo
+     mínimo, tempo até a oportunidade mais próxima. Oportunidade flutuante, que considera a
+     competição pela oferta. Uma figura conceitual comparando as curvas de ponderação. -->
+
+### Medidas cumulativas
+
+<!-- ESBOÇO: simplicidade de comunicação como principal virtude e a arbitrariedade do limiar como
+     principal fraqueza. Mostrar o efeito de mudar o limiar sobre o mapa resultante. -->
+
+### Medidas gravitacionais
+
+<!-- ESBOÇO: funções de decaimento disponíveis e o efeito prático da escolha. Enfatizar que o
+     resultado é adimensional e serve para comparação relativa, e não para leitura absoluta. -->
+
+### Custo mínimo
+
+<!-- ESBOÇO: adequada a serviços em que a proximidade ao mais próximo é o que importa, como saúde
+     básica e ensino fundamental. Vantagem de não exigir limiar. -->
+
+### Oportunidade flutuante
+
+<!-- ESBOÇO: incorpora a competição pela oferta, o que muda bastante o retrato em serviços com
+     capacidade limitada. Requisito de dado sobre porte da oferta, que o CNEFE não fornece, e as
+     implicações disso para esta aplicação. -->
+
+## Cálculo com o pacote accessibility
+
+<!-- ESBOÇO: preparar a tabela de entrada, com a matriz de tempos e as contagens de oportunidades
+     por destino. Mostrar as funções correspondentes a cada família e os argumentos comuns.
+     Calcular acesso a ensino e a saúde por caminhada e por transporte público. -->
+
+```r
+library(accessibility)
+
+acc_cum <- cumulative_cutoff(
+  travel_matrix = ttm,
+  land_use_data = oportunidades,
+  opportunity   = "ensino",
+  travel_cost   = "travel_time_p50",
+  cutoff        = 30
+)
+```
+
+## Escolha de parâmetros
+
+<!-- ESBOÇO: limiar de tempo, função de impedância e horário de partida como decisões de análise, e
+     não detalhes técnicos. Mostrar uma análise de sensibilidade simples, com o mesmo indicador
+     calculado sob três limiares, e discutir o quanto a conclusão muda. -->
+
+## Mapas de acessibilidade
+
+<!-- ESBOÇO: mapa por modo, com escala de cor comum para permitir comparação. Figura principal do
+     capítulo. Leitura do padrão observado em Anápolis, com atenção ao contraste entre a área
+     central e as bordas urbanas, e à diferença entre caminhada e transporte público. -->
+
+## Distribuição social da acessibilidade
+
+<!-- ESBOÇO: fechar cruzando o indicador com a renda por célula da grade, obtida na Parte 1.
+     Acessibilidade média por grupo de renda, curva de concentração e índice de Palma. A pergunta
+     que orienta a seção é se a cidade oferece acesso semelhante a grupos socioeconômicos
+     distintos. -->
+
+::: {.callout-tip}
+## Retomando a Parte 1
+
+O indicador de qualidade do entorno construído no capítulo [3](3-agregados.qmd) qualifica a leitura
+dos mapas de caminhada. Uma célula com bom acesso calculado pela rede viária pode ter
+caminhabilidade ruim na prática, e o dado do entorno é o que revela essa diferença.
+:::

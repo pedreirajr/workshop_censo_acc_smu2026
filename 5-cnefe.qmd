@@ -1,0 +1,85 @@
+---
+title: "CNEFE"
+---
+
+O Cadastro Nacional de Endereços para Fins Estatísticos é o produto que mais mudou o que se pode
+fazer com o Censo em escala fina. Ele lista os endereços visitados na operação censitária, com
+coordenadas e com a indicação da espécie de cada um, o que permite localizar domicílios,
+estabelecimentos de ensino, de saúde e outras edificações no território. Para análises de
+acessibilidade isso é decisivo, porque resolve o problema recorrente de onde estão as oportunidades.
+
+::: {.callout-note}
+## Nesta seção você vai
+
+- entender o que o CNEFE registra e o que ele não é
+- ler o arquivo de Anápolis com estratégia adequada de memória
+- classificar endereços por espécie e construir categorias de uso
+- agregar destinos por setor censitário e por grade
+- reconhecer as limitações do cadastro
+:::
+
+## O que é o CNEFE
+
+<!-- ESBOÇO: origem operacional do cadastro, o que significa cada espécie de endereço e a diferença
+     entre endereço e estabelecimento. Deixar claro que não é um cadastro de atividades econômicas
+     e que a coordenada tem precisão variável conforme a forma de coleta. -->
+
+## Leitura com estratégia de memória
+
+<!-- ESBOÇO: o arquivo nacional é grande demais para caber na memória de um notebook comum. Mostrar
+     a leitura preguiçosa com Arrow, o filtro por município antes do collect e a alternativa de
+     leitura do arquivo municipal já recortado. -->
+
+```r
+library(censobr)
+library(arrow)
+library(dplyr)
+
+cnefe <- read_cnefe(year = 2022, as_data_frame = FALSE)
+
+cnefe_ana <- cnefe |>
+  filter(code_muni == "5201108") |>
+  collect()
+```
+
+<!-- DADOS: alternativa offline, arquivo municipal já recortado em
+     dados/censo/cnefe_anapolis.parquet -->
+
+## Espécies de endereço e categorias de uso
+
+<!-- ESBOÇO: tabela de frequência por espécie em Anápolis. Agrupar as espécies em categorias úteis
+     à análise de acessibilidade, como domicílios, ensino, saúde, comércio e serviços. Explicitar
+     as decisões de agrupamento, porque elas mudam o resultado do indicador. -->
+
+## Agregação de destinos
+
+<!-- ESBOÇO: contar endereços por categoria dentro de cada setor censitário e dentro de cada célula
+     da grade estatística, antecipando o capítulo 6. Converter para objeto sf com st_as_sf e
+     verificar coordenadas inválidas ou fora do município. -->
+
+```r
+library(sf)
+
+cnefe_sf <- cnefe_ana |>
+  filter(!is.na(longitude), !is.na(latitude)) |>
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4674)
+```
+
+## Mapas de pontos e de densidade
+
+<!-- ESBOÇO: mapa de pontos por categoria e mapa de densidade de endereços, mostrando a
+     concentração de oportunidades na área central. Discutir sobreposição de pontos e alternativas
+     de visualização em áreas densas. -->
+
+## Limitações
+
+<!-- ESBOÇO: data de referência do cadastro, endereços sem coordenada, imprecisão em áreas rurais e
+     ausência de informação sobre porte do estabelecimento. Consequência prática, uma escola conta
+     como uma unidade independentemente do número de vagas, o que a Parte 2 precisa considerar. -->
+
+::: {.callout-tip}
+## Conexão com a Parte 2
+
+As contagens de oportunidades produzidas aqui são exatamente o insumo de destinos usado no cálculo
+dos indicadores de acessibilidade do capítulo [9](9-indicadores.qmd).
+:::

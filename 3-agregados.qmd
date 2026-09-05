@@ -1,0 +1,91 @@
+---
+title: "Agregados por setor censitário"
+---
+
+Os Agregados por Setor Censitário são o produto mais usado do Censo Demográfico e o ponto de
+entrada natural para quem precisa de um retrato sociodemográfico com boa resolução geográfica. São
+tabelas do universo, calculadas para todos os setores do país, que descrevem população, domicílios,
+responsáveis e características do entorno. Este capítulo mostra como lê-las, como transformar
+contagens brutas em indicadores comparáveis e como mapeá-las, encerrando com as características
+urbanísticas do entorno dos domicílios sob a ótica de transportes.
+
+::: {.callout-note}
+## Nesta seção você vai
+
+- entender o que os agregados cobrem e o que ficou de fora
+- ler os agregados de Anápolis com o `censobr`
+- navegar pelo dicionário de variáveis
+- construir indicadores derivados a partir de contagens
+- unir os dados à malha e produzir mapas coropléticos
+- explorar as características urbanísticas do entorno com recorte de transportes
+:::
+
+## O que são os agregados
+
+<!-- ESBOÇO: dados do universo, apurados para a totalidade dos domicílios, organizados por tema.
+     Diferenciar de microdados e de tabelas do SIDRA. Comentar arredondamento e supressão por
+     confidencialidade, e por que setores com poucos domicílios exigem cautela. -->
+
+## Leitura dos dados com o censobr
+
+<!-- ESBOÇO: uso da função de leitura dos agregados, argumento de ano e retorno em formato Arrow.
+     Mostrar por que collect() só deve vir depois do filtro do município. Filtrar Anápolis pelo
+     código de município embutido no código do setor. -->
+
+```r
+library(censobr)
+library(dplyr)
+
+agregados <- read_tracts(year = 2022, dataset = "Basico", as_data_frame = FALSE)
+
+agregados_ana <- agregados |>
+  filter(code_muni == "5201108") |>
+  collect()
+```
+
+## O dicionário de variáveis
+
+<!-- ESBOÇO: como localizar o dicionário, a lógica de nomeação das variáveis por tema e a
+     importância de conferir a definição antes de calcular. Tabela com as variáveis usadas no
+     capítulo e sua descrição. -->
+
+## De contagens a indicadores
+
+<!-- ESBOÇO: densidade demográfica, razão de dependência, média de moradores por domicílio e renda
+     média do responsável. Enfatizar a necessidade de normalizar por população ou por área antes de
+     comparar setores. Um chunk com mutate encadeado. -->
+
+```r
+indicadores <- agregados_ana |>
+  mutate(
+    dens_hab_ha = populacao / (area_km2 * 100),
+    moradores_por_dom = populacao / domicilios
+  )
+```
+
+## Junção com a malha e mapeamento
+
+<!-- ESBOÇO: left_join dos indicadores com os setores lidos no capítulo 2, checagem de setores sem
+     correspondência e mapa coroplético com ggplot2. Discutir escolha de classes e de paleta.
+     Figura principal do capítulo. -->
+
+## Características urbanísticas do entorno
+
+<!-- ESBOÇO: apresentar o levantamento do entorno, feito por observação do recenseador na face de
+     quadra, e a natureza da informação. Selecionar as variáveis de interesse para transportes,
+     como existência de calçada, rampa para cadeirante, pavimentação, iluminação pública e ponto
+     de ônibus ou de outro modo coletivo. -->
+
+### Construção de um índice de qualidade do entorno
+
+<!-- ESBOÇO: normalizar cada variável pelo total de domicílios do setor, combinar em um índice
+     simples e mapear. Deixar explícito que a agregação é uma escolha metodológica, com
+     alternativas. Fechar apontando a ligação com a Parte 2, já que a caminhabilidade do entorno
+     condiciona o acesso ao transporte coletivo. -->
+
+::: {.callout-tip}
+## Conexão com a Parte 2
+
+O indicador de entorno construído aqui volta no capítulo [9](9-indicadores.qmd), como leitura
+complementar aos mapas de acessibilidade por caminhada.
+:::

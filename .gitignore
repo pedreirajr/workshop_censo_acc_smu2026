@@ -1,0 +1,27 @@
+# Quarto
+/.quarto/
+/_freeze/
+/*_files/
+/*_cache/
+*.html
+!docs/*.html
+!docs/**/*.html
+!docs/*_files/
+!docs/**/*_files/
+**/*.quarto_ipynb
+
+# R
+.Rhistory
+.RData
+.Rproj.user/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dados da oficina (distribuídos à parte, não versionados)
+dados/
+
+# Instruções do Claude (não rastreadas)
+CLAUDE.md
+.claude/

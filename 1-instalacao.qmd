@@ -1,0 +1,96 @@
+---
+title: "Instalação e ajustes iniciais"
+---
+
+Antes de tocar em qualquer dado do Censo é preciso deixar o ambiente pronto. Este capítulo cobre a
+instalação do R e do RStudio, a organização do projeto em pastas, a instalação dos pacotes usados na
+Parte 1 e a configuração do cache que evita baixar o mesmo arquivo duas vezes. É um capítulo de
+preparação, e a recomendação é executá-lo antes do evento, com calma e conexão estável.
+
+::: {.callout-note}
+## Nesta seção você vai
+
+- instalar o R e o RStudio nas versões recomendadas
+- criar o projeto do RStudio e a estrutura de pastas da oficina
+- instalar os pacotes da Parte 1
+- configurar o diretório de cache do `censobr` e do `geobr`
+- rodar um teste rápido para confirmar que o ambiente está funcional
+:::
+
+## Instalação do R e do RStudio
+
+<!-- ESBOÇO: links de download do CRAN e do Posit, versões mínimas recomendadas, ordem de
+     instalação (R antes do RStudio) e observação sobre usuários de Windows com Rtools. Uma
+     figura da tela inicial do RStudio com os quatro painéis identificados. -->
+
+## O projeto do RStudio
+
+<!-- ESBOÇO: por que trabalhar dentro de um projeto (caminhos relativos, diretório de trabalho
+     estável, reprodutibilidade). Como abrir o .Rproj da oficina. Estrutura de pastas esperada,
+     com dados/censo, dados/geo, dados/r5 e scripts/. -->
+
+```
+workshop_censo_acc_smu2026/
+├── workshop_censo_acc_smu2026.Rproj
+├── scripts/
+└── dados/
+    ├── censo/
+    ├── geo/
+    └── r5/
+```
+
+## Instalação dos pacotes
+
+<!-- ESBOÇO: bloco único de instalação, com uma frase sobre o papel de cada pacote. Alertar sobre
+     a instalação do sf no Windows e no Linux (dependências GDAL/GEOS/PROJ). -->
+
+```r
+pacotes <- c(
+  "tidyverse",   # manipulação e visualização de dados
+  "sf",          # dados geográficos vetoriais
+  "censobr",     # produtos do Censo Demográfico
+  "geobr",       # malhas territoriais oficiais
+  "sidrar",      # tabelas agregadas do SIDRA
+  "arrow",       # leitura de arquivos grandes em formato parquet
+  "mapview"      # visualização interativa rápida
+)
+
+install.packages(setdiff(pacotes, rownames(installed.packages())))
+```
+
+## Cache dos dados baixados
+
+<!-- ESBOÇO: explicar que censobr e geobr guardam os arquivos baixados em cache local, o que
+     evita repetir downloads pesados a cada execução. Mostrar como definir e inspecionar o
+     diretório de cache e como limpá-lo quando necessário. -->
+
+```r
+library(censobr)
+library(geobr)
+
+# define e inspeciona o diretório de cache
+set_censobr_cache_dir(path = "dados/censo/cache")
+```
+
+## Teste do ambiente
+
+<!-- ESBOÇO: um chunk curto que baixa a malha municipal de Goiás e plota Anápolis. Se o mapa
+     aparecer, o ambiente está pronto. Incluir mensagem sobre o tempo esperado do primeiro
+     download. -->
+
+```r
+library(geobr)
+library(sf)
+library(ggplot2)
+
+anapolis <- read_municipality(code_muni = 5201108, year = 2022)
+
+ggplot(anapolis) +
+  geom_sf(fill = "grey90", colour = "grey30") +
+  theme_minimal()
+```
+
+## Problemas mais comuns
+
+<!-- ESBOÇO: tabela de erro observado e solução, cobrindo falha de compilação do sf, proxy
+     institucional bloqueando download, versão antiga do R e falta de espaço em disco. -->

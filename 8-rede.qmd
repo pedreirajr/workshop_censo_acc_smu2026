@@ -1,0 +1,121 @@
+---
+title: "Leitura dos arquivos e montagem da rede"
+---
+
+Medir acessibilidade exige saber quanto tempo se leva para ir de cada origem a cada destino, por
+cada modo de interesse. Esse cálculo depende de uma representação computacional da rede de
+transportes, montada a partir de arquivos de origens distintas. Este capítulo trata dos insumos,
+mostra onde cada um deve estar, constrói a rede multimodal de Anápolis com o `r5r` e produz a
+matriz de tempos de viagem que sustenta todo o restante da Parte 2.
+
+::: {.callout-note}
+## Nesta seção você vai
+
+- identificar os insumos exigidos pelo `r5r` e a função de cada um
+- organizar os arquivos na estrutura de pastas esperada
+- construir a rede multimodal com `setup_r5()`
+- calcular a matriz de tempos de viagem por modo
+- inspecionar e validar os resultados antes de seguir adiante
+:::
+
+## Os insumos da rede
+
+<!-- ESBOÇO: apresentar cada insumo, o que ele representa, se é obrigatório ou opcional, e de onde
+     costuma vir. Rede viária em .osm.pbf a partir do OpenStreetMap, obrigatória. GTFS do transporte
+     coletivo em .zip, opcional, necessário apenas para roteamento por transporte público. Modelo
+     digital de elevação em .tif, opcional, relevante quando o relevo condiciona caminhada e
+     bicicleta. Tabela resumo com formato, obrigatoriedade e observação. -->
+
+::: {.callout-important}
+## Onde os arquivos devem estar
+
+O `r5r` monta a rede a partir de **uma única pasta**, lendo todos os arquivos reconhecidos que
+encontrar nela. Coloque os insumos em `dados/r5/` e não misture arquivos de cenários diferentes no
+mesmo diretório.
+:::
+
+```
+dados/r5/
+├── anapolis.osm.pbf     rede viária (obrigatório)
+├── anapolis_gtfs.zip    transporte coletivo (opcional)
+└── anapolis_dem.tif     modelo digital de elevação (opcional)
+```
+
+<!-- DADOS: os três arquivos são distribuídos à parte e devem ser copiados para dados/r5/ -->
+
+### Rede viária
+
+<!-- ESBOÇO: o que o OSM representa, quais atributos o R5 usa para permitir ou proibir cada modo, e
+     por que vale inspecionar a rede antes de confiar nela. Comentar a qualidade do mapeamento em
+     cidades de porte médio, que costuma ser boa no viário e desigual nas calçadas. -->
+
+### Transporte coletivo
+
+<!-- ESBOÇO: estrutura de um GTFS, arquivos que o compõem e o que cada um define. Leitura e
+     inspeção com gtfstools, verificação do período de validade do calendário e checagem de que a
+     data usada no roteamento está coberta pelo feed. VERIFICAR a disponibilidade e a data de
+     referência do GTFS de Anápolis antes de escrever esta seção. -->
+
+### Relevo
+
+<!-- ESBOÇO: efeito da declividade sobre tempo de caminhada e de bicicleta, e como o R5 incorpora
+     essa informação. Quando vale a pena incluir o modelo de elevação. -->
+
+## Origens e destinos
+
+<!-- ESBOÇO: retomar o arquivo produzido no capítulo 6, com centroides das células da grade, a
+     população residente e as contagens de oportunidades do CNEFE. Conferir o formato exigido, com
+     colunas id, lon e lat em coordenadas geográficas. Comentar o custo computacional, que cresce
+     com o produto do número de origens pelo número de destinos. -->
+
+```r
+library(dplyr)
+
+pontos <- readr::read_csv("dados/geo/pontos_anapolis.csv")
+```
+
+## Construção da rede
+
+<!-- ESBOÇO: chamada do setup_r5, o que acontece no primeiro uso, os arquivos de rede gerados na
+     pasta e por que a segunda execução é muito mais rápida. Alertar que qualquer mudança nos
+     insumos exige apagar os arquivos gerados para forçar a reconstrução. -->
+
+```r
+options(java.parameters = "-Xmx4G")
+library(r5r)
+
+r5r_core <- setup_r5(data_path = "dados/r5")
+```
+
+## Matriz de tempos de viagem
+
+<!-- ESBOÇO: cálculo da matriz por caminhada, bicicleta, transporte público e automóvel. Explicar
+     cada argumento relevante, a janela de partida, o tempo máximo de viagem, o tempo máximo de
+     caminhada de acesso e o percentil usado no transporte público. Justificar as escolhas
+     adotadas na oficina. -->
+
+```r
+ttm <- travel_time_matrix(
+  r5r_core,
+  origins      = pontos,
+  destinations = pontos,
+  mode         = c("WALK", "TRANSIT"),
+  departure_datetime = as.POSIXct("2026-09-09 07:00:00"),
+  max_trip_duration  = 60
+)
+```
+
+## Inspeção e validação
+
+<!-- ESBOÇO: etapa frequentemente pulada e responsável por boa parte dos erros silenciosos.
+     Verificar proporção de pares sem rota, distribuição dos tempos por modo e coerência entre
+     modos. Mapear o tempo de viagem a partir de uma origem escolhida, que é a forma mais direta de
+     enxergar se a rede está correta. Discutir causas comuns de par sem rota, como ponto fora da
+     rede, ilha desconectada e limite de tempo curto demais. -->
+
+::: {.callout-warning}
+## Encerre a sessão do R5
+
+Ao terminar, chame `stop_r5(r5r_core)` para liberar a memória da máquina virtual. Sem isso, a JVM
+continua ocupando a RAM até o fim da sessão do R.
+:::

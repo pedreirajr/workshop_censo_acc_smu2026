@@ -1,0 +1,740 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Dados Censitários e Acessibilidade Urbana em R",
+    "section": "",
+    "text": "Apresentação\nEste site reúne o material prático da oficina Dados Censitários e Acessibilidade Urbana em R, oferecida no Simpósio de Mobilidade Urbana, evento de encerramento do projeto Redes de Transportes e Cidades Conectadas, realizado na EESC-USP, em São Carlos-SP, entre 8 e 11 de setembro de 2026.\nA oficina parte de uma constatação simples. Boa parte das perguntas sobre mobilidade urbana só ganha resposta quando duas coisas se encontram, a descrição de quem mora onde e a medida de quanto custa chegar aos lugares. A primeira vem do Censo Demográfico, a maior operação estatística do país, cujos produtos descrevem população e domicílios em recortes territoriais finos. A segunda vem das medidas de acessibilidade urbana, que combinam a distribuição das oportunidades no território com o desempenho da rede de transportes. Trabalhar as duas no mesmo ambiente computacional, sem exportações intermediárias e com registro reprodutível de cada etapa, é o que o R permite fazer, e é o que se pretende demonstrar aqui.",
+    "crumbs": [
+      "Apresentação"
+    ]
+  },
+  {
+    "objectID": "index.html#como-a-oficina-está-organizada",
+    "href": "index.html#como-a-oficina-está-organizada",
+    "title": "Dados Censitários e Acessibilidade Urbana em R",
+    "section": "Como a oficina está organizada",
+    "text": "Como a oficina está organizada\nSão 8 horas de atividade, divididas em dois blocos de 4 horas. Cada bloco tem 2 horas expositivas e 2 horas de aplicação prática ao computador.\n\n\n\n\n\n\n\n\nBloco\nTeoria (2h)\nPrática (2h)\n\n\n\n\nDados censitários\nConceitos, métodos e produtos do Censo Demográfico\nParte 1 deste site (capítulos 1 a 6)\n\n\nAcessibilidade urbana\nConceitos, medidas e usos em planejamento\nParte 2 deste site (capítulos 7 a 10)\n\n\n\nEste site cobre apenas as partes práticas. O conteúdo expositivo é apresentado em sala, com material próprio. O que está aqui é o roteiro de código, pensado para ser acompanhado ao vivo e, depois, reexecutado por conta própria.\nA Parte 1 percorre os principais produtos do Censo Demográfico, começando pela preparação do ambiente e pelos recortes territoriais do IBGE e avançando pelos agregados por setor censitário, pelos microdados da amostra, pelo CNEFE e pela grade estatística. Os agregados incluem uma seção dedicada às características urbanísticas do entorno dos domicílios, com recorte voltado a transportes.\nA Parte 2 monta uma análise de acessibilidade do zero, com a preparação do ambiente de roteamento, a leitura dos insumos e a construção da rede multimodal, o cálculo dos indicadores e, por fim, a avaliação de um cenário de intervenção.",
+    "crumbs": [
+      "Apresentação"
+    ]
+  },
+  {
+    "objectID": "index.html#o-estudo-de-caso",
+    "href": "index.html#o-estudo-de-caso",
+    "title": "Dados Censitários e Acessibilidade Urbana em R",
+    "section": "O estudo de caso",
+    "text": "O estudo de caso\nTodas as aplicações usam Anápolis-GO como território de referência. A escolha de um município de porte médio é deliberada. Os arquivos são pequenos o bastante para que cada etapa rode em poucos minutos em um notebook comum, condição necessária para uma prática de 2 horas, e grandes o suficiente para que os padrões territoriais apareçam com clareza nos mapas.\nUsar o mesmo município nas duas Partes também tem uma razão didática. Os dados populacionais produzidos na Parte 1 são exatamente os insumos consumidos na Parte 2, de modo que o participante percorre o caminho completo, do arquivo bruto do IBGE ao mapa de acessibilidade.",
+    "crumbs": [
+      "Apresentação"
+    ]
+  },
+  {
+    "objectID": "index.html#pré-requisitos",
+    "href": "index.html#pré-requisitos",
+    "title": "Dados Censitários e Acessibilidade Urbana em R",
+    "section": "Pré-requisitos",
+    "text": "Pré-requisitos\nA oficina supõe familiaridade básica com R, o suficiente para ler um script, entender o que faz uma função e reconhecer a estrutura de um data frame. Não se exige experiência prévia com dados do Censo, com geoprocessamento ou com roteamento de redes de transporte.\nQuem quiser chegar mais preparado pode consultar estes materiais.\n\nPedreira Junior (2026), para os fundamentos de R aplicados a dados tabulares e geográficos e para o detalhamento dos produtos do Censo tratados na Parte 1.\nPereira & Herszenhut (2023), para a fundamentação conceitual e computacional das medidas de acessibilidade tratadas na Parte 2.",
+    "crumbs": [
+      "Apresentação"
+    ]
+  },
+  {
+    "objectID": "index.html#antes-do-evento",
+    "href": "index.html#antes-do-evento",
+    "title": "Dados Censitários e Acessibilidade Urbana em R",
+    "section": "Antes do evento",
+    "text": "Antes do evento\n\n\n\n\n\n\nImportanteInstale tudo antes de chegar\n\n\n\nAs instalações consomem tempo e dependem de conexão estável. Faça a preparação em casa, com antecedência, para não gastar a prática configurando software. Os capítulos 1 e 7 trazem o passo a passo completo, incluindo a instalação do Java exigida pelo pacote r5r.\n\n\nEm resumo, será necessário ter instalados o R, o RStudio, um Java compatível com o r5r e os pacotes de R usados nas duas Partes. Os capítulos de instalação detalham cada item e trazem um teste de verificação do ambiente.",
+    "crumbs": [
+      "Apresentação"
+    ]
+  },
+  {
+    "objectID": "index.html#onde-ficam-os-dados",
+    "href": "index.html#onde-ficam-os-dados",
+    "title": "Dados Censitários e Acessibilidade Urbana em R",
+    "section": "Onde ficam os dados",
+    "text": "Onde ficam os dados\nOs arquivos usados na oficina são distribuídos à parte e devem ser colocados dentro do projeto do RStudio, na pasta dados/, com a seguinte organização.\nworkshop_censo_acc_smu2026/\n├── workshop_censo_acc_smu2026.Rproj\n└── dados/\n    ├── censo/   agregados, microdados e CNEFE de Anápolis\n    ├── geo/     malhas territoriais e grade estatística\n    └── r5/      rede viária (.osm.pbf), GTFS (.zip) e relevo (.tif)\nSempre que um capítulo depender de um arquivo específico, o caminho esperado aparece indicado no próprio código. Parte dos dados do Censo é obtida diretamente pelos pacotes censobr e geobr, sem necessidade de arquivos locais.",
+    "crumbs": [
+      "Apresentação"
+    ]
+  },
+  {
+    "objectID": "index.html#instrutores",
+    "href": "index.html#instrutores",
+    "title": "Dados Censitários e Acessibilidade Urbana em R",
+    "section": "Instrutores",
+    "text": "Instrutores\n\n\nJorge Ubirajara Pedreira Junior\nProfessor da Universidade Federal da Bahia (UFBA), atua em planejamento de transportes, análise de dados urbanos e uso de bases de dados institucionais brasileiras. Autor de Censo Demográfico no R. Página pessoal\n\n\nThiago Louro\n\n\n\nLucas Assis",
+    "crumbs": [
+      "Apresentação"
+    ]
+  },
+  {
+    "objectID": "index.html#como-citar",
+    "href": "index.html#como-citar",
+    "title": "Dados Censitários e Acessibilidade Urbana em R",
+    "section": "Como citar",
+    "text": "Como citar\n\nPedreira Junior, J. U., Louro, T., & Assis, L. (2026). Dados Censitários e Acessibilidade Urbana em R: material prático da oficina do Simpósio de Mobilidade Urbana. https://pedreirajr.github.io/workshop_censo_acc_smu2026/",
+    "crumbs": [
+      "Apresentação"
+    ]
+  },
+  {
+    "objectID": "index.html#agradecimentos",
+    "href": "index.html#agradecimentos",
+    "title": "Dados Censitários e Acessibilidade Urbana em R",
+    "section": "Agradecimentos",
+    "text": "Agradecimentos\nEste material se apoia inteiramente em bens públicos produzidos por duas instituições. O Instituto Brasileiro de Geografia e Estatística (IBGE) produz e disponibiliza os dados do Censo Demográfico tratados na Parte 1. O Instituto de Pesquisa Econômica Aplicada (Ipea) desenvolve e mantém os pacotes geobr, censobr, r5r, accessibility e aopdata, sem os quais nada do que se faz aqui caberia em 4 horas de oficina.\n\n\n\n\nPedreira Junior, J. U. (2026). Censo Demográfico no R: conceitos e aplicações para a análise do território brasileiro. https://pedreirajr.github.io/rcensolivro/\n\n\nPereira, R. H. M., & Herszenhut, D. (2023). Introdução à acessibilidade urbana: um guia prático em R. Instituto de Pesquisa Econômica Aplicada (Ipea). https://ipeagit.github.io/intro_access_book/",
+    "crumbs": [
+      "Apresentação"
+    ]
+  },
+  {
+    "objectID": "1-instalacao.html",
+    "href": "1-instalacao.html",
+    "title": "1  Instalação e ajustes iniciais",
+    "section": "",
+    "text": "1.1 Instalação do R e do RStudio\nAntes de tocar em qualquer dado do Censo é preciso deixar o ambiente pronto. Este capítulo cobre a instalação do R e do RStudio, a organização do projeto em pastas, a instalação dos pacotes usados na Parte 1 e a configuração do cache que evita baixar o mesmo arquivo duas vezes. É um capítulo de preparação, e a recomendação é executá-lo antes do evento, com calma e conexão estável.",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
+    ]
+  },
+  {
+    "objectID": "1-instalacao.html#o-projeto-do-rstudio",
+    "href": "1-instalacao.html#o-projeto-do-rstudio",
+    "title": "1  Instalação e ajustes iniciais",
+    "section": "1.2 O projeto do RStudio",
+    "text": "1.2 O projeto do RStudio\n\nworkshop_censo_acc_smu2026/\n├── workshop_censo_acc_smu2026.Rproj\n├── scripts/\n└── dados/\n    ├── censo/\n    ├── geo/\n    └── r5/",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
+    ]
+  },
+  {
+    "objectID": "1-instalacao.html#instalação-dos-pacotes",
+    "href": "1-instalacao.html#instalação-dos-pacotes",
+    "title": "1  Instalação e ajustes iniciais",
+    "section": "1.3 Instalação dos pacotes",
+    "text": "1.3 Instalação dos pacotes\n\npacotes &lt;- c(\n  \"tidyverse\",   # manipulação e visualização de dados\n  \"sf\",          # dados geográficos vetoriais\n  \"censobr\",     # produtos do Censo Demográfico\n  \"geobr\",       # malhas territoriais oficiais\n  \"sidrar\",      # tabelas agregadas do SIDRA\n  \"arrow\",       # leitura de arquivos grandes em formato parquet\n  \"mapview\"      # visualização interativa rápida\n)\n\ninstall.packages(setdiff(pacotes, rownames(installed.packages())))",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
+    ]
+  },
+  {
+    "objectID": "1-instalacao.html#cache-dos-dados-baixados",
+    "href": "1-instalacao.html#cache-dos-dados-baixados",
+    "title": "1  Instalação e ajustes iniciais",
+    "section": "1.4 Cache dos dados baixados",
+    "text": "1.4 Cache dos dados baixados\n\nlibrary(censobr)\nlibrary(geobr)\n\n# define e inspeciona o diretório de cache\nset_censobr_cache_dir(path = \"dados/censo/cache\")",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
+    ]
+  },
+  {
+    "objectID": "1-instalacao.html#teste-do-ambiente",
+    "href": "1-instalacao.html#teste-do-ambiente",
+    "title": "1  Instalação e ajustes iniciais",
+    "section": "1.5 Teste do ambiente",
+    "text": "1.5 Teste do ambiente\n\nlibrary(geobr)\nlibrary(sf)\nlibrary(ggplot2)\n\nanapolis &lt;- read_municipality(code_muni = 5201108, year = 2022)\n\nggplot(anapolis) +\n  geom_sf(fill = \"grey90\", colour = \"grey30\") +\n  theme_minimal()",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
+    ]
+  },
+  {
+    "objectID": "1-instalacao.html#problemas-mais-comuns",
+    "href": "1-instalacao.html#problemas-mais-comuns",
+    "title": "1  Instalação e ajustes iniciais",
+    "section": "1.6 Problemas mais comuns",
+    "text": "1.6 Problemas mais comuns",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
+    ]
+  },
+  {
+    "objectID": "2-recortes-territoriais.html",
+    "href": "2-recortes-territoriais.html",
+    "title": "2  Recortes territoriais",
+    "section": "",
+    "text": "2.1 Os recortes do IBGE\nNenhuma análise territorial começa pelo dado. Ela começa pela decisão de qual unidade geográfica responde à pergunta que se quer fazer. O IBGE divide o território brasileiro em vários recortes sobrepostos, cada um criado com um propósito distinto, e escolher o errado compromete tudo o que vem depois. Este capítulo apresenta esses recortes, mostra como obtê-los com o pacote geobr e discute os critérios de escolha, com Anápolis como território de referência.",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Recortes territoriais</span>"
+    ]
+  },
+  {
+    "objectID": "2-recortes-territoriais.html#os-recortes-do-ibge",
+    "href": "2-recortes-territoriais.html#os-recortes-do-ibge",
+    "title": "2  Recortes territoriais",
+    "section": "",
+    "text": "2.1.1 Recortes político-administrativos\n\n\n\n2.1.2 Recortes estatísticos\n\n\n\n2.1.3 Recortes temáticos de interesse para transportes",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Recortes territoriais</span>"
+    ]
+  },
+  {
+    "objectID": "2-recortes-territoriais.html#download-das-malhas-com-o-geobr",
+    "href": "2-recortes-territoriais.html#download-das-malhas-com-o-geobr",
+    "title": "2  Recortes territoriais",
+    "section": "2.2 Download das malhas com o geobr",
+    "text": "2.2 Download das malhas com o geobr\n\nlibrary(geobr)\nlibrary(sf)\nlibrary(dplyr)\n\ncod_anapolis &lt;- 5201108\n\nmunicipio &lt;- read_municipality(code_muni = cod_anapolis, year = 2022)\nsetores   &lt;- read_census_tract(code_tract = cod_anapolis, year = 2022)\nap        &lt;- read_weighting_area(code_weighting = cod_anapolis, year = 2022)",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Recortes territoriais</span>"
+    ]
+  },
+  {
+    "objectID": "2-recortes-territoriais.html#sistemas-de-referência-de-coordenadas",
+    "href": "2-recortes-territoriais.html#sistemas-de-referência-de-coordenadas",
+    "title": "2  Recortes territoriais",
+    "section": "2.3 Sistemas de referência de coordenadas",
+    "text": "2.3 Sistemas de referência de coordenadas\n\nsetores_utm &lt;- st_transform(setores, crs = 31982)  # SIRGAS 2000 / UTM 22S",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Recortes territoriais</span>"
+    ]
+  },
+  {
+    "objectID": "2-recortes-territoriais.html#os-recortes-de-anápolis-lado-a-lado",
+    "href": "2-recortes-territoriais.html#os-recortes-de-anápolis-lado-a-lado",
+    "title": "2  Recortes territoriais",
+    "section": "2.4 Os recortes de Anápolis lado a lado",
+    "text": "2.4 Os recortes de Anápolis lado a lado",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Recortes territoriais</span>"
+    ]
+  },
+  {
+    "objectID": "2-recortes-territoriais.html#qual-recorte-usar",
+    "href": "2-recortes-territoriais.html#qual-recorte-usar",
+    "title": "2  Recortes territoriais",
+    "section": "2.5 Qual recorte usar",
+    "text": "2.5 Qual recorte usar",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Recortes territoriais</span>"
+    ]
+  },
+  {
+    "objectID": "3-agregados.html",
+    "href": "3-agregados.html",
+    "title": "3  Agregados por setor censitário",
+    "section": "",
+    "text": "3.1 O que são os agregados\nOs Agregados por Setor Censitário são o produto mais usado do Censo Demográfico e o ponto de entrada natural para quem precisa de um retrato sociodemográfico com boa resolução geográfica. São tabelas do universo, calculadas para todos os setores do país, que descrevem população, domicílios, responsáveis e características do entorno. Este capítulo mostra como lê-las, como transformar contagens brutas em indicadores comparáveis e como mapeá-las, encerrando com as características urbanísticas do entorno dos domicílios sob a ótica de transportes.",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Agregados por setor censitário</span>"
+    ]
+  },
+  {
+    "objectID": "3-agregados.html#leitura-dos-dados-com-o-censobr",
+    "href": "3-agregados.html#leitura-dos-dados-com-o-censobr",
+    "title": "3  Agregados por setor censitário",
+    "section": "3.2 Leitura dos dados com o censobr",
+    "text": "3.2 Leitura dos dados com o censobr\n\nlibrary(censobr)\nlibrary(dplyr)\n\nagregados &lt;- read_tracts(year = 2022, dataset = \"Basico\", as_data_frame = FALSE)\n\nagregados_ana &lt;- agregados |&gt;\n  filter(code_muni == \"5201108\") |&gt;\n  collect()",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Agregados por setor censitário</span>"
+    ]
+  },
+  {
+    "objectID": "3-agregados.html#o-dicionário-de-variáveis",
+    "href": "3-agregados.html#o-dicionário-de-variáveis",
+    "title": "3  Agregados por setor censitário",
+    "section": "3.3 O dicionário de variáveis",
+    "text": "3.3 O dicionário de variáveis",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Agregados por setor censitário</span>"
+    ]
+  },
+  {
+    "objectID": "3-agregados.html#de-contagens-a-indicadores",
+    "href": "3-agregados.html#de-contagens-a-indicadores",
+    "title": "3  Agregados por setor censitário",
+    "section": "3.4 De contagens a indicadores",
+    "text": "3.4 De contagens a indicadores\n\nindicadores &lt;- agregados_ana |&gt;\n  mutate(\n    dens_hab_ha = populacao / (area_km2 * 100),\n    moradores_por_dom = populacao / domicilios\n  )",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Agregados por setor censitário</span>"
+    ]
+  },
+  {
+    "objectID": "3-agregados.html#junção-com-a-malha-e-mapeamento",
+    "href": "3-agregados.html#junção-com-a-malha-e-mapeamento",
+    "title": "3  Agregados por setor censitário",
+    "section": "3.5 Junção com a malha e mapeamento",
+    "text": "3.5 Junção com a malha e mapeamento",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Agregados por setor censitário</span>"
+    ]
+  },
+  {
+    "objectID": "3-agregados.html#características-urbanísticas-do-entorno",
+    "href": "3-agregados.html#características-urbanísticas-do-entorno",
+    "title": "3  Agregados por setor censitário",
+    "section": "3.6 Características urbanísticas do entorno",
+    "text": "3.6 Características urbanísticas do entorno\n\n\n3.6.1 Construção de um índice de qualidade do entorno\n\n\n\n\n\n\n\nDicaConexão com a Parte 2\n\n\n\nO indicador de entorno construído aqui volta no capítulo 9, como leitura complementar aos mapas de acessibilidade por caminhada.",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Agregados por setor censitário</span>"
+    ]
+  },
+  {
+    "objectID": "4-microdados.html",
+    "href": "4-microdados.html",
+    "title": "4  Microdados da amostra",
+    "section": "",
+    "text": "4.1 Universo e amostra\nOs agregados respondem quantos, e os microdados respondem quem. O questionário da amostra investiga temas que o questionário básico não cobre, como migração, nível de instrução, rendimento detalhado e deslocamento para trabalho e estudo. O preço dessa riqueza é metodológico. Cada registro representa um número variável de pessoas do universo, e ignorar essa ponderação produz estimativas simplesmente erradas. Este capítulo mostra como ler os microdados e como tratá-los corretamente.",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Microdados da amostra</span>"
+    ]
+  },
+  {
+    "objectID": "4-microdados.html#leitura-dos-microdados",
+    "href": "4-microdados.html#leitura-dos-microdados",
+    "title": "4  Microdados da amostra",
+    "section": "4.2 Leitura dos microdados",
+    "text": "4.2 Leitura dos microdados\n\nlibrary(censobr)\nlibrary(dplyr)\n\npessoas &lt;- read_population(year = 2022, as_data_frame = FALSE)\n\npessoas_ana &lt;- pessoas |&gt;\n  filter(code_muni == \"5201108\") |&gt;\n  select(code_weighting, peso, idade, sexo, rendimento, desloc_trabalho, tempo_desloc) |&gt;\n  collect()",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Microdados da amostra</span>"
+    ]
+  },
+  {
+    "objectID": "4-microdados.html#os-pesos-amostrais",
+    "href": "4-microdados.html#os-pesos-amostrais",
+    "title": "4  Microdados da amostra",
+    "section": "4.3 Os pesos amostrais",
+    "text": "4.3 Os pesos amostrais\n\n\n\n\n\n\n\nAvisoNunca calcule sem os pesos\n\n\n\nUma média simples dos microdados descreve a amostra, e não a população. A diferença não é pequena e não é aleatória, porque o desenho amostral do Censo varia entre municípios e entre áreas dentro de um mesmo município.",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Microdados da amostra</span>"
+    ]
+  },
+  {
+    "objectID": "4-microdados.html#declaração-do-desenho-amostral",
+    "href": "4-microdados.html#declaração-do-desenho-amostral",
+    "title": "4  Microdados da amostra",
+    "section": "4.4 Declaração do desenho amostral",
+    "text": "4.4 Declaração do desenho amostral\n\nlibrary(srvyr)\n\ndesenho &lt;- pessoas_ana |&gt;\n  as_survey_design(weights = peso, strata = code_weighting)\n\ndesenho |&gt;\n  group_by(code_weighting) |&gt;\n  summarise(renda_media = survey_mean(rendimento, na.rm = TRUE))",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Microdados da amostra</span>"
+    ]
+  },
+  {
+    "objectID": "4-microdados.html#indicadores-de-deslocamento",
+    "href": "4-microdados.html#indicadores-de-deslocamento",
+    "title": "4  Microdados da amostra",
+    "section": "4.5 Indicadores de deslocamento",
+    "text": "4.5 Indicadores de deslocamento\n\n\n\n\n\n\n\nDicaConexão com a Parte 2\n\n\n\nO tempo de deslocamento declarado é uma medida percebida e autorreferida. No capítulo 9 o mesmo fenômeno é medido pela rede, com o r5r, e a comparação entre as duas abordagens rende boa discussão.",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Microdados da amostra</span>"
+    ]
+  },
+  {
+    "objectID": "5-cnefe.html",
+    "href": "5-cnefe.html",
+    "title": "5  CNEFE",
+    "section": "",
+    "text": "5.1 O que é o CNEFE\nO Cadastro Nacional de Endereços para Fins Estatísticos é o produto que mais mudou o que se pode fazer com o Censo em escala fina. Ele lista os endereços visitados na operação censitária, com coordenadas e com a indicação da espécie de cada um, o que permite localizar domicílios, estabelecimentos de ensino, de saúde e outras edificações no território. Para análises de acessibilidade isso é decisivo, porque resolve o problema recorrente de onde estão as oportunidades.",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>CNEFE</span>"
+    ]
+  },
+  {
+    "objectID": "5-cnefe.html#leitura-com-estratégia-de-memória",
+    "href": "5-cnefe.html#leitura-com-estratégia-de-memória",
+    "title": "5  CNEFE",
+    "section": "5.2 Leitura com estratégia de memória",
+    "text": "5.2 Leitura com estratégia de memória\n\nlibrary(censobr)\nlibrary(arrow)\nlibrary(dplyr)\n\ncnefe &lt;- read_cnefe(year = 2022, as_data_frame = FALSE)\n\ncnefe_ana &lt;- cnefe |&gt;\n  filter(code_muni == \"5201108\") |&gt;\n  collect()",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>CNEFE</span>"
+    ]
+  },
+  {
+    "objectID": "5-cnefe.html#espécies-de-endereço-e-categorias-de-uso",
+    "href": "5-cnefe.html#espécies-de-endereço-e-categorias-de-uso",
+    "title": "5  CNEFE",
+    "section": "5.3 Espécies de endereço e categorias de uso",
+    "text": "5.3 Espécies de endereço e categorias de uso",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>CNEFE</span>"
+    ]
+  },
+  {
+    "objectID": "5-cnefe.html#agregação-de-destinos",
+    "href": "5-cnefe.html#agregação-de-destinos",
+    "title": "5  CNEFE",
+    "section": "5.4 Agregação de destinos",
+    "text": "5.4 Agregação de destinos\n\nlibrary(sf)\n\ncnefe_sf &lt;- cnefe_ana |&gt;\n  filter(!is.na(longitude), !is.na(latitude)) |&gt;\n  st_as_sf(coords = c(\"longitude\", \"latitude\"), crs = 4674)",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>CNEFE</span>"
+    ]
+  },
+  {
+    "objectID": "5-cnefe.html#mapas-de-pontos-e-de-densidade",
+    "href": "5-cnefe.html#mapas-de-pontos-e-de-densidade",
+    "title": "5  CNEFE",
+    "section": "5.5 Mapas de pontos e de densidade",
+    "text": "5.5 Mapas de pontos e de densidade",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>CNEFE</span>"
+    ]
+  },
+  {
+    "objectID": "5-cnefe.html#limitações",
+    "href": "5-cnefe.html#limitações",
+    "title": "5  CNEFE",
+    "section": "5.6 Limitações",
+    "text": "5.6 Limitações\n\n\n\n\n\n\n\nDicaConexão com a Parte 2\n\n\n\nAs contagens de oportunidades produzidas aqui são exatamente o insumo de destinos usado no cálculo dos indicadores de acessibilidade do capítulo 9.",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>CNEFE</span>"
+    ]
+  },
+  {
+    "objectID": "6-grade-estatistica.html",
+    "href": "6-grade-estatistica.html",
+    "title": "6  Grade estatística",
+    "section": "",
+    "text": "6.1 O que é a grade estatística\nO setor censitário tem um defeito incômodo. Ele muda de tamanho, de forma e de código entre as edições do Censo, o que dificulta qualquer comparação ao longo do tempo e faz com que áreas centrais e periféricas tenham unidades de tamanhos muito diferentes. A grade estatística resolve os dois problemas ao distribuir a informação em células regulares de dimensão fixa, estáveis entre censos. Para a Parte 2 ela tem uma vantagem adicional, porque fornece origens de análise com peso populacional e geometria uniforme.",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Grade estatística</span>"
+    ]
+  },
+  {
+    "objectID": "6-grade-estatistica.html#obtenção-da-grade",
+    "href": "6-grade-estatistica.html#obtenção-da-grade",
+    "title": "6  Grade estatística",
+    "section": "6.2 Obtenção da grade",
+    "text": "6.2 Obtenção da grade\n\nlibrary(geobr)\nlibrary(sf)\nlibrary(dplyr)\n\ngrade &lt;- read_statistical_grid(code_grid = \"GO\", year = 2022)\n\ngrade_ana &lt;- grade |&gt;\n  st_filter(municipio, .predicate = st_within)",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Grade estatística</span>"
+    ]
+  },
+  {
+    "objectID": "6-grade-estatistica.html#grade-e-setor-lado-a-lado",
+    "href": "6-grade-estatistica.html#grade-e-setor-lado-a-lado",
+    "title": "6  Grade estatística",
+    "section": "6.3 Grade e setor lado a lado",
+    "text": "6.3 Grade e setor lado a lado",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Grade estatística</span>"
+    ]
+  },
+  {
+    "objectID": "6-grade-estatistica.html#preparação-das-origens-e-destinos",
+    "href": "6-grade-estatistica.html#preparação-das-origens-e-destinos",
+    "title": "6  Grade estatística",
+    "section": "6.4 Preparação das origens e destinos",
+    "text": "6.4 Preparação das origens e destinos\n\npontos &lt;- grade_ana |&gt;\n  filter(populacao &gt; 0) |&gt;\n  st_centroid() |&gt;\n  st_transform(4326)\n\n# formato exigido pelo r5r\npontos_r5 &lt;- pontos |&gt;\n  mutate(\n    id  = as.character(id_grade),\n    lon = st_coordinates(geometry)[, 1],\n    lat = st_coordinates(geometry)[, 2]\n  ) |&gt;\n  st_drop_geometry()\n\n\n\n\n\n\n\nDicaFim da Parte 1\n\n\n\nO arquivo de pontos produzido aqui reúne, em uma mesma tabela, onde as pessoas moram e onde estão as oportunidades. É com ele que a Parte 2 começa.",
+    "crumbs": [
+      "PARTE 1: DADOS CENSITÁRIOS",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Grade estatística</span>"
+    ]
+  },
+  {
+    "objectID": "7-instalacao-r5r.html",
+    "href": "7-instalacao-r5r.html",
+    "title": "7  Instalação e ajustes iniciais",
+    "section": "",
+    "text": "7.1 Java\nA Parte 2 exige um ambiente mais exigente que a Parte 1. O cálculo de matrizes de tempo de viagem é feito pelo R5, um motor de roteamento escrito em Java, e o pacote r5r funciona como ponte entre o R e esse motor. Isso significa que é preciso ter Java instalado, na versão correta, e memória suficiente reservada para a máquina virtual. Este capítulo trata dessa preparação, que costuma ser o principal ponto de travamento em oficinas de acessibilidade.",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
+    ]
+  },
+  {
+    "objectID": "7-instalacao-r5r.html#java",
+    "href": "7-instalacao-r5r.html#java",
+    "title": "7  Instalação e ajustes iniciais",
+    "section": "",
+    "text": "# confere qual Java o R está enxergando\nSys.getenv(\"JAVA_HOME\")\nsystem(\"java -version\")",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
+    ]
+  },
+  {
+    "objectID": "7-instalacao-r5r.html#memória-da-máquina-virtual",
+    "href": "7-instalacao-r5r.html#memória-da-máquina-virtual",
+    "title": "7  Instalação e ajustes iniciais",
+    "section": "7.2 Memória da máquina virtual",
+    "text": "7.2 Memória da máquina virtual\n\n# deve vir antes de library(r5r)\noptions(java.parameters = \"-Xmx4G\")\nlibrary(r5r)\n\n\n\n\n\n\nAvisoA ordem importa\n\n\n\nSe o r5r for carregado antes da linha de options, a memória padrão da JVM permanece em vigor e a mudança só passa a valer após reiniciar a sessão do R.",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
+    ]
+  },
+  {
+    "objectID": "7-instalacao-r5r.html#instalação-dos-pacotes",
+    "href": "7-instalacao-r5r.html#instalação-dos-pacotes",
+    "title": "7  Instalação e ajustes iniciais",
+    "section": "7.3 Instalação dos pacotes",
+    "text": "7.3 Instalação dos pacotes\n\npacotes &lt;- c(\n  \"r5r\",           # roteamento multimodal e matrizes de tempo de viagem\n  \"accessibility\", # cálculo de indicadores de acessibilidade\n  \"gtfstools\",     # leitura e edição de dados GTFS\n  \"aopdata\",       # dados do Projeto Acesso a Oportunidades\n  \"sf\", \"dplyr\", \"ggplot2\"\n)\n\ninstall.packages(setdiff(pacotes, rownames(installed.packages())))",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
+    ]
+  },
+  {
+    "objectID": "7-instalacao-r5r.html#teste-do-ambiente",
+    "href": "7-instalacao-r5r.html#teste-do-ambiente",
+    "title": "7  Instalação e ajustes iniciais",
+    "section": "7.4 Teste do ambiente",
+    "text": "7.4 Teste do ambiente",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
+    ]
+  },
+  {
+    "objectID": "7-instalacao-r5r.html#problemas-mais-comuns",
+    "href": "7-instalacao-r5r.html#problemas-mais-comuns",
+    "title": "7  Instalação e ajustes iniciais",
+    "section": "7.5 Problemas mais comuns",
+    "text": "7.5 Problemas mais comuns",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
+    ]
+  },
+  {
+    "objectID": "8-rede.html",
+    "href": "8-rede.html",
+    "title": "8  Leitura dos arquivos e montagem da rede",
+    "section": "",
+    "text": "8.1 Os insumos da rede\nMedir acessibilidade exige saber quanto tempo se leva para ir de cada origem a cada destino, por cada modo de interesse. Esse cálculo depende de uma representação computacional da rede de transportes, montada a partir de arquivos de origens distintas. Este capítulo trata dos insumos, mostra onde cada um deve estar, constrói a rede multimodal de Anápolis com o r5r e produz a matriz de tempos de viagem que sustenta todo o restante da Parte 2.",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Leitura dos arquivos e montagem da rede</span>"
+    ]
+  },
+  {
+    "objectID": "8-rede.html#os-insumos-da-rede",
+    "href": "8-rede.html#os-insumos-da-rede",
+    "title": "8  Leitura dos arquivos e montagem da rede",
+    "section": "",
+    "text": "ImportanteOnde os arquivos devem estar\n\n\n\nO r5r monta a rede a partir de uma única pasta, lendo todos os arquivos reconhecidos que encontrar nela. Coloque os insumos em dados/r5/ e não misture arquivos de cenários diferentes no mesmo diretório.\n\n\ndados/r5/\n├── anapolis.osm.pbf     rede viária (obrigatório)\n├── anapolis_gtfs.zip    transporte coletivo (opcional)\n└── anapolis_dem.tif     modelo digital de elevação (opcional)\n\n\n8.1.1 Rede viária\n\n\n\n8.1.2 Transporte coletivo\n\n\n\n8.1.3 Relevo",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Leitura dos arquivos e montagem da rede</span>"
+    ]
+  },
+  {
+    "objectID": "8-rede.html#origens-e-destinos",
+    "href": "8-rede.html#origens-e-destinos",
+    "title": "8  Leitura dos arquivos e montagem da rede",
+    "section": "8.2 Origens e destinos",
+    "text": "8.2 Origens e destinos\n\nlibrary(dplyr)\n\npontos &lt;- readr::read_csv(\"dados/geo/pontos_anapolis.csv\")",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Leitura dos arquivos e montagem da rede</span>"
+    ]
+  },
+  {
+    "objectID": "8-rede.html#construção-da-rede",
+    "href": "8-rede.html#construção-da-rede",
+    "title": "8  Leitura dos arquivos e montagem da rede",
+    "section": "8.3 Construção da rede",
+    "text": "8.3 Construção da rede\n\noptions(java.parameters = \"-Xmx4G\")\nlibrary(r5r)\n\nr5r_core &lt;- setup_r5(data_path = \"dados/r5\")",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Leitura dos arquivos e montagem da rede</span>"
+    ]
+  },
+  {
+    "objectID": "8-rede.html#matriz-de-tempos-de-viagem",
+    "href": "8-rede.html#matriz-de-tempos-de-viagem",
+    "title": "8  Leitura dos arquivos e montagem da rede",
+    "section": "8.4 Matriz de tempos de viagem",
+    "text": "8.4 Matriz de tempos de viagem\n\nttm &lt;- travel_time_matrix(\n  r5r_core,\n  origins      = pontos,\n  destinations = pontos,\n  mode         = c(\"WALK\", \"TRANSIT\"),\n  departure_datetime = as.POSIXct(\"2026-09-09 07:00:00\"),\n  max_trip_duration  = 60\n)",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Leitura dos arquivos e montagem da rede</span>"
+    ]
+  },
+  {
+    "objectID": "8-rede.html#inspeção-e-validação",
+    "href": "8-rede.html#inspeção-e-validação",
+    "title": "8  Leitura dos arquivos e montagem da rede",
+    "section": "8.5 Inspeção e validação",
+    "text": "8.5 Inspeção e validação\n\n\n\n\n\n\n\nAvisoEncerre a sessão do R5\n\n\n\nAo terminar, chame stop_r5(r5r_core) para liberar a memória da máquina virtual. Sem isso, a JVM continua ocupando a RAM até o fim da sessão do R.",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Leitura dos arquivos e montagem da rede</span>"
+    ]
+  },
+  {
+    "objectID": "9-indicadores.html",
+    "href": "9-indicadores.html",
+    "title": "9  Cômputo dos indicadores",
+    "section": "",
+    "text": "9.1 Famílias de medidas\nCom a matriz de tempos pronta e as oportunidades localizadas no território, calcular acessibilidade vira uma operação direta. A parte difícil está antes e depois, na escolha da medida e na leitura do resultado. Medidas diferentes respondem a perguntas diferentes, e um mapa de acessibilidade só significa alguma coisa quando se sabe qual pergunta ele responde. Este capítulo apresenta as principais famílias de medidas, calcula-as para Anápolis e discute como interpretá-las.",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Cômputo dos indicadores</span>"
+    ]
+  },
+  {
+    "objectID": "9-indicadores.html#famílias-de-medidas",
+    "href": "9-indicadores.html#famílias-de-medidas",
+    "title": "9  Cômputo dos indicadores",
+    "section": "",
+    "text": "9.1.1 Medidas cumulativas\n\n\n\n9.1.2 Medidas gravitacionais\n\n\n\n9.1.3 Custo mínimo\n\n\n\n9.1.4 Oportunidade flutuante",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Cômputo dos indicadores</span>"
+    ]
+  },
+  {
+    "objectID": "9-indicadores.html#cálculo-com-o-pacote-accessibility",
+    "href": "9-indicadores.html#cálculo-com-o-pacote-accessibility",
+    "title": "9  Cômputo dos indicadores",
+    "section": "9.2 Cálculo com o pacote accessibility",
+    "text": "9.2 Cálculo com o pacote accessibility\n\nlibrary(accessibility)\n\nacc_cum &lt;- cumulative_cutoff(\n  travel_matrix = ttm,\n  land_use_data = oportunidades,\n  opportunity   = \"ensino\",\n  travel_cost   = \"travel_time_p50\",\n  cutoff        = 30\n)",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Cômputo dos indicadores</span>"
+    ]
+  },
+  {
+    "objectID": "9-indicadores.html#escolha-de-parâmetros",
+    "href": "9-indicadores.html#escolha-de-parâmetros",
+    "title": "9  Cômputo dos indicadores",
+    "section": "9.3 Escolha de parâmetros",
+    "text": "9.3 Escolha de parâmetros",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Cômputo dos indicadores</span>"
+    ]
+  },
+  {
+    "objectID": "9-indicadores.html#mapas-de-acessibilidade",
+    "href": "9-indicadores.html#mapas-de-acessibilidade",
+    "title": "9  Cômputo dos indicadores",
+    "section": "9.4 Mapas de acessibilidade",
+    "text": "9.4 Mapas de acessibilidade",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Cômputo dos indicadores</span>"
+    ]
+  },
+  {
+    "objectID": "9-indicadores.html#distribuição-social-da-acessibilidade",
+    "href": "9-indicadores.html#distribuição-social-da-acessibilidade",
+    "title": "9  Cômputo dos indicadores",
+    "section": "9.5 Distribuição social da acessibilidade",
+    "text": "9.5 Distribuição social da acessibilidade\n\n\n\n\n\n\n\nDicaRetomando a Parte 1\n\n\n\nO indicador de qualidade do entorno construído no capítulo 3 qualifica a leitura dos mapas de caminhada. Uma célula com bom acesso calculado pela rede viária pode ter caminhabilidade ruim na prática, e o dado do entorno é o que revela essa diferença.",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Cômputo dos indicadores</span>"
+    ]
+  },
+  {
+    "objectID": "10-cenarios.html",
+    "href": "10-cenarios.html",
+    "title": "10  Avaliação de cenários",
+    "section": "",
+    "text": "10.1 A lógica do antes e depois\nUm mapa de acessibilidade descreve a cidade como ela é. O uso mais interessante da ferramenta, porém, está em perguntar como ela ficaria. Avaliar cenários significa alterar um insumo da rede, recalcular tudo e comparar o antes e o depois, procedimento que transforma a análise de acessibilidade em instrumento de apoio à decisão. Este capítulo monta um cenário de intervenção em Anápolis e mede seus efeitos, com atenção especial a quem ganha e a quem não ganha.",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Avaliação de cenários</span>"
+    ]
+  },
+  {
+    "objectID": "10-cenarios.html#a-lógica-do-antes-e-depois",
+    "href": "10-cenarios.html#a-lógica-do-antes-e-depois",
+    "title": "10  Avaliação de cenários",
+    "section": "",
+    "text": "ImportanteUma pasta por cenário\n\n\n\nCada cenário exige sua própria pasta de insumos e sua própria rede construída. Misturar arquivos de cenários diferentes no mesmo diretório é a causa mais frequente de resultado inexplicável.\n\n\ndados/r5/\n├── base/         cenário de referência\n└── cenario_1/    cenário alternativo",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Avaliação de cenários</span>"
+    ]
+  },
+  {
+    "objectID": "10-cenarios.html#construção-do-cenário",
+    "href": "10-cenarios.html#construção-do-cenário",
+    "title": "10  Avaliação de cenários",
+    "section": "10.2 Construção do cenário",
+    "text": "10.2 Construção do cenário\n\n\n10.2.1 Alteração do serviço de transporte coletivo\n\nlibrary(gtfstools)\n\ngtfs &lt;- read_gtfs(\"dados/r5/base/anapolis_gtfs.zip\")\n\n# altera a frequência da linha de interesse e grava o feed do cenário\nwrite_gtfs(gtfs, \"dados/r5/cenario_1/anapolis_gtfs.zip\")\n\n\n10.2.2 Alteração da rede viária",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Avaliação de cenários</span>"
+    ]
+  },
+  {
+    "objectID": "10-cenarios.html#recálculo-e-comparação",
+    "href": "10-cenarios.html#recálculo-e-comparação",
+    "title": "10  Avaliação de cenários",
+    "section": "10.3 Recálculo e comparação",
+    "text": "10.3 Recálculo e comparação\n\nr5r_cenario &lt;- setup_r5(data_path = \"dados/r5/cenario_1\")\n\n# mesmos parâmetros do capítulo 8, alterando apenas os insumos",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Avaliação de cenários</span>"
+    ]
+  },
+  {
+    "objectID": "10-cenarios.html#mapas-e-tabelas-de-diferença",
+    "href": "10-cenarios.html#mapas-e-tabelas-de-diferença",
+    "title": "10  Avaliação de cenários",
+    "section": "10.4 Mapas e tabelas de diferença",
+    "text": "10.4 Mapas e tabelas de diferença",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Avaliação de cenários</span>"
+    ]
+  },
+  {
+    "objectID": "10-cenarios.html#quem-ganha-e-quem-perde",
+    "href": "10-cenarios.html#quem-ganha-e-quem-perde",
+    "title": "10  Avaliação de cenários",
+    "section": "10.5 Quem ganha e quem perde",
+    "text": "10.5 Quem ganha e quem perde",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Avaliação de cenários</span>"
+    ]
+  },
+  {
+    "objectID": "10-cenarios.html#limites-da-análise",
+    "href": "10-cenarios.html#limites-da-análise",
+    "title": "10  Avaliação de cenários",
+    "section": "10.6 Limites da análise",
+    "text": "10.6 Limites da análise\n\n\n\n\n\n\n\nDicaPara continuar\n\n\n\nO material citado na apresentação aprofunda todos os temas tratados aqui. O Projeto Acesso a Oportunidades, acessível pelo pacote aopdata, oferece indicadores prontos para as maiores cidades brasileiras e serve de referência para comparação (Pereira et al., 2022).\n\n\n\n\n\n\nPereira, R. H. M., Herszenhut, D., Braga, C. K. V., Bazzo, J. P., Oliveira, J. L. A., Parga, J. P., Saraiva, M., Silva, L. P., Tomasiello, D. B., & Warwar, L. (2022). Distribuição espacial de características sociodemográficas e localização de empregos e serviços públicos das vinte maiores cidades do Brasil (Texto para Discussão N. 2772). Instituto de Pesquisa Econômica Aplicada (Ipea). https://doi.org/10.38116/td2772",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Avaliação de cenários</span>"
+    ]
+  },
+  {
+    "objectID": "referencias.html",
+    "href": "referencias.html",
+    "title": "Referências",
+    "section": "",
+    "text": "Pedreira Junior, J. U. (2026). Censo demográfico no R:\nConceitos e aplicações para a análise do território brasileiro. https://pedreirajr.github.io/rcensolivro/\n\n\nPereira, R. H. M., & Herszenhut, D. (2023). Introdução à\nacessibilidade urbana: Um guia prático em R. Instituto\nde Pesquisa Econômica Aplicada (Ipea). https://ipeagit.github.io/intro_access_book/\n\n\nPereira, R. H. M., Herszenhut, D., Braga, C. K. V., Bazzo, J. P.,\nOliveira, J. L. A., Parga, J. P., Saraiva, M., Silva, L. P., Tomasiello,\nD. B., & Warwar, L. (2022). Distribuição espacial de\ncaracterísticas sociodemográficas e localização de empregos e serviços\npúblicos das vinte maiores cidades do Brasil (Texto\nPara Discussão No. 2772). Instituto de Pesquisa Econômica Aplicada\n(Ipea). https://doi.org/10.38116/td2772",
+    "crumbs": [
+      "Referências"
+    ]
+  }
+]

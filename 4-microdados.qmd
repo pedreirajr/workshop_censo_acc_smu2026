@@ -1,0 +1,91 @@
+---
+title: "Microdados da amostra"
+---
+
+Os agregados respondem quantos, e os microdados respondem quem. O questionário da amostra investiga
+temas que o questionário básico não cobre, como migração, nível de instrução, rendimento detalhado e
+deslocamento para trabalho e estudo. O preço dessa riqueza é metodológico. Cada registro representa
+um número variável de pessoas do universo, e ignorar essa ponderação produz estimativas
+simplesmente erradas. Este capítulo mostra como ler os microdados e como tratá-los corretamente.
+
+::: {.callout-note}
+## Nesta seção você vai
+
+- distinguir o questionário básico do questionário da amostra
+- ler os microdados de Anápolis com o `censobr`
+- entender o papel dos pesos amostrais
+- declarar o desenho amostral e produzir estimativas com intervalo de confiança
+- calcular indicadores de deslocamento por área de ponderação
+:::
+
+## Universo e amostra
+
+<!-- ESBOÇO: contrastar os dois questionários, explicar por que a amostra existe e o que ela
+     permite investigar. Deixar claro o menor nível geográfico válido para divulgação, a área de
+     ponderação, e por que não se desce ao setor. -->
+
+## Leitura dos microdados
+
+<!-- ESBOÇO: leitura da base de população e da base de domicílios, retorno em Arrow, seleção de
+     colunas antes do collect e filtro por código de município. Comentar o tamanho do arquivo
+     nacional e a estratégia de memória. -->
+
+```r
+library(censobr)
+library(dplyr)
+
+pessoas <- read_population(year = 2022, as_data_frame = FALSE)
+
+pessoas_ana <- pessoas |>
+  filter(code_muni == "5201108") |>
+  select(code_weighting, peso, idade, sexo, rendimento, desloc_trabalho, tempo_desloc) |>
+  collect()
+```
+
+<!-- DADOS: alternativa offline, microdados já recortados para Anápolis em
+     dados/censo/microdados_anapolis.parquet -->
+
+## Os pesos amostrais
+
+<!-- ESBOÇO: o que o peso representa, por que ele varia entre registros e o que acontece quando se
+     calcula uma média simples ignorando-o. Demonstração numérica comparando estimativa ponderada
+     e não ponderada da mesma variável, com a diferença explicitada em tabela. -->
+
+::: {.callout-warning}
+## Nunca calcule sem os pesos
+
+Uma média simples dos microdados descreve a amostra, e não a população. A diferença não é pequena e
+não é aleatória, porque o desenho amostral do Censo varia entre municípios e entre áreas dentro de
+um mesmo município.
+:::
+
+## Declaração do desenho amostral
+
+<!-- ESBOÇO: uso do survey e do srvyr para declarar o desenho, com a área de ponderação como
+     estrato. Mostrar a sintaxe do as_survey_design e obter estimativas com erro padrão. -->
+
+```r
+library(srvyr)
+
+desenho <- pessoas_ana |>
+  as_survey_design(weights = peso, strata = code_weighting)
+
+desenho |>
+  group_by(code_weighting) |>
+  summarise(renda_media = survey_mean(rendimento, na.rm = TRUE))
+```
+
+## Indicadores de deslocamento
+
+<!-- ESBOÇO: aplicação temática da oficina. Estimar por área de ponderação a proporção de pessoas
+     que se deslocam para trabalho ou estudo, o modo declarado quando disponível e a distribuição
+     do tempo de deslocamento. Mapa por área de ponderação e leitura crítica dos resultados,
+     lembrando a imprecisão em áreas com poucos registros. -->
+
+::: {.callout-tip}
+## Conexão com a Parte 2
+
+O tempo de deslocamento declarado é uma medida percebida e autorreferida. No capítulo
+[9](9-indicadores.qmd) o mesmo fenômeno é medido pela rede, com o `r5r`, e a comparação entre as
+duas abordagens rende boa discussão.
+:::

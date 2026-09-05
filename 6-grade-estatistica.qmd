@@ -1,0 +1,82 @@
+---
+title: "Grade estatística"
+---
+
+O setor censitário tem um defeito incômodo. Ele muda de tamanho, de forma e de código entre as
+edições do Censo, o que dificulta qualquer comparação ao longo do tempo e faz com que áreas centrais
+e periféricas tenham unidades de tamanhos muito diferentes. A grade estatística resolve os dois
+problemas ao distribuir a informação em células regulares de dimensão fixa, estáveis entre censos.
+Para a Parte 2 ela tem uma vantagem adicional, porque fornece origens de análise com peso
+populacional e geometria uniforme.
+
+::: {.callout-note}
+## Nesta seção você vai
+
+- entender a lógica da grade estatística e sua resolução
+- obter a grade de Anápolis e juntá-la aos dados populacionais
+- comparar grade e setor censitário no mesmo território
+- preparar o conjunto de origens e destinos usado na Parte 2
+:::
+
+## O que é a grade estatística
+
+<!-- ESBOÇO: construção da grade, resolução das células em área urbana e em área rural, e o
+     critério de alocação da população. Vantagens, estabilidade temporal e uniformidade
+     geométrica. Limitação principal, a grade divulga um conjunto reduzido de variáveis. -->
+
+## Obtenção da grade
+
+<!-- ESBOÇO: leitura com o geobr, recorte para o município e checagem do total populacional contra
+     o valor divulgado para Anápolis. A conferência é obrigatória, porque recorte por interseção
+     pode duplicar ou perder população nas bordas. -->
+
+```r
+library(geobr)
+library(sf)
+library(dplyr)
+
+grade <- read_statistical_grid(code_grid = "GO", year = 2022)
+
+grade_ana <- grade |>
+  st_filter(municipio, .predicate = st_within)
+```
+
+<!-- DADOS: alternativa offline, grade já recortada em dados/geo/grade_anapolis.gpkg -->
+
+## Grade e setor lado a lado
+
+<!-- ESBOÇO: figura com os dois recortes sobrepostos na mesma área da cidade e tabela comparando
+     número de unidades, área mediana e população mediana. Discutir o problema da unidade de área
+     modificável e o efeito da escolha do recorte sobre o indicador final. -->
+
+## Preparação das origens e destinos
+
+<!-- ESBOÇO: etapa que fecha a Parte 1. Gerar os centroides das células com população, juntar as
+     contagens de oportunidades do CNEFE do capítulo 5 e exportar o arquivo que a Parte 2 consome.
+     Deixar explícito o formato exigido pelo r5r, com colunas id, lon e lat em coordenadas
+     geográficas. -->
+
+```r
+pontos <- grade_ana |>
+  filter(populacao > 0) |>
+  st_centroid() |>
+  st_transform(4326)
+
+# formato exigido pelo r5r
+pontos_r5 <- pontos |>
+  mutate(
+    id  = as.character(id_grade),
+    lon = st_coordinates(geometry)[, 1],
+    lat = st_coordinates(geometry)[, 2]
+  ) |>
+  st_drop_geometry()
+```
+
+<!-- DADOS: produto deste capítulo salvo em dados/geo/pontos_anapolis.csv, insumo do capítulo 8 -->
+
+::: {.callout-tip}
+## Fim da Parte 1
+
+O arquivo de pontos produzido aqui reúne, em uma mesma tabela, onde as pessoas moram e onde estão as
+oportunidades. É com ele que a Parte 2 começa.
+:::

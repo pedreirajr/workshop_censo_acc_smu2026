@@ -1,0 +1,82 @@
+---
+title: "Recortes territoriais"
+---
+
+Nenhuma análise territorial começa pelo dado. Ela começa pela decisão de qual unidade geográfica
+responde à pergunta que se quer fazer. O IBGE divide o território brasileiro em vários recortes
+sobrepostos, cada um criado com um propósito distinto, e escolher o errado compromete tudo o que
+vem depois. Este capítulo apresenta esses recortes, mostra como obtê-los com o pacote `geobr` e
+discute os critérios de escolha, com Anápolis como território de referência.
+
+::: {.callout-note}
+## Nesta seção você vai
+
+- reconhecer os principais recortes territoriais do IBGE e o propósito de cada um
+- baixar malhas oficiais com o `geobr`
+- entender sistemas de referência de coordenadas e quando reprojetar
+- mapear os recortes de Anápolis e compará-los
+- escolher o recorte adequado a cada tipo de pergunta
+:::
+
+## Os recortes do IBGE
+
+<!-- ESBOÇO: apresentar a hierarquia político-administrativa (país, UF, município, distrito,
+     subdistrito) e a hierarquia estatística (setor censitário, área de ponderação). Acrescentar
+     os recortes temáticos relevantes para transportes, como área urbanizada, concentração urbana
+     e região metropolitana. Uma figura em painéis com o mesmo território em cada recorte. -->
+
+### Recortes político-administrativos
+
+<!-- ESBOÇO: o que muda entre edições censitárias, criação e fusão de municípios, e por que a
+     comparação intertemporal exige atenção. -->
+
+### Recortes estatísticos
+
+<!-- ESBOÇO: setor censitário como menor unidade de divulgação e critério de tamanho por número de
+     domicílios. Área de ponderação como menor unidade válida para os microdados da amostra.
+     Deixar claro que o setor é instável entre censos. -->
+
+### Recortes temáticos de interesse para transportes
+
+<!-- ESBOÇO: áreas urbanizadas, arranjos populacionais e concentrações urbanas. Utilidade para
+     delimitar o universo de análise da Parte 2. -->
+
+## Download das malhas com o geobr
+
+<!-- ESBOÇO: mostrar as funções de leitura, o argumento year e o efeito do cache. Baixar município,
+     setores e áreas de ponderação de Anápolis. -->
+
+```r
+library(geobr)
+library(sf)
+library(dplyr)
+
+cod_anapolis <- 5201108
+
+municipio <- read_municipality(code_muni = cod_anapolis, year = 2022)
+setores   <- read_census_tract(code_tract = cod_anapolis, year = 2022)
+ap        <- read_weighting_area(code_weighting = cod_anapolis, year = 2022)
+```
+
+## Sistemas de referência de coordenadas
+
+<!-- ESBOÇO: diferença entre coordenadas geográficas e projetadas, por que áreas e distâncias
+     exigem projeção métrica, e escolha do SIRGAS 2000 / UTM 22S para Anápolis. Mostrar st_crs e
+     st_transform. Alertar que o r5r, na Parte 2, exige coordenadas em graus. -->
+
+```r
+setores_utm <- st_transform(setores, crs = 31982)  # SIRGAS 2000 / UTM 22S
+```
+
+## Os recortes de Anápolis lado a lado
+
+<!-- ESBOÇO: figura com painéis comparando município, setores, áreas de ponderação e área
+     urbanizada. Tabela com contagem de unidades e área média de cada recorte. Comentar a
+     diferença de resolução e o que isso implica. -->
+
+## Qual recorte usar
+
+<!-- ESBOÇO: fechar com uma tabela de decisão que cruza tipo de pergunta, fonte do dado e recorte
+     recomendado. Exemplo: estimativa com pesos amostrais exige área de ponderação, indicador do
+     universo aceita setor, comparação intertemporal pede grade estatística. Antecipar a escolha
+     usada na Parte 2. -->

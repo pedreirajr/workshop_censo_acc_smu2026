@@ -1,0 +1,72 @@
+project:
+  type: book
+  output-dir: docs
+
+lang: pt-BR
+
+book:
+  title: "Dados Censitários e Acessibilidade Urbana em R"
+  subtitle: "Material prático da oficina do Simpósio de Mobilidade Urbana (EESC-USP, 2026)"
+  image: img/logo_smu.png
+  site-url: https://pedreirajr.github.io/workshop_censo_acc_smu2026/
+  repo-url: https://github.com/pedreirajr/workshop_censo_acc_smu2026
+  open-graph: true
+  author:
+    - name: "Jorge Ubirajara Pedreira Junior"
+      url: https://pedreirajr.github.io/website/
+    - name: "Thiago Louro"
+    - name: "Lucas Assis"
+  language: pt
+  page-navigation: true
+  search: true
+  page-footer:
+    left: "Simpósio de Mobilidade Urbana · EESC-USP · São Carlos-SP · 8 a 11 de setembro de 2026"
+    right: "[Repositório da oficina](https://github.com/pedreirajr/workshop_censo_acc_smu2026)"
+  chapters:
+    - index.qmd
+
+    - part: "PARTE 1: DADOS CENSITÁRIOS"
+      chapters:
+        - 1-instalacao.qmd
+        - 2-recortes-territoriais.qmd
+        - 3-agregados.qmd
+        - 4-microdados.qmd
+        - 5-cnefe.qmd
+        - 6-grade-estatistica.qmd
+
+    - part: "PARTE 2: ACESSIBILIDADE URBANA"
+      chapters:
+        - 7-instalacao-r5r.qmd
+        - 8-rede.qmd
+        - 9-indicadores.qmd
+        - 10-cenarios.qmd
+
+    - referencias.qmd
+
+format:
+  html:
+    theme: cosmo
+    css: custom.css
+    number-sections: true
+    toc: true
+    toc-depth: 3
+    toc-title: "Índice do Capítulo"
+    link-external-newwindow: true
+    fig-cap-location: top
+    tbl-cap-location: top
+    code-copy: true
+    code-overflow: wrap
+
+bibliography: referencias.bib
+csl: apa.csl
+
+crossref:
+  fig-title: "Figura"
+  fig-prefix: "Figura"
+  tbl-title: "Tabela"
+  tbl-prefix: "Tabela"
+  eq-title: "Equação"
+  eq-prefix: "Equação"
+
+execute:
+  freeze: auto

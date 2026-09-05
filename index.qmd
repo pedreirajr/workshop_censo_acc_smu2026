@@ -1,0 +1,139 @@
+# Apresentação {.unnumbered}
+
+![](img/logo_smu.png){.banner-evento fig-alt="Simpósio de Mobilidade Urbana, EESC-USP, São Carlos-SP, 8 a 11 de setembro de 2026. Curso: Dados censitários e acessibilidade urbana em R"}
+
+Este site reúne o material prático da oficina **Dados Censitários e Acessibilidade Urbana em R**,
+oferecida no **Simpósio de Mobilidade Urbana**, evento de encerramento do projeto Redes de
+Transportes e Cidades Conectadas, realizado na EESC-USP, em São Carlos-SP, entre 8 e 11 de
+setembro de 2026.
+
+A oficina parte de uma constatação simples. Boa parte das perguntas sobre mobilidade urbana só
+ganha resposta quando duas coisas se encontram, a descrição de quem mora onde e a medida de quanto
+custa chegar aos lugares. A primeira vem do Censo Demográfico, a maior operação estatística do
+país, cujos produtos descrevem população e domicílios em recortes territoriais finos. A segunda vem
+das medidas de acessibilidade urbana, que combinam a distribuição das oportunidades no território
+com o desempenho da rede de transportes. Trabalhar as duas no mesmo ambiente computacional, sem
+exportações intermediárias e com registro reprodutível de cada etapa, é o que o R permite fazer, e
+é o que se pretende demonstrar aqui.
+
+## Como a oficina está organizada {.unnumbered}
+
+São 8 horas de atividade, divididas em dois blocos de 4 horas. Cada bloco tem 2 horas expositivas e
+2 horas de aplicação prática ao computador.
+
+| Bloco | Teoria (2h) | Prática (2h) |
+|---|---|---|
+| Dados censitários | Conceitos, métodos e produtos do Censo Demográfico | Parte 1 deste site (capítulos 1 a 6) |
+| Acessibilidade urbana | Conceitos, medidas e usos em planejamento | Parte 2 deste site (capítulos 7 a 10) |
+
+**Este site cobre apenas as partes práticas.** O conteúdo expositivo é apresentado em sala, com
+material próprio. O que está aqui é o roteiro de código, pensado para ser acompanhado ao vivo e,
+depois, reexecutado por conta própria.
+
+A **Parte 1** percorre os principais produtos do Censo Demográfico, começando pela preparação do
+ambiente e pelos recortes territoriais do IBGE e avançando pelos agregados por setor censitário,
+pelos microdados da amostra, pelo CNEFE e pela grade estatística. Os agregados incluem uma seção
+dedicada às características urbanísticas do entorno dos domicílios, com recorte voltado a
+transportes.
+
+A **Parte 2** monta uma análise de acessibilidade do zero, com a preparação do ambiente de
+roteamento, a leitura dos insumos e a construção da rede multimodal, o cálculo dos indicadores e,
+por fim, a avaliação de um cenário de intervenção.
+
+## O estudo de caso {.unnumbered}
+
+Todas as aplicações usam **Anápolis-GO** como território de referência. A escolha de um município
+de porte médio é deliberada. Os arquivos são pequenos o bastante para que cada etapa rode em poucos
+minutos em um notebook comum, condição necessária para uma prática de 2 horas, e grandes o
+suficiente para que os padrões territoriais apareçam com clareza nos mapas.
+
+Usar o mesmo município nas duas Partes também tem uma razão didática. Os dados populacionais
+produzidos na Parte 1 são exatamente os insumos consumidos na Parte 2, de modo que o participante
+percorre o caminho completo, do arquivo bruto do IBGE ao mapa de acessibilidade.
+
+## Pré-requisitos {.unnumbered}
+
+A oficina supõe familiaridade básica com R, o suficiente para ler um *script*, entender o que faz
+uma função e reconhecer a estrutura de um *data frame*. Não se exige experiência prévia com dados
+do Censo, com geoprocessamento ou com roteamento de redes de transporte.
+
+Quem quiser chegar mais preparado pode consultar estes materiais.
+
+- @pedreira_censo_2026, para os fundamentos de R aplicados a dados tabulares e geográficos e para
+  o detalhamento dos produtos do Censo tratados na Parte 1.
+- @pereira_herszenhut_2023, para a fundamentação conceitual e computacional das medidas de
+  acessibilidade tratadas na Parte 2.
+
+## Antes do evento {.unnumbered}
+
+::: {.callout-important}
+## Instale tudo antes de chegar
+
+As instalações consomem tempo e dependem de conexão estável. Faça a preparação em casa, com
+antecedência, para não gastar a prática configurando *software*. Os capítulos
+[1](1-instalacao.qmd) e [7](7-instalacao-r5r.qmd) trazem o passo a passo completo, incluindo a
+instalação do Java exigida pelo pacote `r5r`.
+:::
+
+Em resumo, será necessário ter instalados o R, o RStudio, um Java compatível com o `r5r` e os
+pacotes de R usados nas duas Partes. Os capítulos de instalação detalham cada item e trazem um
+teste de verificação do ambiente.
+
+## Onde ficam os dados {.unnumbered}
+
+Os arquivos usados na oficina são distribuídos à parte e devem ser colocados dentro do projeto do
+RStudio, na pasta `dados/`, com a seguinte organização.
+
+```
+workshop_censo_acc_smu2026/
+├── workshop_censo_acc_smu2026.Rproj
+└── dados/
+    ├── censo/   agregados, microdados e CNEFE de Anápolis
+    ├── geo/     malhas territoriais e grade estatística
+    └── r5/      rede viária (.osm.pbf), GTFS (.zip) e relevo (.tif)
+```
+
+Sempre que um capítulo depender de um arquivo específico, o caminho esperado aparece indicado no
+próprio código. Parte dos dados do Censo é obtida diretamente pelos pacotes `censobr` e `geobr`,
+sem necessidade de arquivos locais.
+
+## Instrutores {.unnumbered}
+
+::: {.instrutores}
+
+::: {.instrutor}
+### Jorge Ubirajara Pedreira Junior {.unnumbered}
+
+Professor da Universidade Federal da Bahia (UFBA), atua em planejamento de transportes, análise de
+dados urbanos e uso de bases de dados institucionais brasileiras. Autor de
+*Censo Demográfico no R*.
+[Página pessoal](https://pedreirajr.github.io/website/)
+:::
+
+::: {.instrutor}
+### Thiago Louro {.unnumbered}
+
+<!-- COMPLETAR: minibio do Thiago (vínculo institucional, áreas de atuação, link) -->
+:::
+
+::: {.instrutor}
+### Lucas Assis {.unnumbered}
+
+<!-- COMPLETAR: minibio do Lucas (vínculo institucional, áreas de atuação, link) -->
+:::
+
+:::
+
+## Como citar {.unnumbered}
+
+> Pedreira Junior, J. U., Louro, T., & Assis, L. (2026). *Dados Censitários e Acessibilidade
+> Urbana em R: material prático da oficina do Simpósio de Mobilidade Urbana*.
+> <https://pedreirajr.github.io/workshop_censo_acc_smu2026/>
+
+## Agradecimentos {.unnumbered}
+
+Este material se apoia inteiramente em bens públicos produzidos por duas instituições. O Instituto
+Brasileiro de Geografia e Estatística (IBGE) produz e disponibiliza os dados do Censo Demográfico
+tratados na Parte 1. O Instituto de Pesquisa Econômica Aplicada (Ipea) desenvolve e mantém os
+pacotes `geobr`, `censobr`, `r5r`, `accessibility` e `aopdata`, sem os quais nada do que se faz
+aqui caberia em 4 horas de oficina.
