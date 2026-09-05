@@ -237,8 +237,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-cenarios.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Avaliação de cenários</span></span></a>
+  <a href="./10-equidade.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Equidade e pobreza de acessibilidade</span></span></a>
   </div>
 </li>
       </ul>
@@ -259,16 +259,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Índice do Capítulo</h2>
    
   <ul>
-  <li><a href="#os-insumos-da-rede" id="toc-os-insumos-da-rede" class="nav-link active" data-scroll-target="#os-insumos-da-rede"><span class="header-section-number">8.1</span> Os insumos da rede</a>
-  <ul class="collapse">
-  <li><a href="#rede-viária" id="toc-rede-viária" class="nav-link" data-scroll-target="#rede-viária"><span class="header-section-number">8.1.1</span> Rede viária</a></li>
-  <li><a href="#transporte-coletivo" id="toc-transporte-coletivo" class="nav-link" data-scroll-target="#transporte-coletivo"><span class="header-section-number">8.1.2</span> Transporte coletivo</a></li>
-  <li><a href="#relevo" id="toc-relevo" class="nav-link" data-scroll-target="#relevo"><span class="header-section-number">8.1.3</span> Relevo</a></li>
-  </ul></li>
-  <li><a href="#origens-e-destinos" id="toc-origens-e-destinos" class="nav-link" data-scroll-target="#origens-e-destinos"><span class="header-section-number">8.2</span> Origens e destinos</a></li>
-  <li><a href="#construção-da-rede" id="toc-construção-da-rede" class="nav-link" data-scroll-target="#construção-da-rede"><span class="header-section-number">8.3</span> Construção da rede</a></li>
-  <li><a href="#matriz-de-tempos-de-viagem" id="toc-matriz-de-tempos-de-viagem" class="nav-link" data-scroll-target="#matriz-de-tempos-de-viagem"><span class="header-section-number">8.4</span> Matriz de tempos de viagem</a></li>
-  <li><a href="#inspeção-e-validação" id="toc-inspeção-e-validação" class="nav-link" data-scroll-target="#inspeção-e-validação"><span class="header-section-number">8.5</span> Inspeção e validação</a></li>
+  <li><a href="#os-dados-da-oficina" id="toc-os-dados-da-oficina" class="nav-link active" data-scroll-target="#os-dados-da-oficina"><span class="header-section-number">8.1</span> Os dados da oficina</a></li>
+  <li><a href="#grade-de-uso-do-solo-h3-resolução-9" id="toc-grade-de-uso-do-solo-h3-resolução-9" class="nav-link" data-scroll-target="#grade-de-uso-do-solo-h3-resolução-9"><span class="header-section-number">8.2</span> Grade de uso do solo (H3, resolução 9)</a></li>
+  <li><a href="#rede-viária-openstreetmap" id="toc-rede-viária-openstreetmap" class="nav-link" data-scroll-target="#rede-viária-openstreetmap"><span class="header-section-number">8.3</span> Rede viária (OpenStreetMap)</a></li>
+  <li><a href="#elevação-mde" id="toc-elevação-mde" class="nav-link" data-scroll-target="#elevação-mde"><span class="header-section-number">8.4</span> Elevação (MDE)</a></li>
+  <li><a href="#transporte-público-gtfs" id="toc-transporte-público-gtfs" class="nav-link" data-scroll-target="#transporte-público-gtfs"><span class="header-section-number">8.5</span> Transporte público (GTFS)</a></li>
+  <li><a href="#construindo-a-rede-de-transporte" id="toc-construindo-a-rede-de-transporte" class="nav-link" data-scroll-target="#construindo-a-rede-de-transporte"><span class="header-section-number">8.6</span> Construindo a rede de transporte</a></li>
+  <li><a href="#conferindo-erros-do-gtfs" id="toc-conferindo-erros-do-gtfs" class="nav-link" data-scroll-target="#conferindo-erros-do-gtfs"><span class="header-section-number">8.7</span> Conferindo erros do GTFS</a></li>
+  <li><a href="#visualizando-a-rede" id="toc-visualizando-a-rede" class="nav-link" data-scroll-target="#visualizando-a-rede"><span class="header-section-number">8.8</span> Visualizando a rede</a></li>
   </ul>
 </nav>
     </div>
@@ -294,7 +292,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Medir acessibilidade exige saber quanto tempo se leva para ir de cada origem a cada destino, por cada modo de interesse. Esse cálculo depende de uma representação computacional da rede de transportes, montada a partir de arquivos de origens distintas. Este capítulo trata dos insumos, mostra onde cada um deve estar, constrói a rede multimodal de Anápolis com o <code>r5r</code> e produz a matriz de tempos de viagem que sustenta todo o restante da Parte 2.</p>
+<p>Medir acessibilidade exige saber quanto tempo se leva para ir de cada origem a cada destino, por cada modo de interesse. Esse cálculo depende de uma representação computacional da rede de transportes, montada a partir de arquivos de origens distintas. Este capítulo apresenta os quatro insumos usados na oficina, mostra como obtê-los e inspecioná-los, e constrói com eles a rede de roteamento de Anápolis.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -306,113 +304,245 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>identificar os insumos exigidos pelo <code>r5r</code> e a função de cada um</li>
-<li>organizar os arquivos na estrutura de pastas esperada</li>
-<li>construir a rede multimodal com <code>setup_r5()</code></li>
-<li>calcular a matriz de tempos de viagem por modo</li>
-<li>inspecionar e validar os resultados antes de seguir adiante</li>
+<li>baixar os dados da oficina e organizá-los nas pastas do projeto</li>
+<li>inspecionar a grade de uso do solo, a rede viária, o modelo de elevação e o GTFS</li>
+<li>construir a rede de roteamento com <code>build_network()</code></li>
+<li>conferir os erros de validação do GTFS</li>
+<li>visualizar a rede efetivamente usada pelo R5</li>
 </ul>
 </div>
 </div>
-<section id="os-insumos-da-rede" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="os-insumos-da-rede"><span class="header-section-number">8.1</span> Os insumos da rede</h2>
-<!-- ESBOÇO: apresentar cada insumo, o que ele representa, se é obrigatório ou opcional, e de onde
-     costuma vir. Rede viária em .osm.pbf a partir do OpenStreetMap, obrigatória. GTFS do transporte
-     coletivo em .zip, opcional, necessário apenas para roteamento por transporte público. Modelo
-     digital de elevação em .tif, opcional, relevante quando o relevo condiciona caminhada e
-     bicicleta. Tabela resumo com formato, obrigatoriedade e observação. -->
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<section id="os-dados-da-oficina" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="os-dados-da-oficina"><span class="header-section-number">8.1</span> Os dados da oficina</h2>
+<p>Os arquivos que não são produzidos por código são distribuídos como <em>assets</em> de um <a href="https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/tag/dados"><em>release</em></a> do repositório da oficina.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Conteúdo</th>
+<th>Pasta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>anapolis.pbf</code></td>
+<td>Rede viária (OpenStreetMap) do município</td>
+<td><code>dados/r5/</code></td>
+</tr>
+<tr class="even">
+<td><code>Anapolis.tif</code></td>
+<td>Modelo digital de elevação (MDE), usado para custo de caminhada e bicicleta em ladeiras</td>
+<td><code>dados/r5/</code></td>
+</tr>
+<tr class="odd">
+<td><code>GTFS_ANL.zip</code></td>
+<td>Feed GTFS do transporte público de Anápolis</td>
+<td><code>dados/r5/</code></td>
+</tr>
+<tr class="even">
+<td><code>grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg</code></td>
+<td>Grade de hexágonos H3 (resolução 9) com número de empregos, população, renda média e classificação urbano/rural</td>
+<td><code>dados/geo/</code></td>
+</tr>
+</tbody>
+</table>
+<p>O bloco abaixo baixa o que ainda não estiver na máquina. Rodá-lo mais de uma vez não repete o download.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>url_base <span class="ot">&lt;-</span> <span class="st">"https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>baixa_dado <span class="ot">&lt;-</span> <span class="cf">function</span>(arquivo, destino) {</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  caminho <span class="ot">&lt;-</span> <span class="fu">file.path</span>(destino, arquivo)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(caminho)) {</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dir.create</span>(destino, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">download.file</span>(<span class="fu">paste0</span>(url_base, <span class="st">"/"</span>, arquivo), caminho, <span class="at">mode =</span> <span class="st">"wb"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  caminho</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>pasta_rede <span class="ot">&lt;-</span> <span class="st">"dados/r5"</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>pasta_geo  <span class="ot">&lt;-</span> <span class="st">"dados/geo"</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">lapply</span>(</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"anapolis.pbf"</span>, <span class="st">"Anapolis.tif"</span>, <span class="st">"GTFS_ANL.zip"</span>),</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  baixa_dado,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">destino =</span> pasta_rede</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>arq_grade <span class="ot">&lt;-</span> <span class="fu">baixa_dado</span>(</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="st">"grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg"</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">destino =</span> pasta_geo</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(pasta_rede)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Importante</span>Onde os arquivos devem estar
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>O <code>r5r</code> monta a rede a partir de <strong>uma única pasta</strong>, lendo todos os arquivos reconhecidos que encontrar nela. Coloque os insumos em <code>dados/r5/</code> e não misture arquivos de cenários diferentes no mesmo diretório.</p>
-</div>
-</div>
-<pre><code>dados/r5/
-├── anapolis.osm.pbf     rede viária (obrigatório)
-├── anapolis_gtfs.zip    transporte coletivo (opcional)
-└── anapolis_dem.tif     modelo digital de elevação (opcional)</code></pre>
-<!-- DADOS: os três arquivos são distribuídos à parte e devem ser copiados para dados/r5/ -->
-<section id="rede-viária" class="level3" data-number="8.1.1">
-<h3 data-number="8.1.1" class="anchored" data-anchor-id="rede-viária"><span class="header-section-number">8.1.1</span> Rede viária</h3>
-<!-- ESBOÇO: o que o OSM representa, quais atributos o R5 usa para permitir ou proibir cada modo, e
-     por que vale inspecionar a rede antes de confiar nela. Comentar a qualidade do mapeamento em
-     cidades de porte médio, que costuma ser boa no viário e desigual nas calçadas. -->
 </section>
-<section id="transporte-coletivo" class="level3" data-number="8.1.2">
-<h3 data-number="8.1.2" class="anchored" data-anchor-id="transporte-coletivo"><span class="header-section-number">8.1.2</span> Transporte coletivo</h3>
-<!-- ESBOÇO: estrutura de um GTFS, arquivos que o compõem e o que cada um define. Leitura e
-     inspeção com gtfstools, verificação do período de validade do calendário e checagem de que a
-     data usada no roteamento está coberta pelo feed. VERIFICAR a disponibilidade e a data de
-     referência do GTFS de Anápolis antes de escrever esta seção. -->
-</section>
-<section id="relevo" class="level3" data-number="8.1.3">
-<h3 data-number="8.1.3" class="anchored" data-anchor-id="relevo"><span class="header-section-number">8.1.3</span> Relevo</h3>
-<!-- ESBOÇO: efeito da declividade sobre tempo de caminhada e de bicicleta, e como o R5 incorpora
-     essa informação. Quando vale a pena incluir o modelo de elevação. -->
-</section>
-</section>
-<section id="origens-e-destinos" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="origens-e-destinos"><span class="header-section-number">8.2</span> Origens e destinos</h2>
-<!-- ESBOÇO: retomar o arquivo produzido no capítulo 6, com centroides das células da grade, a
-     população residente e as contagens de oportunidades do CNEFE. Conferir o formato exigido, com
-     colunas id, lon e lat em coordenadas geográficas. Comentar o custo computacional, que cresce
-     com o produto do número de origens pelo número de destinos. -->
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<section id="grade-de-uso-do-solo-h3-resolução-9" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="grade-de-uso-do-solo-h3-resolução-9"><span class="header-section-number">8.2</span> Grade de uso do solo (H3, resolução 9)</h2>
+<p>A grade é um conjunto de hexágonos <a href="https://h3geo.org/">H3</a> cobrindo todo o município, com número de empregos, população, renda média e uma classificação urbano ou rural por hexágono. Ela foi elaborada a partir de dados do IBGE, com os produtos tratados na Parte 1.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>grade <span class="ot">&lt;-</span> <span class="fu">st_read</span>(arq_grade, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>pontos <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"dados/geo/pontos_anapolis.csv"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(sf<span class="sc">::</span><span class="fu">st_drop_geometry</span>(grade))</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li><code>id_hex</code>, identificador do hexágono H3</li>
+<li><code>Jobs</code>, número de empregos no hexágono</li>
+<li><code>pop_ph</code>, população residente no hexágono</li>
+<li><code>avg_inc_resp</code>, renda média domiciliar per capita dos residentes</li>
+<li><code>classe_urbano</code>, <code>"Urbano"</code> ou <code>"Rural"</code></li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(grade<span class="sc">$</span>classe_urbano)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>A maior parte da área do município é rural, mas concentra pouca população e quase nenhum emprego. O grosso da atividade urbana está nos cerca de 1.700 hexágonos classificados como <code>"Urbano"</code>. É neles que o cálculo de acessibilidade vai focar, para manter o processamento leve e o resultado interpretável.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mapview</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  grade <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(classe_urbano <span class="sc">==</span> <span class="st">"Urbano"</span>),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">zcol =</span> <span class="st">"Jobs"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">layer.name =</span> <span class="st">"Empregos por hexágono"</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mapview</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  grade <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(classe_urbano <span class="sc">==</span> <span class="st">"Urbano"</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">zcol =</span> <span class="st">"avg_inc_resp"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">layer.name =</span> <span class="st">"Renda média (R$)"</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
-<section id="construção-da-rede" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="construção-da-rede"><span class="header-section-number">8.3</span> Construção da rede</h2>
-<!-- ESBOÇO: chamada do setup_r5, o que acontece no primeiro uso, os arquivos de rede gerados na
-     pasta e por que a segunda execução é muito mais rápida. Alertar que qualquer mudança nos
-     insumos exige apagar os arquivos gerados para forçar a reconstrução. -->
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">java.parameters =</span> <span class="st">"-Xmx4G"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(r5r)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>r5r_core <span class="ot">&lt;-</span> <span class="fu">setup_r5</span>(<span class="at">data_path =</span> <span class="st">"dados/r5"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="rede-viária-openstreetmap" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="rede-viária-openstreetmap"><span class="header-section-number">8.3</span> Rede viária (OpenStreetMap)</h2>
+<p>O arquivo <code>anapolis.pbf</code> é um extrato do OpenStreetMap. O GDAL, por meio do <code>sf</code>, lê <code>.pbf</code> com o driver OSM, que expõe a rede em várias camadas.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_layers</span>(<span class="fu">file.path</span>(pasta_rede, <span class="st">"anapolis.pbf"</span>))</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>A camada <code>lines</code> traz as vias (ruas, avenidas, ciclovias e outras), usada pelo <code>r5r</code> para caminhada, bicicleta e carro.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>vias <span class="ot">&lt;-</span> <span class="fu">st_read</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">file.path</span>(pasta_rede, <span class="st">"anapolis.pbf"</span>),</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">layer =</span> <span class="st">"lines"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">quiet =</span> <span class="cn">TRUE</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(vias) <span class="sc">+</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">linewidth =</span> <span class="fl">0.15</span>, <span class="at">color =</span> <span class="st">"gray30"</span>) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Rede viária de Anápolis (OSM)"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
-<section id="matriz-de-tempos-de-viagem" class="level2" data-number="8.4">
-<h2 data-number="8.4" class="anchored" data-anchor-id="matriz-de-tempos-de-viagem"><span class="header-section-number">8.4</span> Matriz de tempos de viagem</h2>
-<!-- ESBOÇO: cálculo da matriz por caminhada, bicicleta, transporte público e automóvel. Explicar
-     cada argumento relevante, a janela de partida, o tempo máximo de viagem, o tempo máximo de
-     caminhada de acesso e o percentil usado no transporte público. Justificar as escolhas
-     adotadas na oficina. -->
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ttm <span class="ot">&lt;-</span> <span class="fu">travel_time_matrix</span>(</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  r5r_core,</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">origins      =</span> pontos,</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">destinations =</span> pontos,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode         =</span> <span class="fu">c</span>(<span class="st">"WALK"</span>, <span class="st">"TRANSIT"</span>),</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">departure_datetime =</span> <span class="fu">as.POSIXct</span>(<span class="st">"2026-09-09 07:00:00"</span>),</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_trip_duration  =</span> <span class="dv">60</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="elevação-mde" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="elevação-mde"><span class="header-section-number">8.4</span> Elevação (MDE)</h2>
+<p><code>Anapolis.tif</code> é um modelo digital de elevação cobrindo a mesma área do extrato OSM. O <code>r5r</code> usa esse <em>raster</em> para estimar o efeito de subidas e descidas no tempo de caminhada e de bicicleta.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>mde <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="fu">file.path</span>(pasta_rede, <span class="st">"Anapolis.tif"</span>))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>mde <span class="ot">&lt;-</span> <span class="fu">setMinMax</span>(mde)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mde, <span class="at">main =</span> <span class="st">"Modelo digital de elevação - Anápolis (m)"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">min  =</span> <span class="fu">global</span>(mde, <span class="st">"min"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span>, <span class="dv">1</span>],</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">max  =</span> <span class="fu">global</span>(mde, <span class="st">"max"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span>, <span class="dv">1</span>],</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">mean =</span> <span class="fu">global</span>(mde, <span class="st">"mean"</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span>, <span class="dv">1</span>]</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>O terreno varia de aproximadamente 686 a 1.158 metros, desnível relevante o suficiente para impactar tempos de caminhada e de bicicleta em algumas regiões do município.</p>
 </section>
-<section id="inspeção-e-validação" class="level2" data-number="8.5">
-<h2 data-number="8.5" class="anchored" data-anchor-id="inspeção-e-validação"><span class="header-section-number">8.5</span> Inspeção e validação</h2>
-<!-- ESBOÇO: etapa frequentemente pulada e responsável por boa parte dos erros silenciosos.
-     Verificar proporção de pares sem rota, distribuição dos tempos por modo e coerência entre
-     modos. Mapear o tempo de viagem a partir de uma origem escolhida, que é a forma mais direta de
-     enxergar se a rede está correta. Discutir causas comuns de par sem rota, como ponto fora da
-     rede, ilha desconectada e limite de tempo curto demais. -->
+<section id="transporte-público-gtfs" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="transporte-público-gtfs"><span class="header-section-number">8.5</span> Transporte público (GTFS)</h2>
+<p><code>GTFS_ANL.zip</code> é o feed de transporte público. Não precisamos descompactá-lo manualmente para usar no <code>r5r</code>, que lê o <code>.zip</code> diretamente, mas vale explorar seu conteúdo antes.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>gtfs_dir <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">"gtfs_anl"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span>(<span class="fu">file.path</span>(pasta_rede, <span class="st">"GTFS_ANL.zip"</span>), <span class="at">exdir =</span> gtfs_dir)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(gtfs_dir)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>calendario <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="fu">file.path</span>(gtfs_dir, <span class="st">"calendar.txt"</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>calendario</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Aviso</span>Encerre a sessão do R5
+<span class="screen-reader-only">Aviso</span>Atenção à data de validade do feed
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Ao terminar, chame <code>stop_r5(r5r_core)</code> para liberar a memória da máquina virtual. Sem isso, a JVM continua ocupando a RAM até o fim da sessão do R.</p>
+<p>Este feed tem um único <code>service_id</code>, válido <strong>apenas em 22/07/2026</strong> (<code>start_date</code> = <code>end_date</code> = <code>20260722</code>). Isso significa que, ao rotear por transporte público com o <code>r5r</code>, o <code>departure_datetime</code> <strong>precisa</strong> cair nessa data. Qualquer outra data não terá viagens programadas. Essa é a data usada no capítulo seguinte.</p>
 </div>
 </div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>paradas <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="fu">file.path</span>(gtfs_dir, <span class="st">"stops.txt"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"stop_lon"</span>, <span class="st">"stop_lat"</span>), <span class="at">crs =</span> <span class="dv">4326</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mapview</span>(paradas, <span class="at">layer.name =</span> <span class="st">"Paradas de ônibus"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Com os quatro insumos conferidos, rede viária, elevação, GTFS e uso do solo, podemos construir a rede de roteamento.</p>
+</section>
+<section id="construindo-a-rede-de-transporte" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="construindo-a-rede-de-transporte"><span class="header-section-number">8.6</span> Construindo a rede de transporte</h2>
+<p>O <code>r5r::build_network()</code> exige que <strong>todos os insumos estejam na mesma pasta</strong>, um único arquivo <code>.pbf</code>, opcionalmente um ou mais <code>.zip</code> de GTFS e opcionalmente um <code>.tif</code> de elevação. Ele também grava nessa pasta o arquivo <code>network.dat</code>, com a rede já processada em cache, e um <code>gtfs_errors.csv</code>.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Importante</span>Uma pasta só para a rede
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Mantenha em <code>dados/r5/</code> apenas os insumos da rede. Se a pasta estiver sincronizada com um serviço de nuvem, considere movê-la para um diretório local, porque o <code>network.dat</code> pode ficar com dezenas de megabytes e seria sincronizado sem necessidade.</p>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>r5r_network <span class="ot">&lt;-</span> <span class="fu">build_network</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data_path =</span> pasta_rede,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">elevation =</span> <span class="st">"TOBLER"</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">overwrite =</span> <span class="cn">FALSE</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>r5r_network</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li><code>elevation = "TOBLER"</code> faz o R5 penalizar o tempo de caminhada e de bicicleta em ladeiras, usando o <code>Anapolis.tif</code> que está na pasta.</li>
+<li>Da primeira vez, o <code>build_network()</code> demora, porque compila o grafo a partir do <code>.pbf</code> e do GTFS. Nas próximas vezes, com <code>overwrite = FALSE</code> (o padrão), ele reaproveita o <code>network.dat</code> já salvo e carrega quase instantaneamente.</li>
+<li>Se algo no GTFS ou no <code>.pbf</code> mudar, rode com <code>overwrite = TRUE</code> para reconstruir do zero.</li>
+</ul>
+</section>
+<section id="conferindo-erros-do-gtfs" class="level2" data-number="8.7">
+<h2 data-number="8.7" class="anchored" data-anchor-id="conferindo-erros-do-gtfs"><span class="header-section-number">8.7</span> Conferindo erros do GTFS</h2>
+<p>O <code>build_network()</code> valida o GTFS e salva os problemas encontrados em <code>gtfs_errors.csv</code>. Vale sempre checar.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>erros_gtfs <span class="ot">&lt;-</span> <span class="fu">get_gtfs_errors</span>(r5r_network)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>erros_gtfs</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Erros de prioridade <code>"HIGH"</code> impedem a construção da rede, caso em que o <code>build_network()</code> já teria parado com um erro. Erros de prioridade mais baixa não bloqueiam, mas vale entender o que significam antes de confiar nos resultados de transporte público.</p>
+<p>No GTFS de Anápolis usado nesta oficina aparecem cerca de 867 avisos, todos de prioridade <code>LOW</code> ou <code>MEDIUM</code>, a maioria <code>DuplicateKeyError</code> em <code>stop_id</code> (paradas cadastradas mais de uma vez) e <code>RangeError</code> em <code>parent_station</code> (referência a uma estação-mãe que não existe no <code>stops.txt</code>). Isso é comum em feeds GTFS reais e não impede o roteamento, mas é um bom lembrete de que “os dados vieram de um pacote” não significa “os dados estão limpos”.</p>
+</section>
+<section id="visualizando-a-rede" class="level2" data-number="8.8">
+<h2 data-number="8.8" class="anchored" data-anchor-id="visualizando-a-rede"><span class="header-section-number">8.8</span> Visualizando a rede</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>rede_viaria <span class="ot">&lt;-</span> <span class="fu">street_network_to_sf</span>(r5r_network)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> rede_viaria<span class="sc">$</span>edges, <span class="at">linewidth =</span> <span class="fl">0.15</span>, <span class="at">color =</span> <span class="st">"gray40"</span>) <span class="sc">+</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Rede viária utilizada pelo R5"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Com a rede construída, já podemos calcular matrizes de tempo de viagem e acessibilidade.</p>
 
 
 </section>

@@ -49,12 +49,18 @@ grade_ana <- grade |>
      número de unidades, área mediana e população mediana. Discutir o problema da unidade de área
      modificável e o efeito da escolha do recorte sobre o indicador final. -->
 
-## Preparação das origens e destinos
+## Da grade do IBGE à grade hexagonal
 
-<!-- ESBOÇO: etapa que fecha a Parte 1. Gerar os centroides das células com população, juntar as
-     contagens de oportunidades do CNEFE do capítulo 5 e exportar o arquivo que a Parte 2 consome.
-     Deixar explícito o formato exigido pelo r5r, com colunas id, lon e lat em coordenadas
-     geográficas. -->
+<!-- ESBOÇO: etapa que fecha a Parte 1 e faz a ponte com a Parte 2. A grade do IBGE é quadrada e
+     alinhada a um referencial cartográfico. A Parte 2 usa uma grade hexagonal H3 de resolução 9,
+     construída a partir dos mesmos produtos do Censo tratados nesta Parte, com população e renda
+     dos agregados e empregos vindos do CNEFE. Explicar por que hexágonos, vizinhança uniforme e
+     distância constante entre centroides, e mostrar a correspondência entre os dois recortes no
+     mesmo território. -->
+
+<!-- ESBOÇO: gerar os centroides das células com população e deixar explícito o formato exigido
+     pelo r5r, com colunas id, lon e lat em coordenadas geográficas. É o mesmo procedimento que o
+     capítulo 9 aplica sobre a grade hexagonal. -->
 
 ```r
 pontos <- grade_ana |>
@@ -72,11 +78,11 @@ pontos_r5 <- pontos |>
   st_drop_geometry()
 ```
 
-<!-- DADOS: produto deste capítulo salvo em dados/geo/pontos_anapolis.csv, insumo do capítulo 8 -->
-
 ::: {.callout-tip}
 ## Fim da Parte 1
 
-O arquivo de pontos produzido aqui reúne, em uma mesma tabela, onde as pessoas moram e onde estão as
-oportunidades. É com ele que a Parte 2 começa.
+A Parte 2 começa com uma grade hexagonal de Anápolis que já traz população, renda média e número de
+empregos por célula. Todas essas informações vêm dos produtos percorridos nesta Parte, e o
+`cnefetools` [@pedreira2026cnefetools] automatiza a etapa de contagem de oportunidades a partir do
+CNEFE.
 :::

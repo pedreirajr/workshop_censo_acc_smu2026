@@ -1,93 +1,247 @@
 ---
 title: "Cômputo dos indicadores"
+execute:
+  eval: false
 ---
 
-Com a matriz de tempos pronta e as oportunidades localizadas no território, calcular acessibilidade
-vira uma operação direta. A parte difícil está antes e depois, na escolha da medida e na leitura do
-resultado. Medidas diferentes respondem a perguntas diferentes, e um mapa de acessibilidade só
-significa alguma coisa quando se sabe qual pergunta ele responde. Este capítulo apresenta as
-principais famílias de medidas, calcula-as para Anápolis e discute como interpretá-las.
+Com a rede construída, o caminho até um indicador de acessibilidade tem duas etapas. Primeiro se
+calcula quanto tempo se leva de cada origem a cada destino, o que produz uma matriz de tempos de
+viagem. Depois se combina essa matriz com a distribuição das oportunidades no território, o que
+produz o indicador. Este capítulo percorre as duas etapas para quatro modos, a pé, de bicicleta, de
+carro e por transporte público, e compara os resultados.
 
 ::: {.callout-note}
 ## Nesta seção você vai
 
-- distinguir as principais famílias de medidas de acessibilidade
-- calcular indicadores com o pacote `accessibility`
-- escolher limiares de tempo e funções de impedância com critério
-- mapear a acessibilidade por modo e comparar os resultados
-- avaliar a distribuição social da acessibilidade
+- preparar os pontos de origem e destino a partir da grade H3
+- calcular matrizes de tempo de viagem para quatro modos
+- calcular acessibilidade cumulativa a empregos
+- calcular acessibilidade com função de decaimento (gravidade)
+- comparar os quatro modos em gráfico e em mapa
 :::
 
-## Famílias de medidas
+## Pontos de origem e destino
 
-<!-- ESBOÇO: apresentar as quatro famílias com a mesma estrutura, o que a medida pergunta, como se
-     calcula, o que exige de parâmetro e quando usar. Medida cumulativa, quantas oportunidades são
-     alcançáveis em até X minutos. Medida gravitacional, soma ponderada pela impedância. Custo
-     mínimo, tempo até a oportunidade mais próxima. Oportunidade flutuante, que considera a
-     competição pela oferta. Uma figura conceitual comparando as curvas de ponderação. -->
+Usamos o centroide de cada hexágono **urbano** como ponto de origem e destino. O `r5r` espera um
+`data.frame` ou `sf` com colunas `id`, `lon` e `lat`, em WGS84.
 
-### Medidas cumulativas
+```{r}
+grade_urbana <- grade |>
+  filter(classe_urbano == "Urbano") |>
+  st_transform(4326)
 
-<!-- ESBOÇO: simplicidade de comunicação como principal virtude e a arbitrariedade do limiar como
-     principal fraqueza. Mostrar o efeito de mudar o limiar sobre o mapa resultante. -->
+pontos <- grade_urbana |>
+  st_centroid() |>
+  mutate(
+    lon = st_coordinates(geom)[, 1],
+    lat = st_coordinates(geom)[, 2]
+  ) |>
+  st_drop_geometry() |>
+  transmute(id = id_hex, lon, lat)
 
-### Medidas gravitacionais
+nrow(pontos)
+```
 
-<!-- ESBOÇO: funções de decaimento disponíveis e o efeito prático da escolha. Enfatizar que o
-     resultado é adimensional e serve para comparação relativa, e não para leitura absoluta. -->
+::: {.callout-tip}
+## Amostra para teste rápido
 
-### Custo mínimo
+Para um teste rápido durante a aula ao vivo, use uma amostra de hexágonos em vez do conjunto
+completo. O cálculo fica bem mais rápido e serve para conferir que o código funciona antes de rodar
+tudo.
 
-<!-- ESBOÇO: adequada a serviços em que a proximidade ao mais próximo é o que importa, como saúde
-     básica e ensino fundamental. Vantagem de não exigir limiar. -->
+``` r
+pontos_demo <- pontos |>
+  slice_sample(n = 300)
+```
 
-### Oportunidade flutuante
+Troque `pontos` por `pontos_demo` nas chamadas abaixo e depois volte para `pontos` para o resultado
+completo.
+:::
 
-<!-- ESBOÇO: incorpora a competição pela oferta, o que muda bastante o retrato em serviços com
-     capacidade limitada. Requisito de dado sobre porte da oferta, que o CNEFE não fornece, e as
-     implicações disso para esta aplicação. -->
+E a tabela de uso do solo, com os nomes de coluna que o `accessibility` espera.
 
-## Cálculo com o pacote accessibility
+```{r}
+uso_solo <- grade_urbana |>
+  st_drop_geometry() |>
+  transmute(
+    id = id_hex,
+    jobs = Jobs,
+    population = pop_ph,
+    income = avg_inc_resp
+  )
 
-<!-- ESBOÇO: preparar a tabela de entrada, com a matriz de tempos e as contagens de oportunidades
-     por destino. Mostrar as funções correspondentes a cada família e os argumentos comuns.
-     Calcular acesso a ensino e a saúde por caminhada e por transporte público. -->
+head(uso_solo)
+```
 
-```r
-library(accessibility)
+## Matrizes de tempo de viagem
 
-acc_cum <- cumulative_cutoff(
-  travel_matrix = ttm,
-  land_use_data = oportunidades,
-  opportunity   = "ensino",
-  travel_cost   = "travel_time_p50",
-  cutoff        = 30
+O transporte público só tem viagens programadas em **22/07/2026**, como visto no capítulo anterior,
+então usamos essa data também nos outros modos, por consistência. Para caminhada, bicicleta e carro o
+horário não muda o resultado, porque não há tabela de horários envolvida.
+
+```{r}
+data_viagem <- as.POSIXct("22-07-2026 07:00:00", format = "%d-%m-%Y %H:%M:%S")
+```
+
+### A pé
+
+```{r}
+ttm_pe <- travel_time_matrix(
+  r5r_network = r5r_network,
+  origins = pontos,
+  destinations = pontos,
+  mode = "WALK",
+  departure_datetime = data_viagem,
+  max_trip_duration = 60
+)
+
+head(ttm_pe)
+```
+
+### Bicicleta
+
+```{r}
+ttm_bike <- travel_time_matrix(
+  r5r_network = r5r_network,
+  origins = pontos,
+  destinations = pontos,
+  mode = "BICYCLE",
+  departure_datetime = data_viagem,
+  max_lts = 2,
+  max_trip_duration = 60
 )
 ```
 
-## Escolha de parâmetros
+### Carro
 
-<!-- ESBOÇO: limiar de tempo, função de impedância e horário de partida como decisões de análise, e
-     não detalhes técnicos. Mostrar uma análise de sensibilidade simples, com o mesmo indicador
-     calculado sob três limiares, e discutir o quanto a conclusão muda. -->
+```{r}
+ttm_carro <- travel_time_matrix(
+  r5r_network = r5r_network,
+  origins = pontos,
+  destinations = pontos,
+  mode = "CAR",
+  departure_datetime = data_viagem,
+  max_trip_duration = 60
+)
+```
 
-## Mapas de acessibilidade
+### Transporte público
 
-<!-- ESBOÇO: mapa por modo, com escala de cor comum para permitir comparação. Figura principal do
-     capítulo. Leitura do padrão observado em Anápolis, com atenção ao contraste entre a área
-     central e as bordas urbanas, e à diferença entre caminhada e transporte público. -->
+Para transporte público, o modo de acesso e egresso a pé (`"WALK"`) é combinado com `"TRANSIT"`. Usar
+uma janela de tempo (`time_window`) maior deixa a estimativa mais robusta a variações de horário, e
+também mais lenta. Trinta minutos é um bom equilíbrio para uma aula.
 
-## Distribuição social da acessibilidade
+```{r}
+ttm_transporte_publico <- travel_time_matrix(
+  r5r_network = r5r_network,
+  origins = pontos,
+  destinations = pontos,
+  mode = c("WALK", "TRANSIT"),
+  departure_datetime = data_viagem,
+  time_window = 30,
+  max_walk_time = 30,
+  max_trip_duration = 90
+)
+```
 
-<!-- ESBOÇO: fechar cruzando o indicador com a renda por célula da grade, obtida na Parte 1.
-     Acessibilidade média por grupo de renda, curva de concentração e índice de Palma. A pergunta
-     que orienta a seção é se a cidade oferece acesso semelhante a grupos socioeconômicos
-     distintos. -->
+## Acessibilidade cumulativa (oportunidades cumulativas)
 
-::: {.callout-tip}
-## Retomando a Parte 1
+Quantos empregos são alcançáveis em até 30 minutos, por hexágono, em cada modo? Usamos
+`accessibility::cumulative_cutoff()`, que espera a coluna de custo `travel_time_p50`, o tempo mediano
+de viagem dentro da janela usada.
 
-O indicador de qualidade do entorno construído no capítulo [3](3-agregados.qmd) qualifica a leitura
-dos mapas de caminhada. Uma célula com bom acesso calculado pela rede viária pode ter
-caminhabilidade ruim na prática, e o dado do entorno é o que revela essa diferença.
-:::
+```{r}
+acess_pe <- cumulative_cutoff(
+  travel_matrix = ttm_pe,
+  land_use_data = uso_solo,
+  opportunity = "jobs",
+  travel_cost = "travel_time_p50",
+  cutoff = 30
+)
+
+acess_bike <- cumulative_cutoff(
+  travel_matrix = ttm_bike,
+  land_use_data = uso_solo,
+  opportunity = "jobs",
+  travel_cost = "travel_time_p50",
+  cutoff = 30
+)
+
+acess_carro <- cumulative_cutoff(
+  travel_matrix = ttm_carro,
+  land_use_data = uso_solo,
+  opportunity = "jobs",
+  travel_cost = "travel_time_p50",
+  cutoff = 30
+)
+
+acess_tp <- cumulative_cutoff(
+  travel_matrix = ttm_transporte_publico,
+  land_use_data = uso_solo,
+  opportunity = "jobs",
+  travel_cost = "travel_time_p50",
+  cutoff = 30
+)
+```
+
+Juntando os quatro resultados em uma única tabela, para comparar.
+
+```{r}
+acess_modos <- bind_rows(
+  acess_pe |>
+    mutate(modo = "A pe"),
+  acess_bike |>
+    mutate(modo = "Bicicleta"),
+  acess_carro |>
+    mutate(modo = "Carro"),
+  acess_tp |>
+    mutate(modo = "Transporte publico")
+)
+
+ggplot(acess_modos, aes(x = modo, y = jobs, fill = modo)) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(
+    title = "Empregos alcançáveis em até 30 minutos, por modo",
+    x = NULL, y = "Empregos acessíveis"
+  ) +
+  theme_minimal()
+```
+
+E em mapa, para o transporte público.
+
+```{r}
+grade_urbana |>
+  left_join(acess_tp, by = c("id_hex" = "id")) |>
+  ggplot() +
+  geom_sf(aes(fill = jobs), color = NA) +
+  scale_fill_viridis_c(name = "Empregos\nem até 30 min") +
+  theme_minimal() +
+  labs(title = "Acessibilidade a empregos por transporte público")
+```
+
+## Acessibilidade por gravidade
+
+A abordagem de oportunidades cumulativas usa um corte rígido, em que 30 minutos "conta" e 31 minutos
+"não conta". Uma alternativa é ponderar as oportunidades pelo tempo de viagem com uma função de
+decaimento, por exemplo uma decaída exponencial, em que oportunidades mais distantes pesam cada vez
+menos.
+
+```{r}
+acess_grav_tp <- gravity(
+  travel_matrix = ttm_transporte_publico,
+  land_use_data = uso_solo,
+  opportunity = "jobs",
+  travel_cost = "travel_time_p50",
+  decay_function = decay_exponential(decay_value = 0.1)
+)
+
+head(acess_grav_tp)
+```
+
+Outras funções de decaimento disponíveis no `accessibility` são `decay_binary()`, `decay_linear()`,
+`decay_logistic()`, `decay_power()` e `decay_stepped()`, todas documentadas em `?decay_exponential` e
+na [vinheta de funções de decaimento](https://ipeagit.github.io/accessibility/articles/decay_functions.html)
+do pacote.
+
+Com a acessibilidade calculada para os quatro modos, o próximo passo é olhar para quem se beneficia
+mais ou menos dela.

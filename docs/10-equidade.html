@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>10&nbsp; Avaliação de cenários – Dados Censitários e Acessibilidade Urbana em R</title>
+<title>10&nbsp; Equidade e pobreza de acessibilidade – Dados Censitários e Acessibilidade Urbana em R</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -130,7 +130,7 @@ div.csl-indent {
 
 
 <link rel="stylesheet" href="custom.css">
-<meta property="og:title" content="10&nbsp; Avaliação de cenários – Dados Censitários e Acessibilidade Urbana em R">
+<meta property="og:title" content="10&nbsp; Equidade e pobreza de acessibilidade – Dados Censitários e Acessibilidade Urbana em R">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://pedreirajr.github.io/workshop_censo_acc_smu2026/img/logo_smu.png">
 <meta property="og:site_name" content="Dados Censitários e Acessibilidade Urbana em R">
@@ -147,7 +147,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./7-instalacao-r5r.html">PARTE 2: ACESSIBILIDADE URBANA</a></li><li class="breadcrumb-item"><a href="./10-cenarios.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Avaliação de cenários</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./7-instalacao-r5r.html">PARTE 2: ACESSIBILIDADE URBANA</a></li><li class="breadcrumb-item"><a href="./10-equidade.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Equidade e pobreza de acessibilidade</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
@@ -257,8 +257,8 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-cenarios.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Avaliação de cenários</span></span></a>
+  <a href="./10-equidade.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Equidade e pobreza de acessibilidade</span></span></a>
   </div>
 </li>
       </ul>
@@ -279,25 +279,19 @@ div.csl-indent {
     <h2 id="toc-title">Índice do Capítulo</h2>
    
   <ul>
-  <li><a href="#a-lógica-do-antes-e-depois" id="toc-a-lógica-do-antes-e-depois" class="nav-link active" data-scroll-target="#a-lógica-do-antes-e-depois"><span class="header-section-number">10.1</span> A lógica do antes e depois</a></li>
-  <li><a href="#construção-do-cenário" id="toc-construção-do-cenário" class="nav-link" data-scroll-target="#construção-do-cenário"><span class="header-section-number">10.2</span> Construção do cenário</a>
-  <ul class="collapse">
-  <li><a href="#alteração-do-serviço-de-transporte-coletivo" id="toc-alteração-do-serviço-de-transporte-coletivo" class="nav-link" data-scroll-target="#alteração-do-serviço-de-transporte-coletivo"><span class="header-section-number">10.2.1</span> Alteração do serviço de transporte coletivo</a></li>
-  <li><a href="#alteração-da-rede-viária" id="toc-alteração-da-rede-viária" class="nav-link" data-scroll-target="#alteração-da-rede-viária"><span class="header-section-number">10.2.2</span> Alteração da rede viária</a></li>
-  </ul></li>
-  <li><a href="#recálculo-e-comparação" id="toc-recálculo-e-comparação" class="nav-link" data-scroll-target="#recálculo-e-comparação"><span class="header-section-number">10.3</span> Recálculo e comparação</a></li>
-  <li><a href="#mapas-e-tabelas-de-diferença" id="toc-mapas-e-tabelas-de-diferença" class="nav-link" data-scroll-target="#mapas-e-tabelas-de-diferença"><span class="header-section-number">10.4</span> Mapas e tabelas de diferença</a></li>
-  <li><a href="#quem-ganha-e-quem-perde" id="toc-quem-ganha-e-quem-perde" class="nav-link" data-scroll-target="#quem-ganha-e-quem-perde"><span class="header-section-number">10.5</span> Quem ganha e quem perde</a></li>
-  <li><a href="#limites-da-análise" id="toc-limites-da-análise" class="nav-link" data-scroll-target="#limites-da-análise"><span class="header-section-number">10.6</span> Limites da análise</a></li>
+  <li><a href="#preparando-os-dados-sociodemográficos" id="toc-preparando-os-dados-sociodemográficos" class="nav-link active" data-scroll-target="#preparando-os-dados-sociodemográficos"><span class="header-section-number">10.1</span> Preparando os dados sociodemográficos</a></li>
+  <li><a href="#calculando-as-medidas-para-cada-modo" id="toc-calculando-as-medidas-para-cada-modo" class="nav-link" data-scroll-target="#calculando-as-medidas-para-cada-modo"><span class="header-section-number">10.2</span> Calculando as medidas para cada modo</a></li>
+  <li><a href="#como-ler-os-resultados" id="toc-como-ler-os-resultados" class="nav-link" data-scroll-target="#como-ler-os-resultados"><span class="header-section-number">10.3</span> Como ler os resultados</a></li>
+  <li><a href="#para-continuar" id="toc-para-continuar" class="nav-link" data-scroll-target="#para-continuar"><span class="header-section-number">10.4</span> Para continuar</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./7-instalacao-r5r.html">PARTE 2: ACESSIBILIDADE URBANA</a></li><li class="breadcrumb-item"><a href="./10-cenarios.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Avaliação de cenários</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./7-instalacao-r5r.html">PARTE 2: ACESSIBILIDADE URBANA</a></li><li class="breadcrumb-item"><a href="./10-equidade.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Equidade e pobreza de acessibilidade</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Avaliação de cenários</span></h1>
+<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Equidade e pobreza de acessibilidade</span></h1>
 </div>
 
 
@@ -314,7 +308,8 @@ div.csl-indent {
 </header>
 
 
-<p>Um mapa de acessibilidade descreve a cidade como ela é. O uso mais interessante da ferramenta, porém, está em perguntar como ela ficaria. Avaliar cenários significa alterar um insumo da rede, recalcular tudo e comparar o antes e o depois, procedimento que transforma a análise de acessibilidade em instrumento de apoio à decisão. Este capítulo monta um cenário de intervenção em Anápolis e mede seus efeitos, com atenção especial a quem ganha e a quem não ganha.</p>
+<p>Calcular acessibilidade não basta para entender a justiça de um sistema de transportes. Dois modos podem gerar acessibilidade média parecida e distribuí-la de formas muito diferentes entre ricos e pobres. O pacote <code>accessibility</code> traz medidas de <strong>desigualdade</strong> (Palma, Gini, índice de concentração, Theil) e de <strong>pobreza de acessibilidade</strong> (família FGT) para responder a essa pergunta.</p>
+<p>Seguimos usando <code>acess_pe</code>, <code>acess_bike</code>, <code>acess_carro</code>, <code>acess_tp</code> e <code>uso_solo</code>, calculados no capítulo anterior.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -326,107 +321,146 @@ div.csl-indent {
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>estruturar a comparação entre cenário de referência e cenário alternativo</li>
-<li>construir um cenário alterando a rede ou o serviço de transporte coletivo</li>
-<li>recalcular a matriz de tempos e os indicadores</li>
-<li>mapear e tabular as diferenças</li>
-<li>identificar a distribuição dos ganhos entre grupos sociais</li>
-<li>reconhecer os limites do que a análise consegue afirmar</li>
+<li>preparar os dados sociodemográficos para as medidas de desigualdade</li>
+<li>calcular Palma, Gini, índice de concentração, Theil T e FGT para cada modo</li>
+<li>interpretar cada indicador</li>
+<li>identificar quais modos favorecem quais grupos de renda</li>
 </ul>
 </div>
 </div>
-<section id="a-lógica-do-antes-e-depois" class="level2" data-number="10.1">
-<h2 data-number="10.1" class="anchored" data-anchor-id="a-lógica-do-antes-e-depois"><span class="header-section-number">10.1</span> A lógica do antes e depois</h2>
-<!-- ESBOÇO: princípio da comparação controlada, em que apenas o elemento de interesse muda entre
-     os dois cenários. Alertar para os erros comuns, mudar mais de um parâmetro ao mesmo tempo,
-     alterar o horário de partida entre cenários e comparar resultados calculados com conjuntos de
-     origens diferentes. Definir o cenário de referência como o do capítulo 9. -->
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<section id="preparando-os-dados-sociodemográficos" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="preparando-os-dados-sociodemográficos"><span class="header-section-number">10.1</span> Preparando os dados sociodemográficos</h2>
+<p>As medidas de desigualdade precisam de renda e população <strong>sem valores faltantes</strong>. Hexágonos sem moradores (<code>population == 0</code>) não têm renda média definida (<code>NA</code>) e não fazem sentido nessas contas, então os removemos.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>uso_solo_equidade <span class="ot">&lt;-</span> uso_solo <span class="sc">|&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(population <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="sc">!</span><span class="fu">is.na</span>(income))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(uso_solo)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(uso_solo_equidade)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Importante</span>Uma pasta por cenário
+</section>
+<section id="calculando-as-medidas-para-cada-modo" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="calculando-as-medidas-para-cada-modo"><span class="header-section-number">10.2</span> Calculando as medidas para cada modo</h2>
+<p>Criamos uma função pequena para não repetir a mesma sequência de chamadas quatro vezes.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>medidas_equidade <span class="ot">&lt;-</span> <span class="cf">function</span>(acess_df, land_use) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  linha_pobreza <span class="ot">&lt;-</span> <span class="fu">quantile</span>(acess_df<span class="sc">$</span>jobs, <span class="fl">0.25</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  palma <span class="ot">&lt;-</span> <span class="fu">palma_ratio</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">accessibility_data =</span> acess_df,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">sociodemographic_data =</span> land_use,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">population =</span> <span class="st">"population"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">income =</span> <span class="st">"income"</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  gini <span class="ot">&lt;-</span> <span class="fu">gini_index</span>(</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">accessibility_data =</span> acess_df,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">sociodemographic_data =</span> land_use,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">population =</span> <span class="st">"population"</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  concentracao <span class="ot">&lt;-</span> <span class="fu">concentration_index</span>(</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">accessibility_data =</span> acess_df,</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">sociodemographic_data =</span> land_use,</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">population =</span> <span class="st">"population"</span>,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">income =</span> <span class="st">"income"</span>,</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">"corrected"</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  theil <span class="ot">&lt;-</span> <span class="fu">theil_t</span>(</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">accessibility_data =</span> acess_df,</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">sociodemographic_data =</span> land_use,</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">population =</span> <span class="st">"population"</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  pobreza <span class="ot">&lt;-</span> <span class="fu">fgt_poverty</span>(</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">accessibility_data =</span> acess_df,</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">sociodemographic_data =</span> land_use,</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">population =</span> <span class="st">"population"</span>,</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">poverty_line =</span> linha_pobreza</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(palma, gini, concentracao, theil, pobreza)</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>equidade_modos <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">medidas_equidade</span>(acess_pe, uso_solo_equidade) <span class="sc">|&gt;</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">modo =</span> <span class="st">"A pe"</span>),</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">medidas_equidade</span>(acess_bike, uso_solo_equidade) <span class="sc">|&gt;</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">modo =</span> <span class="st">"Bicicleta"</span>),</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">medidas_equidade</span>(acess_carro, uso_solo_equidade) <span class="sc">|&gt;</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">modo =</span> <span class="st">"Carro"</span>),</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">medidas_equidade</span>(acess_tp, uso_solo_equidade) <span class="sc">|&gt;</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">modo =</span> <span class="st">"Transporte publico"</span>)</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(modo)</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>equidade_modos</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</section>
+<section id="como-ler-os-resultados" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="como-ler-os-resultados"><span class="header-section-number">10.3</span> Como ler os resultados</h2>
+<ul>
+<li><strong>Palma ratio</strong>, razão entre a acessibilidade média dos 10% mais ricos e dos 40% mais pobres. Quanto maior, mais desigual. O valor 1 seria “igualdade” nessa comparação de extremos.</li>
+<li><strong>Gini</strong>, desigualdade geral da distribuição de acessibilidade, de 0 (igualdade perfeita) a 1 (toda a acessibilidade concentrada em uma pessoa ou hexágono).</li>
+<li><strong>Índice de concentração</strong>, varia de -1 a +1. Negativo indica que a desigualdade favorece os mais pobres, e positivo, que favorece os mais ricos, um viés pró-rico. É o indicador mais direto de <em>quem</em> se beneficia mais <span class="citation" data-cites="erreygers2009">(<a href="referencias.html#ref-erreygers2009" role="doc-biblioref">Erreygers, 2009</a>)</span>.</li>
+<li><strong>Theil T</strong>, outra medida geral de desigualdade, sensível a diferenças na cauda superior da distribuição.</li>
+<li><strong>FGT0, FGT1 e FGT2</strong>, proporção de pessoas “pobres de acessibilidade”, abaixo do 25º percentil neste caso. O FGT0 é a incidência, ou seja, quantos são pobres, o FGT1 pondera pela profundidade da pobreza e o FGT2 dá peso extra a quem está mais distante da linha de pobreza.</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(equidade_modos, <span class="fu">aes</span>(<span class="at">x =</span> modo, <span class="at">y =</span> concentration_index, <span class="at">fill =</span> modo)) <span class="sc">+</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Índice de concentração da acessibilidade a empregos, por modo"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Negativo = favorece os mais pobres; positivo = favorece os mais ricos"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Índice de concentração"</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="callout-body-container callout-body">
-<p>Cada cenário exige sua própria pasta de insumos e sua própria rede construída. Misturar arquivos de cenários diferentes no mesmo diretório é a causa mais frequente de resultado inexplicável.</p>
-</div>
-</div>
-<pre><code>dados/r5/
-├── base/         cenário de referência
-└── cenario_1/    cenário alternativo</code></pre>
+<p>Em geral, é comum encontrar padrões como acessibilidade a pé mais equitativa, pouco correlacionada com renda porque todo mundo anda, acessibilidade de carro fortemente pró-rico, já que poucos têm carro e moram em áreas bem servidas de vias, e transporte público em posição intermediária. O padrão real de Anápolis pode ser diferente, e é isso que os números acima mostram <span class="citation" data-cites="pereira_karner_2021 levinson_king_2020">(<a href="referencias.html#ref-levinson_king_2020" role="doc-biblioref">Levinson &amp; King, 2020</a>; <a href="referencias.html#ref-pereira_karner_2021" role="doc-biblioref">Pereira &amp; Karner, 2021</a>)</span>.</p>
 </section>
-<section id="construção-do-cenário" class="level2" data-number="10.2">
-<h2 data-number="10.2" class="anchored" data-anchor-id="construção-do-cenário"><span class="header-section-number">10.2</span> Construção do cenário</h2>
-<!-- ESBOÇO: apresentar as duas vias possíveis e escolher uma para a demonstração ao vivo,
-     deixando a outra como exercício. -->
-<section id="alteração-do-serviço-de-transporte-coletivo" class="level3" data-number="10.2.1">
-<h3 data-number="10.2.1" class="anchored" data-anchor-id="alteração-do-serviço-de-transporte-coletivo"><span class="header-section-number">10.2.1</span> Alteração do serviço de transporte coletivo</h3>
-<!-- ESBOÇO: edição do GTFS com o gtfstools, incluindo aumento de frequência de uma linha,
-     prolongamento de itinerário ou criação de uma linha nova. Mostrar a manipulação das tabelas do
-     feed e a gravação do arquivo alterado. Validar o feed resultante antes de usá-lo. -->
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtfstools)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>gtfs <span class="ot">&lt;-</span> <span class="fu">read_gtfs</span>(<span class="st">"dados/r5/base/anapolis_gtfs.zip"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># altera a frequência da linha de interesse e grava o feed do cenário</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">write_gtfs</span>(gtfs, <span class="st">"dados/r5/cenario_1/anapolis_gtfs.zip"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="alteração-da-rede-viária" class="level3" data-number="10.2.2">
-<h3 data-number="10.2.2" class="anchored" data-anchor-id="alteração-da-rede-viária"><span class="header-section-number">10.2.2</span> Alteração da rede viária</h3>
-<!-- ESBOÇO: caminho alternativo, com edição da rede em .osm.pbf para representar uma nova conexão,
-     uma ponte ou um trecho de estrutura cicloviária. Comentar o fluxo de edição e a necessidade de
-     conferir a conectividade do resultado. -->
-</section>
-</section>
-<section id="recálculo-e-comparação" class="level2" data-number="10.3">
-<h2 data-number="10.3" class="anchored" data-anchor-id="recálculo-e-comparação"><span class="header-section-number">10.3</span> Recálculo e comparação</h2>
-<!-- ESBOÇO: montar a rede do cenário, recalcular a matriz de tempos com exatamente os mesmos
-     parâmetros e recalcular os indicadores. Juntar os dois conjuntos de resultados em uma única
-     tabela, com diferença absoluta e diferença relativa por célula. -->
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>r5r_cenario <span class="ot">&lt;-</span> <span class="fu">setup_r5</span>(<span class="at">data_path =</span> <span class="st">"dados/r5/cenario_1"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># mesmos parâmetros do capítulo 8, alterando apenas os insumos</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="mapas-e-tabelas-de-diferença" class="level2" data-number="10.4">
-<h2 data-number="10.4" class="anchored" data-anchor-id="mapas-e-tabelas-de-diferença"><span class="header-section-number">10.4</span> Mapas e tabelas de diferença</h2>
-<!-- ESBOÇO: mapa de variação com paleta divergente centrada em zero, que é a leitura mais direta
-     do efeito da intervenção. Tabela síntese com variação média, número de pessoas beneficiadas e
-     magnitude típica do ganho. Cuidado com a escala, porque ganho percentual grande sobre base
-     pequena engana. -->
-</section>
-<section id="quem-ganha-e-quem-perde" class="level2" data-number="10.5">
-<h2 data-number="10.5" class="anchored" data-anchor-id="quem-ganha-e-quem-perde"><span class="header-section-number">10.5</span> Quem ganha e quem perde</h2>
-<!-- ESBOÇO: cruzar o ganho de acessibilidade com a renda e com a população por célula, respondendo
-     se a intervenção reduz ou amplia a desigualdade de acesso na cidade. Este é o desfecho da
-     oficina, porque articula todo o percurso, do dado censitário ao subsídio à decisão. -->
-</section>
-<section id="limites-da-análise" class="level2" data-number="10.6">
-<h2 data-number="10.6" class="anchored" data-anchor-id="limites-da-análise"><span class="header-section-number">10.6</span> Limites da análise</h2>
-<!-- ESBOÇO: fechar com honestidade metodológica. A análise não considera congestionamento
-     endógeno, mudança de uso do solo induzida pela intervenção, custo monetário da viagem, escolha
-     modal nem capacidade das oportunidades. Indicar o que seria necessário para avançar em cada
-     ponto e apontar leituras. -->
+<section id="para-continuar" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="para-continuar"><span class="header-section-number">10.4</span> Para continuar</h2>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Dica</span>Para continuar
+Dica
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>O material citado na <a href="./index.html">apresentação</a> aprofunda todos os temas tratados aqui. O Projeto Acesso a Oportunidades, acessível pelo pacote <code>aopdata</code>, oferece indicadores prontos para as maiores cidades brasileiras e serve de referência para comparação <span class="citation" data-cites="pereira_aop_td2772">(<a href="referencias.html#ref-pereira_aop_td2772" role="doc-biblioref">Pereira et al., 2022</a>)</span>.</p>
+<p>Para reproduzir a extração de rede viária, GTFS e uso do solo para <strong>outros municípios</strong>, os pacotes <code>osmextract</code> (rede OSM), <code>tidytransit</code> (GTFS) e <code>cnefetools</code> (dados de população e renda do IBGE a partir do CNEFE) automatizam boa parte desse trabalho <span class="citation" data-cites="pedreira2026cnefetools">(<a href="referencias.html#ref-pedreira2026cnefetools" role="doc-biblioref">Pedreira Junior &amp; Stabile, 2026</a>)</span>.</p>
 </div>
 </div>
+<p>O Projeto Acesso a Oportunidades, acessível pelo pacote <code>aopdata</code>, oferece indicadores prontos para as maiores cidades brasileiras e serve de referência para comparação <span class="citation" data-cites="pereira_aop_td2772">(<a href="referencias.html#ref-pereira_aop_td2772" role="doc-biblioref">Pereira et al., 2022</a>)</span>. A <a href="https://ipeagit.github.io/oficina_acessibilidade_anpet_2025/">oficina de acessibilidade da ANPET 2025</a> e o livro <span class="citation" data-cites="pereira_herszenhut_2023">Pereira &amp; Herszenhut (<a href="referencias.html#ref-pereira_herszenhut_2023" role="doc-biblioref">2023</a>)</span> aprofundam todos os temas tratados nesta Parte.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-erreygers2009" class="csl-entry" role="listitem">
+Erreygers, G. (2009). Correcting the <span>C</span>oncentration <span>I</span>ndex. <em>Journal of Health Economics</em>, <em>28</em>(2), 504–515.
+</div>
+<div id="ref-levinson_king_2020" class="csl-entry" role="listitem">
+Levinson, D., &amp; King, D. (2020). <em>Transport <span>A</span>ccess <span>M</span>anual: <span>A</span> <span>G</span>uide for <span>M</span>easuring <span>C</span>onnection between <span>P</span>eople and <span>P</span>laces</em>. Committee of the Transport Access Manual, University of Sydney.
+</div>
+<div id="ref-pedreira2026cnefetools" class="csl-entry" role="listitem">
+Pedreira Junior, J. U., &amp; Stabile, B. H. M. (2026). <em><span>cnefetools</span>: <span>A</span>ccess and <span>A</span>nalysis of <span>B</span>razilian <span>CNEFE</span> <span>A</span>ddress <span>D</span>ata</em>. <a href="https://github.com/pedreirajr/cnefetools">https://github.com/pedreirajr/cnefetools</a>
+</div>
+<div id="ref-pereira_herszenhut_2023" class="csl-entry" role="listitem">
+Pereira, R. H. M., &amp; Herszenhut, D. (2023). <em>Introdução à acessibilidade urbana: um guia prático em <span>R</span></em>. Instituto de Pesquisa Econômica Aplicada (Ipea). <a href="https://ipeagit.github.io/intro_access_book/">https://ipeagit.github.io/intro_access_book/</a>
+</div>
 <div id="ref-pereira_aop_td2772" class="csl-entry" role="listitem">
 Pereira, R. H. M., Herszenhut, D., Braga, C. K. V., Bazzo, J. P., Oliveira, J. L. A., Parga, J. P., Saraiva, M., Silva, L. P., Tomasiello, D. B., &amp; Warwar, L. (2022). <em>Distribuição espacial de características sociodemográficas e localização de empregos e serviços públicos das vinte maiores cidades do <span>Brasil</span></em> (Texto para Discussão N. 2772). Instituto de Pesquisa Econômica Aplicada (Ipea). <a href="https://doi.org/10.38116/td2772">https://doi.org/10.38116/td2772</a>
+</div>
+<div id="ref-pereira_karner_2021" class="csl-entry" role="listitem">
+Pereira, R. H. M., &amp; Karner, A. (2021). Transportation <span>A</span>ccessibility. Em <em>International Encyclopedia of Transportation</em>. Elsevier.
 </div>
 </div>
 </section>

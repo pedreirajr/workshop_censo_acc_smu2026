@@ -80,6 +80,8 @@ cnefe_sf <- cnefe_ana |>
 ::: {.callout-tip}
 ## Conexão com a Parte 2
 
-As contagens de oportunidades produzidas aqui são exatamente o insumo de destinos usado no cálculo
-dos indicadores de acessibilidade do capítulo [9](9-indicadores.qmd).
+A grade de hexágonos usada na Parte 2 traz o número de empregos por célula, e é do CNEFE que essa
+contagem vem. As oportunidades localizadas aqui são o insumo de destinos do cálculo dos indicadores
+de acessibilidade do capítulo [9](9-indicadores.qmd). O pacote `cnefetools`
+[@pedreira2026cnefetools] automatiza boa parte desse processamento.
 :::

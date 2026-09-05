@@ -68,7 +68,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./10-cenarios.html" rel="next">
+<link href="./10-equidade.html" rel="next">
 <link href="./8-rede.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -237,8 +237,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-cenarios.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Avaliação de cenários</span></span></a>
+  <a href="./10-equidade.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Equidade e pobreza de acessibilidade</span></span></a>
   </div>
 </li>
       </ul>
@@ -259,17 +259,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Índice do Capítulo</h2>
    
   <ul>
-  <li><a href="#famílias-de-medidas" id="toc-famílias-de-medidas" class="nav-link active" data-scroll-target="#famílias-de-medidas"><span class="header-section-number">9.1</span> Famílias de medidas</a>
+  <li><a href="#pontos-de-origem-e-destino" id="toc-pontos-de-origem-e-destino" class="nav-link active" data-scroll-target="#pontos-de-origem-e-destino"><span class="header-section-number">9.1</span> Pontos de origem e destino</a></li>
+  <li><a href="#matrizes-de-tempo-de-viagem" id="toc-matrizes-de-tempo-de-viagem" class="nav-link" data-scroll-target="#matrizes-de-tempo-de-viagem"><span class="header-section-number">9.2</span> Matrizes de tempo de viagem</a>
   <ul class="collapse">
-  <li><a href="#medidas-cumulativas" id="toc-medidas-cumulativas" class="nav-link" data-scroll-target="#medidas-cumulativas"><span class="header-section-number">9.1.1</span> Medidas cumulativas</a></li>
-  <li><a href="#medidas-gravitacionais" id="toc-medidas-gravitacionais" class="nav-link" data-scroll-target="#medidas-gravitacionais"><span class="header-section-number">9.1.2</span> Medidas gravitacionais</a></li>
-  <li><a href="#custo-mínimo" id="toc-custo-mínimo" class="nav-link" data-scroll-target="#custo-mínimo"><span class="header-section-number">9.1.3</span> Custo mínimo</a></li>
-  <li><a href="#oportunidade-flutuante" id="toc-oportunidade-flutuante" class="nav-link" data-scroll-target="#oportunidade-flutuante"><span class="header-section-number">9.1.4</span> Oportunidade flutuante</a></li>
+  <li><a href="#a-pé" id="toc-a-pé" class="nav-link" data-scroll-target="#a-pé"><span class="header-section-number">9.2.1</span> A pé</a></li>
+  <li><a href="#bicicleta" id="toc-bicicleta" class="nav-link" data-scroll-target="#bicicleta"><span class="header-section-number">9.2.2</span> Bicicleta</a></li>
+  <li><a href="#carro" id="toc-carro" class="nav-link" data-scroll-target="#carro"><span class="header-section-number">9.2.3</span> Carro</a></li>
+  <li><a href="#transporte-público" id="toc-transporte-público" class="nav-link" data-scroll-target="#transporte-público"><span class="header-section-number">9.2.4</span> Transporte público</a></li>
   </ul></li>
-  <li><a href="#cálculo-com-o-pacote-accessibility" id="toc-cálculo-com-o-pacote-accessibility" class="nav-link" data-scroll-target="#cálculo-com-o-pacote-accessibility"><span class="header-section-number">9.2</span> Cálculo com o pacote accessibility</a></li>
-  <li><a href="#escolha-de-parâmetros" id="toc-escolha-de-parâmetros" class="nav-link" data-scroll-target="#escolha-de-parâmetros"><span class="header-section-number">9.3</span> Escolha de parâmetros</a></li>
-  <li><a href="#mapas-de-acessibilidade" id="toc-mapas-de-acessibilidade" class="nav-link" data-scroll-target="#mapas-de-acessibilidade"><span class="header-section-number">9.4</span> Mapas de acessibilidade</a></li>
-  <li><a href="#distribuição-social-da-acessibilidade" id="toc-distribuição-social-da-acessibilidade" class="nav-link" data-scroll-target="#distribuição-social-da-acessibilidade"><span class="header-section-number">9.5</span> Distribuição social da acessibilidade</a></li>
+  <li><a href="#acessibilidade-cumulativa-oportunidades-cumulativas" id="toc-acessibilidade-cumulativa-oportunidades-cumulativas" class="nav-link" data-scroll-target="#acessibilidade-cumulativa-oportunidades-cumulativas"><span class="header-section-number">9.3</span> Acessibilidade cumulativa (oportunidades cumulativas)</a></li>
+  <li><a href="#acessibilidade-por-gravidade" id="toc-acessibilidade-por-gravidade" class="nav-link" data-scroll-target="#acessibilidade-por-gravidade"><span class="header-section-number">9.4</span> Acessibilidade por gravidade</a></li>
   </ul>
 </nav>
     </div>
@@ -295,7 +294,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Com a matriz de tempos pronta e as oportunidades localizadas no território, calcular acessibilidade vira uma operação direta. A parte difícil está antes e depois, na escolha da medida e na leitura do resultado. Medidas diferentes respondem a perguntas diferentes, e um mapa de acessibilidade só significa alguma coisa quando se sabe qual pergunta ele responde. Este capítulo apresenta as principais famílias de medidas, calcula-as para Anápolis e discute como interpretá-las.</p>
+<p>Com a rede construída, o caminho até um indicador de acessibilidade tem duas etapas. Primeiro se calcula quanto tempo se leva de cada origem a cada destino, o que produz uma matriz de tempos de viagem. Depois se combina essa matriz com a distribuição das oportunidades no território, o que produz o indicador. Este capítulo percorre as duas etapas para quatro modos, a pé, de bicicleta, de carro e por transporte público, e compara os resultados.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -307,89 +306,212 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>distinguir as principais famílias de medidas de acessibilidade</li>
-<li>calcular indicadores com o pacote <code>accessibility</code></li>
-<li>escolher limiares de tempo e funções de impedância com critério</li>
-<li>mapear a acessibilidade por modo e comparar os resultados</li>
-<li>avaliar a distribuição social da acessibilidade</li>
+<li>preparar os pontos de origem e destino a partir da grade H3</li>
+<li>calcular matrizes de tempo de viagem para quatro modos</li>
+<li>calcular acessibilidade cumulativa a empregos</li>
+<li>calcular acessibilidade com função de decaimento (gravidade)</li>
+<li>comparar os quatro modos em gráfico e em mapa</li>
 </ul>
 </div>
 </div>
-<section id="famílias-de-medidas" class="level2" data-number="9.1">
-<h2 data-number="9.1" class="anchored" data-anchor-id="famílias-de-medidas"><span class="header-section-number">9.1</span> Famílias de medidas</h2>
-<!-- ESBOÇO: apresentar as quatro famílias com a mesma estrutura, o que a medida pergunta, como se
-     calcula, o que exige de parâmetro e quando usar. Medida cumulativa, quantas oportunidades são
-     alcançáveis em até X minutos. Medida gravitacional, soma ponderada pela impedância. Custo
-     mínimo, tempo até a oportunidade mais próxima. Oportunidade flutuante, que considera a
-     competição pela oferta. Uma figura conceitual comparando as curvas de ponderação. -->
-<section id="medidas-cumulativas" class="level3" data-number="9.1.1">
-<h3 data-number="9.1.1" class="anchored" data-anchor-id="medidas-cumulativas"><span class="header-section-number">9.1.1</span> Medidas cumulativas</h3>
-<!-- ESBOÇO: simplicidade de comunicação como principal virtude e a arbitrariedade do limiar como
-     principal fraqueza. Mostrar o efeito de mudar o limiar sobre o mapa resultante. -->
-</section>
-<section id="medidas-gravitacionais" class="level3" data-number="9.1.2">
-<h3 data-number="9.1.2" class="anchored" data-anchor-id="medidas-gravitacionais"><span class="header-section-number">9.1.2</span> Medidas gravitacionais</h3>
-<!-- ESBOÇO: funções de decaimento disponíveis e o efeito prático da escolha. Enfatizar que o
-     resultado é adimensional e serve para comparação relativa, e não para leitura absoluta. -->
-</section>
-<section id="custo-mínimo" class="level3" data-number="9.1.3">
-<h3 data-number="9.1.3" class="anchored" data-anchor-id="custo-mínimo"><span class="header-section-number">9.1.3</span> Custo mínimo</h3>
-<!-- ESBOÇO: adequada a serviços em que a proximidade ao mais próximo é o que importa, como saúde
-     básica e ensino fundamental. Vantagem de não exigir limiar. -->
-</section>
-<section id="oportunidade-flutuante" class="level3" data-number="9.1.4">
-<h3 data-number="9.1.4" class="anchored" data-anchor-id="oportunidade-flutuante"><span class="header-section-number">9.1.4</span> Oportunidade flutuante</h3>
-<!-- ESBOÇO: incorpora a competição pela oferta, o que muda bastante o retrato em serviços com
-     capacidade limitada. Requisito de dado sobre porte da oferta, que o CNEFE não fornece, e as
-     implicações disso para esta aplicação. -->
-</section>
-</section>
-<section id="cálculo-com-o-pacote-accessibility" class="level2" data-number="9.2">
-<h2 data-number="9.2" class="anchored" data-anchor-id="cálculo-com-o-pacote-accessibility"><span class="header-section-number">9.2</span> Cálculo com o pacote accessibility</h2>
-<!-- ESBOÇO: preparar a tabela de entrada, com a matriz de tempos e as contagens de oportunidades
-     por destino. Mostrar as funções correspondentes a cada família e os argumentos comuns.
-     Calcular acesso a ensino e a saúde por caminhada e por transporte público. -->
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(accessibility)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>acc_cum <span class="ot">&lt;-</span> <span class="fu">cumulative_cutoff</span>(</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_matrix =</span> ttm,</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">land_use_data =</span> oportunidades,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">opportunity   =</span> <span class="st">"ensino"</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_cost   =</span> <span class="st">"travel_time_p50"</span>,</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff        =</span> <span class="dv">30</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="escolha-de-parâmetros" class="level2" data-number="9.3">
-<h2 data-number="9.3" class="anchored" data-anchor-id="escolha-de-parâmetros"><span class="header-section-number">9.3</span> Escolha de parâmetros</h2>
-<!-- ESBOÇO: limiar de tempo, função de impedância e horário de partida como decisões de análise, e
-     não detalhes técnicos. Mostrar uma análise de sensibilidade simples, com o mesmo indicador
-     calculado sob três limiares, e discutir o quanto a conclusão muda. -->
-</section>
-<section id="mapas-de-acessibilidade" class="level2" data-number="9.4">
-<h2 data-number="9.4" class="anchored" data-anchor-id="mapas-de-acessibilidade"><span class="header-section-number">9.4</span> Mapas de acessibilidade</h2>
-<!-- ESBOÇO: mapa por modo, com escala de cor comum para permitir comparação. Figura principal do
-     capítulo. Leitura do padrão observado em Anápolis, com atenção ao contraste entre a área
-     central e as bordas urbanas, e à diferença entre caminhada e transporte público. -->
-</section>
-<section id="distribuição-social-da-acessibilidade" class="level2" data-number="9.5">
-<h2 data-number="9.5" class="anchored" data-anchor-id="distribuição-social-da-acessibilidade"><span class="header-section-number">9.5</span> Distribuição social da acessibilidade</h2>
-<!-- ESBOÇO: fechar cruzando o indicador com a renda por célula da grade, obtida na Parte 1.
-     Acessibilidade média por grupo de renda, curva de concentração e índice de Palma. A pergunta
-     que orienta a seção é se a cidade oferece acesso semelhante a grupos socioeconômicos
-     distintos. -->
+<section id="pontos-de-origem-e-destino" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="pontos-de-origem-e-destino"><span class="header-section-number">9.1</span> Pontos de origem e destino</h2>
+<p>Usamos o centroide de cada hexágono <strong>urbano</strong> como ponto de origem e destino. O <code>r5r</code> espera um <code>data.frame</code> ou <code>sf</code> com colunas <code>id</code>, <code>lon</code> e <code>lat</code>, em WGS84.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>grade_urbana <span class="ot">&lt;-</span> grade <span class="sc">|&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(classe_urbano <span class="sc">==</span> <span class="st">"Urbano"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="dv">4326</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>pontos <span class="ot">&lt;-</span> grade_urbana <span class="sc">|&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_centroid</span>() <span class="sc">|&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">lon =</span> <span class="fu">st_coordinates</span>(geom)[, <span class="dv">1</span>],</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">lat =</span> <span class="fu">st_coordinates</span>(geom)[, <span class="dv">2</span>]</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(<span class="at">id =</span> id_hex, lon, lat)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(pontos)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Dica</span>Retomando a Parte 1
+<span class="screen-reader-only">Dica</span>Amostra para teste rápido
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>O indicador de qualidade do entorno construído no capítulo <a href="./3-agregados.html">3</a> qualifica a leitura dos mapas de caminhada. Uma célula com bom acesso calculado pela rede viária pode ter caminhabilidade ruim na prática, e o dado do entorno é o que revela essa diferença.</p>
+<p>Para um teste rápido durante a aula ao vivo, use uma amostra de hexágonos em vez do conjunto completo. O cálculo fica bem mais rápido e serve para conferir que o código funciona antes de rodar tudo.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pontos_demo <span class="ot">&lt;-</span> pontos <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">300</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Troque <code>pontos</code> por <code>pontos_demo</code> nas chamadas abaixo e depois volte para <code>pontos</code> para o resultado completo.</p>
 </div>
 </div>
+<p>E a tabela de uso do solo, com os nomes de coluna que o <code>accessibility</code> espera.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>uso_solo <span class="ot">&lt;-</span> grade_urbana <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">id =</span> id_hex,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">jobs =</span> Jobs,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">population =</span> pop_ph,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">income =</span> avg_inc_resp</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(uso_solo)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="matrizes-de-tempo-de-viagem" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="matrizes-de-tempo-de-viagem"><span class="header-section-number">9.2</span> Matrizes de tempo de viagem</h2>
+<p>O transporte público só tem viagens programadas em <strong>22/07/2026</strong>, como visto no capítulo anterior, então usamos essa data também nos outros modos, por consistência. Para caminhada, bicicleta e carro o horário não muda o resultado, porque não há tabela de horários envolvida.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data_viagem <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(<span class="st">"22-07-2026 07:00:00"</span>, <span class="at">format =</span> <span class="st">"%d-%m-%Y %H:%M:%S"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="a-pé" class="level3" data-number="9.2.1">
+<h3 data-number="9.2.1" class="anchored" data-anchor-id="a-pé"><span class="header-section-number">9.2.1</span> A pé</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ttm_pe <span class="ot">&lt;-</span> <span class="fu">travel_time_matrix</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">r5r_network =</span> r5r_network,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">origins =</span> pontos,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">destinations =</span> pontos,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">"WALK"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">departure_datetime =</span> data_viagem,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_trip_duration =</span> <span class="dv">60</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ttm_pe)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="bicicleta" class="level3" data-number="9.2.2">
+<h3 data-number="9.2.2" class="anchored" data-anchor-id="bicicleta"><span class="header-section-number">9.2.2</span> Bicicleta</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ttm_bike <span class="ot">&lt;-</span> <span class="fu">travel_time_matrix</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">r5r_network =</span> r5r_network,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">origins =</span> pontos,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">destinations =</span> pontos,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">"BICYCLE"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">departure_datetime =</span> data_viagem,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_lts =</span> <span class="dv">2</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_trip_duration =</span> <span class="dv">60</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="carro" class="level3" data-number="9.2.3">
+<h3 data-number="9.2.3" class="anchored" data-anchor-id="carro"><span class="header-section-number">9.2.3</span> Carro</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ttm_carro <span class="ot">&lt;-</span> <span class="fu">travel_time_matrix</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">r5r_network =</span> r5r_network,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">origins =</span> pontos,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">destinations =</span> pontos,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">"CAR"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">departure_datetime =</span> data_viagem,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_trip_duration =</span> <span class="dv">60</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="transporte-público" class="level3" data-number="9.2.4">
+<h3 data-number="9.2.4" class="anchored" data-anchor-id="transporte-público"><span class="header-section-number">9.2.4</span> Transporte público</h3>
+<p>Para transporte público, o modo de acesso e egresso a pé (<code>"WALK"</code>) é combinado com <code>"TRANSIT"</code>. Usar uma janela de tempo (<code>time_window</code>) maior deixa a estimativa mais robusta a variações de horário, e também mais lenta. Trinta minutos é um bom equilíbrio para uma aula.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ttm_transporte_publico <span class="ot">&lt;-</span> <span class="fu">travel_time_matrix</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">r5r_network =</span> r5r_network,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">origins =</span> pontos,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">destinations =</span> pontos,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"WALK"</span>, <span class="st">"TRANSIT"</span>),</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">departure_datetime =</span> data_viagem,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_window =</span> <span class="dv">30</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_walk_time =</span> <span class="dv">30</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_trip_duration =</span> <span class="dv">90</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="acessibilidade-cumulativa-oportunidades-cumulativas" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="acessibilidade-cumulativa-oportunidades-cumulativas"><span class="header-section-number">9.3</span> Acessibilidade cumulativa (oportunidades cumulativas)</h2>
+<p>Quantos empregos são alcançáveis em até 30 minutos, por hexágono, em cada modo? Usamos <code>accessibility::cumulative_cutoff()</code>, que espera a coluna de custo <code>travel_time_p50</code>, o tempo mediano de viagem dentro da janela usada.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>acess_pe <span class="ot">&lt;-</span> <span class="fu">cumulative_cutoff</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_matrix =</span> ttm_pe,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">land_use_data =</span> uso_solo,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_cost =</span> <span class="st">"travel_time_p50"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff =</span> <span class="dv">30</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>acess_bike <span class="ot">&lt;-</span> <span class="fu">cumulative_cutoff</span>(</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_matrix =</span> ttm_bike,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">land_use_data =</span> uso_solo,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_cost =</span> <span class="st">"travel_time_p50"</span>,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff =</span> <span class="dv">30</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>acess_carro <span class="ot">&lt;-</span> <span class="fu">cumulative_cutoff</span>(</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_matrix =</span> ttm_carro,</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">land_use_data =</span> uso_solo,</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_cost =</span> <span class="st">"travel_time_p50"</span>,</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff =</span> <span class="dv">30</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>acess_tp <span class="ot">&lt;-</span> <span class="fu">cumulative_cutoff</span>(</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_matrix =</span> ttm_transporte_publico,</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">land_use_data =</span> uso_solo,</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_cost =</span> <span class="st">"travel_time_p50"</span>,</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff =</span> <span class="dv">30</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Juntando os quatro resultados em uma única tabela, para comparar.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>acess_modos <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  acess_pe <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">modo =</span> <span class="st">"A pe"</span>),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  acess_bike <span class="sc">|&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">modo =</span> <span class="st">"Bicicleta"</span>),</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  acess_carro <span class="sc">|&gt;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">modo =</span> <span class="st">"Carro"</span>),</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  acess_tp <span class="sc">|&gt;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">modo =</span> <span class="st">"Transporte publico"</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(acess_modos, <span class="fu">aes</span>(<span class="at">x =</span> modo, <span class="at">y =</span> jobs, <span class="at">fill =</span> modo)) <span class="sc">+</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Empregos alcançáveis em até 30 minutos, por modo"</span>,</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Empregos acessíveis"</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>E em mapa, para o transporte público.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>grade_urbana <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(acess_tp, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"id_hex"</span> <span class="ot">=</span> <span class="st">"id"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> jobs), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Empregos</span><span class="sc">\n</span><span class="st">em até 30 min"</span>) <span class="sc">+</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Acessibilidade a empregos por transporte público"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="acessibilidade-por-gravidade" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="acessibilidade-por-gravidade"><span class="header-section-number">9.4</span> Acessibilidade por gravidade</h2>
+<p>A abordagem de oportunidades cumulativas usa um corte rígido, em que 30 minutos “conta” e 31 minutos “não conta”. Uma alternativa é ponderar as oportunidades pelo tempo de viagem com uma função de decaimento, por exemplo uma decaída exponencial, em que oportunidades mais distantes pesam cada vez menos.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>acess_grav_tp <span class="ot">&lt;-</span> <span class="fu">gravity</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_matrix =</span> ttm_transporte_publico,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">land_use_data =</span> uso_solo,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_cost =</span> <span class="st">"travel_time_p50"</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">decay_function =</span> <span class="fu">decay_exponential</span>(<span class="at">decay_value =</span> <span class="fl">0.1</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(acess_grav_tp)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Outras funções de decaimento disponíveis no <code>accessibility</code> são <code>decay_binary()</code>, <code>decay_linear()</code>, <code>decay_logistic()</code>, <code>decay_power()</code> e <code>decay_stepped()</code>, todas documentadas em <code>?decay_exponential</code> e na <a href="https://ipeagit.github.io/accessibility/articles/decay_functions.html">vinheta de funções de decaimento</a> do pacote.</p>
+<p>Com a acessibilidade calculada para os quatro modos, o próximo passo é olhar para quem se beneficia mais ou menos dela.</p>
 
 
 </section>
@@ -807,8 +929,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./10-cenarios.html" class="pagination-link" aria-label="Avaliação de cenários">
-        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Avaliação de cenários</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./10-equidade.html" class="pagination-link" aria-label="Equidade e pobreza de acessibilidade">
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Equidade e pobreza de acessibilidade</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -225,8 +225,8 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-cenarios.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Avaliação de cenários</span></span></a>
+  <a href="./10-equidade.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Equidade e pobreza de acessibilidade</span></span></a>
   </div>
 </li>
       </ul>
@@ -328,7 +328,7 @@ div.csl-indent {
 </table>
 <p><strong>Este site cobre apenas as partes práticas.</strong> O conteúdo expositivo é apresentado em sala, com material próprio. O que está aqui é o roteiro de código, pensado para ser acompanhado ao vivo e, depois, reexecutado por conta própria.</p>
 <p>A <strong>Parte 1</strong> percorre os principais produtos do Censo Demográfico, começando pela preparação do ambiente e pelos recortes territoriais do IBGE e avançando pelos agregados por setor censitário, pelos microdados da amostra, pelo CNEFE e pela grade estatística. Os agregados incluem uma seção dedicada às características urbanísticas do entorno dos domicílios, com recorte voltado a transportes.</p>
-<p>A <strong>Parte 2</strong> monta uma análise de acessibilidade do zero, com a preparação do ambiente de roteamento, a leitura dos insumos e a construção da rede multimodal, o cálculo dos indicadores e, por fim, a avaliação de um cenário de intervenção.</p>
+<p>A <strong>Parte 2</strong> monta uma análise de acessibilidade do zero, com a preparação do ambiente de roteamento, a leitura dos insumos e a construção da rede multimodal, o cálculo dos indicadores a pé, de bicicleta, de carro e por transporte público e, por fim, a avaliação da distribuição social dessa acessibilidade, com medidas de desigualdade e de pobreza de acesso.</p>
 </section>
 <section id="o-estudo-de-caso" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="o-estudo-de-caso">O estudo de caso</h2>
@@ -363,14 +363,14 @@ div.csl-indent {
 </section>
 <section id="onde-ficam-os-dados" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="onde-ficam-os-dados">Onde ficam os dados</h2>
-<p>Os arquivos usados na oficina são distribuídos à parte e devem ser colocados dentro do projeto do RStudio, na pasta <code>dados/</code>, com a seguinte organização.</p>
+<p>Parte dos dados é obtida ao vivo pelos pacotes <code>censobr</code> e <code>geobr</code>, sem necessidade de arquivos locais. Os arquivos que <strong>não</strong> são produzidos por código, como a rede viária do OpenStreetMap, o GTFS e o modelo de elevação, são distribuídos como <em>assets</em> de um <a href="https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/tag/dados"><em>release</em></a> do repositório da oficina e baixados pelo próprio código dos capítulos, para dentro do projeto do RStudio.</p>
 <pre><code>workshop_censo_acc_smu2026/
 ├── workshop_censo_acc_smu2026.Rproj
 └── dados/
     ├── censo/   agregados, microdados e CNEFE de Anápolis
-    ├── geo/     malhas territoriais e grade estatística
-    └── r5/      rede viária (.osm.pbf), GTFS (.zip) e relevo (.tif)</code></pre>
-<p>Sempre que um capítulo depender de um arquivo específico, o caminho esperado aparece indicado no próprio código. Parte dos dados do Censo é obtida diretamente pelos pacotes <code>censobr</code> e <code>geobr</code>, sem necessidade de arquivos locais.</p>
+    ├── geo/     grade hexagonal H3 e rede de links do modelo de tráfego
+    └── r5/      rede viária (.pbf), GTFS (.zip) e relevo (.tif)</code></pre>
+<p>Sempre que um capítulo depender de um arquivo específico, o <em>download</em> e o caminho esperado aparecem no próprio código, e nada é baixado duas vezes.</p>
 </section>
 <section id="instrutores" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="instrutores">Instrutores</h2>

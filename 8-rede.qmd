@@ -1,121 +1,261 @@
 ---
 title: "Leitura dos arquivos e montagem da rede"
+execute:
+  eval: false
 ---
 
 Medir acessibilidade exige saber quanto tempo se leva para ir de cada origem a cada destino, por
 cada modo de interesse. Esse cálculo depende de uma representação computacional da rede de
-transportes, montada a partir de arquivos de origens distintas. Este capítulo trata dos insumos,
-mostra onde cada um deve estar, constrói a rede multimodal de Anápolis com o `r5r` e produz a
-matriz de tempos de viagem que sustenta todo o restante da Parte 2.
+transportes, montada a partir de arquivos de origens distintas. Este capítulo apresenta os quatro
+insumos usados na oficina, mostra como obtê-los e inspecioná-los, e constrói com eles a rede de
+roteamento de Anápolis.
 
 ::: {.callout-note}
 ## Nesta seção você vai
 
-- identificar os insumos exigidos pelo `r5r` e a função de cada um
-- organizar os arquivos na estrutura de pastas esperada
-- construir a rede multimodal com `setup_r5()`
-- calcular a matriz de tempos de viagem por modo
-- inspecionar e validar os resultados antes de seguir adiante
+- baixar os dados da oficina e organizá-los nas pastas do projeto
+- inspecionar a grade de uso do solo, a rede viária, o modelo de elevação e o GTFS
+- construir a rede de roteamento com `build_network()`
+- conferir os erros de validação do GTFS
+- visualizar a rede efetivamente usada pelo R5
 :::
 
-## Os insumos da rede
+## Os dados da oficina
 
-<!-- ESBOÇO: apresentar cada insumo, o que ele representa, se é obrigatório ou opcional, e de onde
-     costuma vir. Rede viária em .osm.pbf a partir do OpenStreetMap, obrigatória. GTFS do transporte
-     coletivo em .zip, opcional, necessário apenas para roteamento por transporte público. Modelo
-     digital de elevação em .tif, opcional, relevante quando o relevo condiciona caminhada e
-     bicicleta. Tabela resumo com formato, obrigatoriedade e observação. -->
+Os arquivos que não são produzidos por código são distribuídos como *assets* de um
+[*release*](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/tag/dados) do
+repositório da oficina.
 
-::: {.callout-important}
-## Onde os arquivos devem estar
+| Arquivo | Conteúdo | Pasta |
+|---|---|---|
+| `anapolis.pbf` | Rede viária (OpenStreetMap) do município | `dados/r5/` |
+| `Anapolis.tif` | Modelo digital de elevação (MDE), usado para custo de caminhada e bicicleta em ladeiras | `dados/r5/` |
+| `GTFS_ANL.zip` | Feed GTFS do transporte público de Anápolis | `dados/r5/` |
+| `grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg` | Grade de hexágonos H3 (resolução 9) com número de empregos, população, renda média e classificação urbano/rural | `dados/geo/` |
 
-O `r5r` monta a rede a partir de **uma única pasta**, lendo todos os arquivos reconhecidos que
-encontrar nela. Coloque os insumos em `dados/r5/` e não misture arquivos de cenários diferentes no
-mesmo diretório.
-:::
+O bloco abaixo baixa o que ainda não estiver na máquina. Rodá-lo mais de uma vez não repete o
+download.
 
-```
-dados/r5/
-├── anapolis.osm.pbf     rede viária (obrigatório)
-├── anapolis_gtfs.zip    transporte coletivo (opcional)
-└── anapolis_dem.tif     modelo digital de elevação (opcional)
-```
+```{r}
+url_base <- "https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados"
 
-<!-- DADOS: os três arquivos são distribuídos à parte e devem ser copiados para dados/r5/ -->
+baixa_dado <- function(arquivo, destino) {
+  caminho <- file.path(destino, arquivo)
 
-### Rede viária
+  if (!file.exists(caminho)) {
+    dir.create(destino, recursive = TRUE, showWarnings = FALSE)
+    download.file(paste0(url_base, "/", arquivo), caminho, mode = "wb")
+  }
 
-<!-- ESBOÇO: o que o OSM representa, quais atributos o R5 usa para permitir ou proibir cada modo, e
-     por que vale inspecionar a rede antes de confiar nela. Comentar a qualidade do mapeamento em
-     cidades de porte médio, que costuma ser boa no viário e desigual nas calçadas. -->
+  caminho
+}
 
-### Transporte coletivo
+pasta_rede <- "dados/r5"
+pasta_geo  <- "dados/geo"
 
-<!-- ESBOÇO: estrutura de um GTFS, arquivos que o compõem e o que cada um define. Leitura e
-     inspeção com gtfstools, verificação do período de validade do calendário e checagem de que a
-     data usada no roteamento está coberta pelo feed. VERIFICAR a disponibilidade e a data de
-     referência do GTFS de Anápolis antes de escrever esta seção. -->
+invisible(lapply(
+  c("anapolis.pbf", "Anapolis.tif", "GTFS_ANL.zip"),
+  baixa_dado,
+  destino = pasta_rede
+))
 
-### Relevo
+arq_grade <- baixa_dado(
+  "grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg",
+  destino = pasta_geo
+)
 
-<!-- ESBOÇO: efeito da declividade sobre tempo de caminhada e de bicicleta, e como o R5 incorpora
-     essa informação. Quando vale a pena incluir o modelo de elevação. -->
-
-## Origens e destinos
-
-<!-- ESBOÇO: retomar o arquivo produzido no capítulo 6, com centroides das células da grade, a
-     população residente e as contagens de oportunidades do CNEFE. Conferir o formato exigido, com
-     colunas id, lon e lat em coordenadas geográficas. Comentar o custo computacional, que cresce
-     com o produto do número de origens pelo número de destinos. -->
-
-```r
-library(dplyr)
-
-pontos <- readr::read_csv("dados/geo/pontos_anapolis.csv")
+list.files(pasta_rede)
 ```
 
-## Construção da rede
+## Grade de uso do solo (H3, resolução 9)
 
-<!-- ESBOÇO: chamada do setup_r5, o que acontece no primeiro uso, os arquivos de rede gerados na
-     pasta e por que a segunda execução é muito mais rápida. Alertar que qualquer mudança nos
-     insumos exige apagar os arquivos gerados para forçar a reconstrução. -->
+A grade é um conjunto de hexágonos [H3](https://h3geo.org/) cobrindo todo o município, com número de
+empregos, população, renda média e uma classificação urbano ou rural por hexágono. Ela foi elaborada
+a partir de dados do IBGE, com os produtos tratados na Parte 1.
 
-```r
-options(java.parameters = "-Xmx4G")
-library(r5r)
+```{r}
+grade <- st_read(arq_grade, quiet = TRUE)
 
-r5r_core <- setup_r5(data_path = "dados/r5")
+glimpse(sf::st_drop_geometry(grade))
 ```
 
-## Matriz de tempos de viagem
+- `id_hex`, identificador do hexágono H3
+- `Jobs`, número de empregos no hexágono
+- `pop_ph`, população residente no hexágono
+- `avg_inc_resp`, renda média domiciliar per capita dos residentes
+- `classe_urbano`, `"Urbano"` ou `"Rural"`
 
-<!-- ESBOÇO: cálculo da matriz por caminhada, bicicleta, transporte público e automóvel. Explicar
-     cada argumento relevante, a janela de partida, o tempo máximo de viagem, o tempo máximo de
-     caminhada de acesso e o percentil usado no transporte público. Justificar as escolhas
-     adotadas na oficina. -->
+```{r}
+table(grade$classe_urbano)
+```
 
-```r
-ttm <- travel_time_matrix(
-  r5r_core,
-  origins      = pontos,
-  destinations = pontos,
-  mode         = c("WALK", "TRANSIT"),
-  departure_datetime = as.POSIXct("2026-09-09 07:00:00"),
-  max_trip_duration  = 60
+A maior parte da área do município é rural, mas concentra pouca população e quase nenhum emprego. O
+grosso da atividade urbana está nos cerca de 1.700 hexágonos classificados como `"Urbano"`. É neles
+que o cálculo de acessibilidade vai focar, para manter o processamento leve e o resultado
+interpretável.
+
+```{r}
+mapview(
+  grade |>
+    filter(classe_urbano == "Urbano"),
+  zcol = "Jobs",
+  layer.name = "Empregos por hexágono"
 )
 ```
 
-## Inspeção e validação
+```{r}
+mapview(
+  grade |>
+    filter(classe_urbano == "Urbano"),
+  zcol = "avg_inc_resp",
+  layer.name = "Renda média (R$)"
+)
+```
 
-<!-- ESBOÇO: etapa frequentemente pulada e responsável por boa parte dos erros silenciosos.
-     Verificar proporção de pares sem rota, distribuição dos tempos por modo e coerência entre
-     modos. Mapear o tempo de viagem a partir de uma origem escolhida, que é a forma mais direta de
-     enxergar se a rede está correta. Discutir causas comuns de par sem rota, como ponto fora da
-     rede, ilha desconectada e limite de tempo curto demais. -->
+## Rede viária (OpenStreetMap)
+
+O arquivo `anapolis.pbf` é um extrato do OpenStreetMap. O GDAL, por meio do `sf`, lê `.pbf` com o
+driver OSM, que expõe a rede em várias camadas.
+
+```{r}
+st_layers(file.path(pasta_rede, "anapolis.pbf"))
+```
+
+A camada `lines` traz as vias (ruas, avenidas, ciclovias e outras), usada pelo `r5r` para caminhada,
+bicicleta e carro.
+
+```{r}
+vias <- st_read(
+  file.path(pasta_rede, "anapolis.pbf"),
+  layer = "lines",
+  quiet = TRUE
+)
+
+ggplot(vias) +
+  geom_sf(linewidth = 0.15, color = "gray30") +
+  theme_minimal() +
+  labs(title = "Rede viária de Anápolis (OSM)")
+```
+
+## Elevação (MDE)
+
+`Anapolis.tif` é um modelo digital de elevação cobrindo a mesma área do extrato OSM. O `r5r` usa esse
+*raster* para estimar o efeito de subidas e descidas no tempo de caminhada e de bicicleta.
+
+```{r}
+mde <- rast(file.path(pasta_rede, "Anapolis.tif"))
+mde <- setMinMax(mde)
+
+plot(mde, main = "Modelo digital de elevação - Anápolis (m)")
+```
+
+```{r}
+c(
+  min  = global(mde, "min", na.rm = TRUE)[1, 1],
+  max  = global(mde, "max", na.rm = TRUE)[1, 1],
+  mean = global(mde, "mean", na.rm = TRUE)[1, 1]
+)
+```
+
+O terreno varia de aproximadamente 686 a 1.158 metros, desnível relevante o suficiente para impactar
+tempos de caminhada e de bicicleta em algumas regiões do município.
+
+## Transporte público (GTFS)
+
+`GTFS_ANL.zip` é o feed de transporte público. Não precisamos descompactá-lo manualmente para usar no
+`r5r`, que lê o `.zip` diretamente, mas vale explorar seu conteúdo antes.
+
+```{r}
+gtfs_dir <- file.path(tempdir(), "gtfs_anl")
+unzip(file.path(pasta_rede, "GTFS_ANL.zip"), exdir = gtfs_dir)
+
+list.files(gtfs_dir)
+```
+
+```{r}
+calendario <- fread(file.path(gtfs_dir, "calendar.txt"))
+calendario
+```
 
 ::: {.callout-warning}
-## Encerre a sessão do R5
+## Atenção à data de validade do feed
 
-Ao terminar, chame `stop_r5(r5r_core)` para liberar a memória da máquina virtual. Sem isso, a JVM
-continua ocupando a RAM até o fim da sessão do R.
+Este feed tem um único `service_id`, válido **apenas em 22/07/2026** (`start_date` = `end_date` =
+`20260722`). Isso significa que, ao rotear por transporte público com o `r5r`, o
+`departure_datetime` **precisa** cair nessa data. Qualquer outra data não terá viagens programadas.
+Essa é a data usada no capítulo seguinte.
 :::
+
+```{r}
+paradas <- fread(file.path(gtfs_dir, "stops.txt")) |>
+  st_as_sf(coords = c("stop_lon", "stop_lat"), crs = 4326)
+
+mapview(paradas, layer.name = "Paradas de ônibus")
+```
+
+Com os quatro insumos conferidos, rede viária, elevação, GTFS e uso do solo, podemos construir a rede
+de roteamento.
+
+## Construindo a rede de transporte
+
+O `r5r::build_network()` exige que **todos os insumos estejam na mesma pasta**, um único arquivo
+`.pbf`, opcionalmente um ou mais `.zip` de GTFS e opcionalmente um `.tif` de elevação. Ele também
+grava nessa pasta o arquivo `network.dat`, com a rede já processada em cache, e um `gtfs_errors.csv`.
+
+::: {.callout-important}
+## Uma pasta só para a rede
+
+Mantenha em `dados/r5/` apenas os insumos da rede. Se a pasta estiver sincronizada com um serviço de
+nuvem, considere movê-la para um diretório local, porque o `network.dat` pode ficar com dezenas de
+megabytes e seria sincronizado sem necessidade.
+:::
+
+```{r}
+r5r_network <- build_network(
+  data_path = pasta_rede,
+  elevation = "TOBLER",
+  overwrite = FALSE
+)
+
+r5r_network
+```
+
+- `elevation = "TOBLER"` faz o R5 penalizar o tempo de caminhada e de bicicleta em ladeiras, usando o
+  `Anapolis.tif` que está na pasta.
+- Da primeira vez, o `build_network()` demora, porque compila o grafo a partir do `.pbf` e do GTFS.
+  Nas próximas vezes, com `overwrite = FALSE` (o padrão), ele reaproveita o `network.dat` já salvo e
+  carrega quase instantaneamente.
+- Se algo no GTFS ou no `.pbf` mudar, rode com `overwrite = TRUE` para reconstruir do zero.
+
+## Conferindo erros do GTFS
+
+O `build_network()` valida o GTFS e salva os problemas encontrados em `gtfs_errors.csv`. Vale sempre
+checar.
+
+```{r}
+erros_gtfs <- get_gtfs_errors(r5r_network)
+erros_gtfs
+```
+
+Erros de prioridade `"HIGH"` impedem a construção da rede, caso em que o `build_network()` já teria
+parado com um erro. Erros de prioridade mais baixa não bloqueiam, mas vale entender o que significam
+antes de confiar nos resultados de transporte público.
+
+No GTFS de Anápolis usado nesta oficina aparecem cerca de 867 avisos, todos de prioridade `LOW` ou
+`MEDIUM`, a maioria `DuplicateKeyError` em `stop_id` (paradas cadastradas mais de uma vez) e
+`RangeError` em `parent_station` (referência a uma estação-mãe que não existe no `stops.txt`). Isso é
+comum em feeds GTFS reais e não impede o roteamento, mas é um bom lembrete de que "os dados vieram de
+um pacote" não significa "os dados estão limpos".
+
+## Visualizando a rede
+
+```{r}
+rede_viaria <- street_network_to_sf(r5r_network)
+
+ggplot() +
+  geom_sf(data = rede_viaria$edges, linewidth = 0.15, color = "gray40") +
+  theme_minimal() +
+  labs(title = "Rede viária utilizada pelo R5")
+```
+
+Com a rede construída, já podemos calcular matrizes de tempo de viagem e acessibilidade.

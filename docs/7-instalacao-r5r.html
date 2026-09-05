@@ -58,7 +58,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -237,8 +257,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-cenarios.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Avaliação de cenários</span></span></a>
+  <a href="./10-equidade.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Equidade e pobreza de acessibilidade</span></span></a>
   </div>
 </li>
       </ul>
@@ -259,11 +279,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Índice do Capítulo</h2>
    
   <ul>
-  <li><a href="#java" id="toc-java" class="nav-link active" data-scroll-target="#java"><span class="header-section-number">7.1</span> Java</a></li>
-  <li><a href="#memória-da-máquina-virtual" id="toc-memória-da-máquina-virtual" class="nav-link" data-scroll-target="#memória-da-máquina-virtual"><span class="header-section-number">7.2</span> Memória da máquina virtual</a></li>
-  <li><a href="#instalação-dos-pacotes" id="toc-instalação-dos-pacotes" class="nav-link" data-scroll-target="#instalação-dos-pacotes"><span class="header-section-number">7.3</span> Instalação dos pacotes</a></li>
-  <li><a href="#teste-do-ambiente" id="toc-teste-do-ambiente" class="nav-link" data-scroll-target="#teste-do-ambiente"><span class="header-section-number">7.4</span> Teste do ambiente</a></li>
-  <li><a href="#problemas-mais-comuns" id="toc-problemas-mais-comuns" class="nav-link" data-scroll-target="#problemas-mais-comuns"><span class="header-section-number">7.5</span> Problemas mais comuns</a></li>
+  <li><a href="#pacotes-de-r" id="toc-pacotes-de-r" class="nav-link active" data-scroll-target="#pacotes-de-r"><span class="header-section-number">7.1</span> Pacotes de R</a></li>
+  <li><a href="#java" id="toc-java" class="nav-link" data-scroll-target="#java"><span class="header-section-number">7.2</span> Java</a></li>
+  <li><a href="#carregando-os-pacotes-e-configurando-a-memória-do-java" id="toc-carregando-os-pacotes-e-configurando-a-memória-do-java" class="nav-link" data-scroll-target="#carregando-os-pacotes-e-configurando-a-memória-do-java"><span class="header-section-number">7.3</span> Carregando os pacotes e configurando a memória do Java</a></li>
   </ul>
 </nav>
     </div>
@@ -289,7 +307,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>A Parte 2 exige um ambiente mais exigente que a Parte 1. O cálculo de matrizes de tempo de viagem é feito pelo R5, um motor de roteamento escrito em Java, e o pacote <code>r5r</code> funciona como ponte entre o R e esse motor. Isso significa que é preciso ter Java instalado, na versão correta, e memória suficiente reservada para a máquina virtual. Este capítulo trata dessa preparação, que costuma ser o principal ponto de travamento em oficinas de acessibilidade.</p>
+<p>A Parte 2 exige um ambiente mais exigente que a Parte 1. O cálculo de matrizes de tempo de viagem é feito pelo R5, um motor de roteamento escrito em Java, e o pacote <code>r5r</code> funciona como ponte entre o R e esse motor. Faltam então duas coisas, os <strong>pacotes de R</strong> e o <strong>Java</strong>. Este capítulo trata das duas, e é o ponto que mais trava oficinas de acessibilidade.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -300,7 +318,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>A instalação do Java e o primeiro carregamento do R5 levam tempo e dependem de conexão. Chegar com o ambiente pronto é a diferença entre acompanhar a prática e assistir a ela.</p>
+<p>O download do Java tem cerca de 180 MB e o primeiro carregamento do R5 leva tempo. Chegar com o ambiente pronto é a diferença entre acompanhar a prática e assistir a ela.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -314,32 +332,111 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>instalar a versão de Java exigida pelo <code>r5r</code></li>
+<li>instalar os pacotes de R usados na Parte 2</li>
+<li>instalar o Java 21 sem precisar de permissão de administrador</li>
 <li>reservar memória adequada para a máquina virtual Java</li>
-<li>instalar os pacotes da Parte 2</li>
-<li>verificar o ambiente com um teste de roteamento mínimo</li>
-<li>reconhecer e resolver os erros mais frequentes</li>
+<li>carregar os pacotes e confirmar que o ambiente está funcional</li>
 </ul>
 </div>
 </div>
-<section id="java" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="java"><span class="header-section-number">7.1</span> Java</h2>
-<!-- ESBOÇO: qual versão do Java o r5r exige na versão corrente do pacote, onde baixar e como
-     verificar a instalação. Passo a passo separado para Windows, macOS e Linux. Explicar a
-     variável JAVA_HOME e como conferi-la pelo R. VERIFICAR a versão exigida na documentação
-     oficial do r5r antes de escrever esta seção. -->
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># confere qual Java o R está enxergando</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.getenv</span>(<span class="st">"JAVA_HOME"</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">system</span>(<span class="st">"java -version"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="pacotes-de-r" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="pacotes-de-r"><span class="header-section-number">7.1</span> Pacotes de R</h2>
+<p>Este curso assume que você já tem <strong>R e RStudio</strong> instalados.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacotes <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"r5r"</span>, <span class="st">"accessibility"</span>, <span class="st">"rJavaEnv"</span>, <span class="st">"sf"</span>, <span class="st">"terra"</span>, <span class="st">"dplyr"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"data.table"</span>, <span class="st">"ggplot2"</span>, <span class="st">"mapview"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>faltando <span class="ot">&lt;-</span> pacotes[<span class="sc">!</span>pacotes <span class="sc">%in%</span> <span class="fu">rownames</span>(<span class="fu">installed.packages</span>())]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(faltando) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(faltando, <span class="at">repos =</span> <span class="st">"https://cloud.r-project.org"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>O pacote <code>accessibility</code> muda rápido. Esta Parte usa funções de desigualdade e pobreza (<code>palma_ratio()</code>, <code>concentration_index()</code>, <code>theil_t()</code>, <code>fgt_poverty()</code>, <code>gini_index()</code>) que só existem a partir da versão <strong>1.5.0</strong>. Confira e, se preciso, atualize.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">packageVersion</span>(<span class="st">"accessibility"</span>) <span class="sc">&lt;</span> <span class="st">"1.5.0"</span>) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">"accessibility"</span>, <span class="at">repos =</span> <span class="st">"https://cloud.r-project.org"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dica
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Em algumas instalações de R mais antigas, o <code>install.packages("accessibility")</code> tenta compilar o pacote <code>Hmisc</code> (uma dependência) a partir do código-fonte e falha por falta de compilador Fortran ou C. Se isso acontecer, instale o <code>Hmisc</code> como binário antes.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"Hmisc"</span>, <span class="at">repos =</span> <span class="st">"https://cloud.r-project.org"</span>, <span class="at">type =</span> <span class="st">"binary"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"accessibility"</span>, <span class="at">repos =</span> <span class="st">"https://cloud.r-project.org"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
 </section>
-<section id="memória-da-máquina-virtual" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="memória-da-máquina-virtual"><span class="header-section-number">7.2</span> Memória da máquina virtual</h2>
-<!-- ESBOÇO: a alocação de memória precisa ser definida ANTES de carregar o pacote, porque a JVM
-     inicia uma única vez por sessão. Explicar o cálculo do valor em função da RAM disponível e
-     recomendar um valor de trabalho para Anápolis. -->
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># deve vir antes de library(r5r)</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">java.parameters =</span> <span class="st">"-Xmx4G"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(r5r)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="java" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="java"><span class="header-section-number">7.2</span> Java</h2>
+<p>O <code>r5r</code> usa o <a href="https://github.com/conveyal/r5">R5</a>, motor de roteamento escrito em Java. A partir da versão 2.x do <code>r5r</code>, é necessário <strong>Java 21</strong>, e versões antigas, como 8 ou 11, não funcionam mais.</p>
+<p>Em vez de instalar o JDK manualmente no sistema, o que normalmente exige permissão de administrador, usamos o pacote <code>rJavaEnv</code>. Ele baixa uma distribuição do Java (Amazon Corretto) para uma pasta de cache do seu usuário e aponta o R para ela, sem precisar de admin ou root. Isso funciona mesmo em computadores institucionais travados.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rJavaEnv)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># dá o consentimento para o rJavaEnv baixar e gerenciar o Java (só precisa rodar uma vez)</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rje_consent</span>(<span class="at">provided =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># baixa e instala o Java 21, se ainda não estiver em cache</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">java_quick_install</span>(<span class="at">version =</span> <span class="dv">21</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># aponta esta sessão do R para o Java 21 recém instalado</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">use_java</span>(<span class="dv">21</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># confirma a versão que o R, via rJava, está enxergando</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">java_check_version_rjava</span>()</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Da primeira vez, <code>java_quick_install()</code> baixa uns 180 MB e demora um pouco. Nas próximas vezes ele reaproveita o cache e é instantâneo. Em qualquer sessão nova do R, rode <code>rJavaEnv::use_java(21)</code> de novo antes de usar o <code>r5r</code>, porque é isso que aponta o R para esse Java. O <code>PATH</code> do sistema não é alterado, de propósito, para não interferir em outros programas.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Importante
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Se sua rede bloquear o download automático, por proxy corporativo ou firewall, baixe manualmente o <strong>Eclipse Temurin JDK 21</strong> em <a href="https://adoptium.net/temurin/releases/?version=21" class="uri">https://adoptium.net/temurin/releases/?version=21</a> e instale normalmente. Nesse caso, o <code>r5r</code> encontra o Java do sistema mesmo sem o <code>use_java()</code>.</p>
+</div>
+</div>
+</section>
+<section id="carregando-os-pacotes-e-configurando-a-memória-do-java" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="carregando-os-pacotes-e-configurando-a-memória-do-java"><span class="header-section-number">7.3</span> Carregando os pacotes e configurando a memória do Java</h2>
+<p>O R5 roda dentro de uma máquina virtual Java (JVM), que precisa de um limite de memória definido <strong>antes</strong> de carregar o <code>r5r</code>. Para o tamanho de Anápolis, 4 a 6 GB são suficientes.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">java.parameters =</span> <span class="st">"-Xmx6G"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(r5r)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(accessibility)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mapview)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -353,34 +450,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Se o <code>r5r</code> for carregado antes da linha de <code>options</code>, a memória padrão da JVM permanece em vigor e a mudança só passa a valer após reiniciar a sessão do R.</p>
 </div>
 </div>
-</section>
-<section id="instalação-dos-pacotes" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="instalação-dos-pacotes"><span class="header-section-number">7.3</span> Instalação dos pacotes</h2>
-<!-- ESBOÇO: bloco de instalação com uma frase sobre o papel de cada pacote. Comentar que o r5r
-     baixa o arquivo .jar do R5 no primeiro uso. -->
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pacotes <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"r5r"</span>,           <span class="co"># roteamento multimodal e matrizes de tempo de viagem</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"accessibility"</span>, <span class="co"># cálculo de indicadores de acessibilidade</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"gtfstools"</span>,     <span class="co"># leitura e edição de dados GTFS</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"aopdata"</span>,       <span class="co"># dados do Projeto Acesso a Oportunidades</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"sf"</span>, <span class="st">"dplyr"</span>, <span class="st">"ggplot2"</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">setdiff</span>(pacotes, <span class="fu">rownames</span>(<span class="fu">installed.packages</span>())))</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="teste-do-ambiente" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="teste-do-ambiente"><span class="header-section-number">7.4</span> Teste do ambiente</h2>
-<!-- ESBOÇO: rodar o exemplo mínimo que acompanha o pacote, com a rede de teste embutida, para
-     confirmar que a JVM sobe e que o roteamento responde. Se este teste passar, o ambiente está
-     pronto para os dados de Anápolis. -->
-</section>
-<section id="problemas-mais-comuns" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="problemas-mais-comuns"><span class="header-section-number">7.5</span> Problemas mais comuns</h2>
-<!-- ESBOÇO: tabela de erro e solução, cobrindo Java ausente ou em versão incompatível, JAVA_HOME
-     apontando para o lugar errado, memória insuficiente na JVM, antivírus bloqueando o download do
-     .jar e caminho com acentos ou espaços atrapalhando o setup_r5. -->
+<p>Se tudo rodou sem erro, o ambiente está pronto para o próximo capítulo.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Versões usadas neste material
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>O material foi escrito e testado com <code>r5r</code> 2.4.0 e <code>accessibility</code> 1.5.0 <span class="citation" data-cites="pereira_r5r_2021">(<a href="referencias.html#ref-pereira_r5r_2021" role="doc-biblioref">Pereira et al., 2021</a>)</span>. Nomes de funções e argumentos podem mudar em versões futuras. Em caso de erro, confira <code>packageVersion("r5r")</code> e <code>packageVersion("accessibility")</code>.</p>
+</div>
+</div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-pereira_r5r_2021" class="csl-entry" role="listitem">
+Pereira, R. H. M., Saraiva, M., Herszenhut, D., Braga, C. K. V., &amp; Conway, M. W. (2021). r5r: <span>R</span>apid <span>R</span>ealistic <span>R</span>outing on <span>M</span>ultimodal <span>T</span>ransport <span>N</span>etworks with <span>R</span>5 in <span>R</span>. <em>Findings</em>. <a href="https://doi.org/10.32866/001c.21262">https://doi.org/10.32866/001c.21262</a>
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->

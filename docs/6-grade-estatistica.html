@@ -58,7 +58,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -237,8 +257,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-cenarios.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Avaliação de cenários</span></span></a>
+  <a href="./10-equidade.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Equidade e pobreza de acessibilidade</span></span></a>
   </div>
 </li>
       </ul>
@@ -262,7 +282,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#o-que-é-a-grade-estatística" id="toc-o-que-é-a-grade-estatística" class="nav-link active" data-scroll-target="#o-que-é-a-grade-estatística"><span class="header-section-number">6.1</span> O que é a grade estatística</a></li>
   <li><a href="#obtenção-da-grade" id="toc-obtenção-da-grade" class="nav-link" data-scroll-target="#obtenção-da-grade"><span class="header-section-number">6.2</span> Obtenção da grade</a></li>
   <li><a href="#grade-e-setor-lado-a-lado" id="toc-grade-e-setor-lado-a-lado" class="nav-link" data-scroll-target="#grade-e-setor-lado-a-lado"><span class="header-section-number">6.3</span> Grade e setor lado a lado</a></li>
-  <li><a href="#preparação-das-origens-e-destinos" id="toc-preparação-das-origens-e-destinos" class="nav-link" data-scroll-target="#preparação-das-origens-e-destinos"><span class="header-section-number">6.4</span> Preparação das origens e destinos</a></li>
+  <li><a href="#da-grade-do-ibge-à-grade-hexagonal" id="toc-da-grade-do-ibge-à-grade-hexagonal" class="nav-link" data-scroll-target="#da-grade-do-ibge-à-grade-hexagonal"><span class="header-section-number">6.4</span> Da grade do IBGE à grade hexagonal</a></li>
   </ul>
 </nav>
     </div>
@@ -334,12 +354,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
      número de unidades, área mediana e população mediana. Discutir o problema da unidade de área
      modificável e o efeito da escolha do recorte sobre o indicador final. -->
 </section>
-<section id="preparação-das-origens-e-destinos" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="preparação-das-origens-e-destinos"><span class="header-section-number">6.4</span> Preparação das origens e destinos</h2>
-<!-- ESBOÇO: etapa que fecha a Parte 1. Gerar os centroides das células com população, juntar as
-     contagens de oportunidades do CNEFE do capítulo 5 e exportar o arquivo que a Parte 2 consome.
-     Deixar explícito o formato exigido pelo r5r, com colunas id, lon e lat em coordenadas
-     geográficas. -->
+<section id="da-grade-do-ibge-à-grade-hexagonal" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="da-grade-do-ibge-à-grade-hexagonal"><span class="header-section-number">6.4</span> Da grade do IBGE à grade hexagonal</h2>
+<!-- ESBOÇO: etapa que fecha a Parte 1 e faz a ponte com a Parte 2. A grade do IBGE é quadrada e
+     alinhada a um referencial cartográfico. A Parte 2 usa uma grade hexagonal H3 de resolução 9,
+     construída a partir dos mesmos produtos do Censo tratados nesta Parte, com população e renda
+     dos agregados e empregos vindos do CNEFE. Explicar por que hexágonos, vizinhança uniforme e
+     distância constante entre centroides, e mostrar a correspondência entre os dois recortes no
+     mesmo território. -->
+<!-- ESBOÇO: gerar os centroides das células com população e deixar explícito o formato exigido
+     pelo r5r, com colunas id, lon e lat em coordenadas geográficas. É o mesmo procedimento que o
+     capítulo 9 aplica sobre a grade hexagonal. -->
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pontos <span class="ot">&lt;-</span> grade_ana <span class="sc">|&gt;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(populacao <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_centroid</span>() <span class="sc">|&gt;</span></span>
@@ -353,7 +378,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">lat =</span> <span class="fu">st_coordinates</span>(geometry)[, <span class="dv">2</span>]</span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>()</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-<!-- DADOS: produto deste capítulo salvo em dados/geo/pontos_anapolis.csv, insumo do capítulo 8 -->
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -364,11 +388,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>O arquivo de pontos produzido aqui reúne, em uma mesma tabela, onde as pessoas moram e onde estão as oportunidades. É com ele que a Parte 2 começa.</p>
+<p>A Parte 2 começa com uma grade hexagonal de Anápolis que já traz população, renda média e número de empregos por célula. Todas essas informações vêm dos produtos percorridos nesta Parte, e o <code>cnefetools</code> <span class="citation" data-cites="pedreira2026cnefetools">(<a href="referencias.html#ref-pedreira2026cnefetools" role="doc-biblioref">Pedreira Junior &amp; Stabile, 2026</a>)</span> automatiza a etapa de contagem de oportunidades a partir do CNEFE.</p>
 </div>
 </div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-pedreira2026cnefetools" class="csl-entry" role="listitem">
+Pedreira Junior, J. U., &amp; Stabile, B. H. M. (2026). <em><span>cnefetools</span>: <span>A</span>ccess and <span>A</span>nalysis of <span>B</span>razilian <span>CNEFE</span> <span>A</span>ddress <span>D</span>ata</em>. <a href="https://github.com/pedreirajr/cnefetools">https://github.com/pedreirajr/cnefetools</a>
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->

@@ -1,0 +1,147 @@
+---
+title: "Equidade e pobreza de acessibilidade"
+execute:
+  eval: false
+---
+
+Calcular acessibilidade não basta para entender a justiça de um sistema de transportes. Dois modos
+podem gerar acessibilidade média parecida e distribuí-la de formas muito diferentes entre ricos e
+pobres. O pacote `accessibility` traz medidas de **desigualdade** (Palma, Gini, índice de
+concentração, Theil) e de **pobreza de acessibilidade** (família FGT) para responder a essa pergunta.
+
+Seguimos usando `acess_pe`, `acess_bike`, `acess_carro`, `acess_tp` e `uso_solo`, calculados no
+capítulo anterior.
+
+::: {.callout-note}
+## Nesta seção você vai
+
+- preparar os dados sociodemográficos para as medidas de desigualdade
+- calcular Palma, Gini, índice de concentração, Theil T e FGT para cada modo
+- interpretar cada indicador
+- identificar quais modos favorecem quais grupos de renda
+:::
+
+## Preparando os dados sociodemográficos
+
+As medidas de desigualdade precisam de renda e população **sem valores faltantes**. Hexágonos sem
+moradores (`population == 0`) não têm renda média definida (`NA`) e não fazem sentido nessas contas,
+então os removemos.
+
+```{r}
+uso_solo_equidade <- uso_solo |>
+  filter(population > 0, !is.na(income))
+
+nrow(uso_solo)
+nrow(uso_solo_equidade)
+```
+
+## Calculando as medidas para cada modo
+
+Criamos uma função pequena para não repetir a mesma sequência de chamadas quatro vezes.
+
+```{r}
+medidas_equidade <- function(acess_df, land_use) {
+  linha_pobreza <- quantile(acess_df$jobs, 0.25, na.rm = TRUE)
+
+  palma <- palma_ratio(
+    accessibility_data = acess_df,
+    sociodemographic_data = land_use,
+    opportunity = "jobs",
+    population = "population",
+    income = "income"
+  )
+
+  gini <- gini_index(
+    accessibility_data = acess_df,
+    sociodemographic_data = land_use,
+    opportunity = "jobs",
+    population = "population"
+  )
+
+  concentracao <- concentration_index(
+    accessibility_data = acess_df,
+    sociodemographic_data = land_use,
+    opportunity = "jobs",
+    population = "population",
+    income = "income",
+    type = "corrected"
+  )
+
+  theil <- theil_t(
+    accessibility_data = acess_df,
+    sociodemographic_data = land_use,
+    opportunity = "jobs",
+    population = "population"
+  )
+
+  pobreza <- fgt_poverty(
+    accessibility_data = acess_df,
+    sociodemographic_data = land_use,
+    opportunity = "jobs",
+    population = "population",
+    poverty_line = linha_pobreza
+  )
+
+  bind_cols(palma, gini, concentracao, theil, pobreza)
+}
+
+equidade_modos <- bind_rows(
+  medidas_equidade(acess_pe, uso_solo_equidade) |>
+    mutate(modo = "A pe"),
+  medidas_equidade(acess_bike, uso_solo_equidade) |>
+    mutate(modo = "Bicicleta"),
+  medidas_equidade(acess_carro, uso_solo_equidade) |>
+    mutate(modo = "Carro"),
+  medidas_equidade(acess_tp, uso_solo_equidade) |>
+    mutate(modo = "Transporte publico")
+) |>
+  relocate(modo)
+
+equidade_modos
+```
+
+## Como ler os resultados
+
+- **Palma ratio**, razão entre a acessibilidade média dos 10% mais ricos e dos 40% mais pobres.
+  Quanto maior, mais desigual. O valor 1 seria "igualdade" nessa comparação de extremos.
+- **Gini**, desigualdade geral da distribuição de acessibilidade, de 0 (igualdade perfeita) a 1 (toda
+  a acessibilidade concentrada em uma pessoa ou hexágono).
+- **Índice de concentração**, varia de -1 a +1. Negativo indica que a desigualdade favorece os mais
+  pobres, e positivo, que favorece os mais ricos, um viés pró-rico. É o indicador mais direto de
+  *quem* se beneficia mais [@erreygers2009].
+- **Theil T**, outra medida geral de desigualdade, sensível a diferenças na cauda superior da
+  distribuição.
+- **FGT0, FGT1 e FGT2**, proporção de pessoas "pobres de acessibilidade", abaixo do 25º percentil
+  neste caso. O FGT0 é a incidência, ou seja, quantos são pobres, o FGT1 pondera pela profundidade da
+  pobreza e o FGT2 dá peso extra a quem está mais distante da linha de pobreza.
+
+```{r}
+ggplot(equidade_modos, aes(x = modo, y = concentration_index, fill = modo)) +
+  geom_col(show.legend = FALSE) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(
+    title = "Índice de concentração da acessibilidade a empregos, por modo",
+    subtitle = "Negativo = favorece os mais pobres; positivo = favorece os mais ricos",
+    x = NULL, y = "Índice de concentração"
+  ) +
+  theme_minimal()
+```
+
+Em geral, é comum encontrar padrões como acessibilidade a pé mais equitativa, pouco correlacionada
+com renda porque todo mundo anda, acessibilidade de carro fortemente pró-rico, já que poucos têm
+carro e moram em áreas bem servidas de vias, e transporte público em posição intermediária. O padrão
+real de Anápolis pode ser diferente, e é isso que os números acima mostram
+[@pereira_karner_2021; @levinson_king_2020].
+
+## Para continuar
+
+::: {.callout-tip}
+Para reproduzir a extração de rede viária, GTFS e uso do solo para **outros municípios**, os pacotes
+`osmextract` (rede OSM), `tidytransit` (GTFS) e `cnefetools` (dados de população e renda do IBGE a
+partir do CNEFE) automatizam boa parte desse trabalho [@pedreira2026cnefetools].
+:::
+
+O Projeto Acesso a Oportunidades, acessível pelo pacote `aopdata`, oferece indicadores prontos para
+as maiores cidades brasileiras e serve de referência para comparação [@pereira_aop_td2772]. A
+[oficina de acessibilidade da ANPET 2025](https://ipeagit.github.io/oficina_acessibilidade_anpet_2025/)
+e o livro @pereira_herszenhut_2023 aprofundam todos os temas tratados nesta Parte.

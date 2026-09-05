@@ -32,21 +32,24 @@ material das partes práticas.
 7. Instalação e ajustes iniciais
 8. Leitura dos arquivos e montagem da rede
 9. Cômputo dos indicadores
-10. Avaliação de cenários
+10. Equidade e pobreza de acessibilidade
 
 Todas as aplicações usam **Anápolis-GO** como estudo de caso.
 
 ## Dados
 
-Os dados usados nos exemplos são distribuídos à parte e não são versionados neste repositório.
-Depois de obtê-los, coloque-os na pasta `dados/`, com a seguinte organização.
+Os arquivos que não são produzidos por código estão no *release*
+[`dados`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/tag/dados) e são
+baixados pelo próprio código dos capítulos para a pasta `dados/`, que não é versionada.
 
 ```
 dados/
 ├── censo/   agregados, microdados e CNEFE de Anápolis
-├── geo/     malhas territoriais e grade estatística
-└── r5/      rede viária (.osm.pbf), GTFS (.zip) e relevo (.tif)
+├── geo/     grade hexagonal H3 e rede de links do modelo de tráfego (Visum)
+└── r5/      rede viária (.pbf), GTFS (.zip) e relevo (.tif)
 ```
+
+Os demais dados do Censo são obtidos ao vivo pelos pacotes `censobr` e `geobr`.
 
 ## Como renderizar localmente
 

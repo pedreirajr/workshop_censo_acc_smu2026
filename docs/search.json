@@ -14,7 +14,7 @@
     "href": "index.html#como-a-oficina-está-organizada",
     "title": "Dados Censitários e Acessibilidade Urbana em R",
     "section": "Como a oficina está organizada",
-    "text": "Como a oficina está organizada\nSão 8 horas de atividade, divididas em dois blocos de 4 horas. Cada bloco tem 2 horas expositivas e 2 horas de aplicação prática ao computador.\n\n\n\n\n\n\n\n\nBloco\nTeoria (2h)\nPrática (2h)\n\n\n\n\nDados censitários\nConceitos, métodos e produtos do Censo Demográfico\nParte 1 deste site (capítulos 1 a 6)\n\n\nAcessibilidade urbana\nConceitos, medidas e usos em planejamento\nParte 2 deste site (capítulos 7 a 10)\n\n\n\nEste site cobre apenas as partes práticas. O conteúdo expositivo é apresentado em sala, com material próprio. O que está aqui é o roteiro de código, pensado para ser acompanhado ao vivo e, depois, reexecutado por conta própria.\nA Parte 1 percorre os principais produtos do Censo Demográfico, começando pela preparação do ambiente e pelos recortes territoriais do IBGE e avançando pelos agregados por setor censitário, pelos microdados da amostra, pelo CNEFE e pela grade estatística. Os agregados incluem uma seção dedicada às características urbanísticas do entorno dos domicílios, com recorte voltado a transportes.\nA Parte 2 monta uma análise de acessibilidade do zero, com a preparação do ambiente de roteamento, a leitura dos insumos e a construção da rede multimodal, o cálculo dos indicadores e, por fim, a avaliação de um cenário de intervenção.",
+    "text": "Como a oficina está organizada\nSão 8 horas de atividade, divididas em dois blocos de 4 horas. Cada bloco tem 2 horas expositivas e 2 horas de aplicação prática ao computador.\n\n\n\n\n\n\n\n\nBloco\nTeoria (2h)\nPrática (2h)\n\n\n\n\nDados censitários\nConceitos, métodos e produtos do Censo Demográfico\nParte 1 deste site (capítulos 1 a 6)\n\n\nAcessibilidade urbana\nConceitos, medidas e usos em planejamento\nParte 2 deste site (capítulos 7 a 10)\n\n\n\nEste site cobre apenas as partes práticas. O conteúdo expositivo é apresentado em sala, com material próprio. O que está aqui é o roteiro de código, pensado para ser acompanhado ao vivo e, depois, reexecutado por conta própria.\nA Parte 1 percorre os principais produtos do Censo Demográfico, começando pela preparação do ambiente e pelos recortes territoriais do IBGE e avançando pelos agregados por setor censitário, pelos microdados da amostra, pelo CNEFE e pela grade estatística. Os agregados incluem uma seção dedicada às características urbanísticas do entorno dos domicílios, com recorte voltado a transportes.\nA Parte 2 monta uma análise de acessibilidade do zero, com a preparação do ambiente de roteamento, a leitura dos insumos e a construção da rede multimodal, o cálculo dos indicadores a pé, de bicicleta, de carro e por transporte público e, por fim, a avaliação da distribuição social dessa acessibilidade, com medidas de desigualdade e de pobreza de acesso.",
     "crumbs": [
       "Apresentação"
     ]
@@ -54,7 +54,7 @@
     "href": "index.html#onde-ficam-os-dados",
     "title": "Dados Censitários e Acessibilidade Urbana em R",
     "section": "Onde ficam os dados",
-    "text": "Onde ficam os dados\nOs arquivos usados na oficina são distribuídos à parte e devem ser colocados dentro do projeto do RStudio, na pasta dados/, com a seguinte organização.\nworkshop_censo_acc_smu2026/\n├── workshop_censo_acc_smu2026.Rproj\n└── dados/\n    ├── censo/   agregados, microdados e CNEFE de Anápolis\n    ├── geo/     malhas territoriais e grade estatística\n    └── r5/      rede viária (.osm.pbf), GTFS (.zip) e relevo (.tif)\nSempre que um capítulo depender de um arquivo específico, o caminho esperado aparece indicado no próprio código. Parte dos dados do Censo é obtida diretamente pelos pacotes censobr e geobr, sem necessidade de arquivos locais.",
+    "text": "Onde ficam os dados\nParte dos dados é obtida ao vivo pelos pacotes censobr e geobr, sem necessidade de arquivos locais. Os arquivos que não são produzidos por código, como a rede viária do OpenStreetMap, o GTFS e o modelo de elevação, são distribuídos como assets de um release do repositório da oficina e baixados pelo próprio código dos capítulos, para dentro do projeto do RStudio.\nworkshop_censo_acc_smu2026/\n├── workshop_censo_acc_smu2026.Rproj\n└── dados/\n    ├── censo/   agregados, microdados e CNEFE de Anápolis\n    ├── geo/     grade hexagonal H3 e rede de links do modelo de tráfego\n    └── r5/      rede viária (.pbf), GTFS (.zip) e relevo (.tif)\nSempre que um capítulo depender de um arquivo específico, o download e o caminho esperado aparecem no próprio código, e nada é baixado duas vezes.",
     "crumbs": [
       "Apresentação"
     ]
@@ -402,7 +402,7 @@
     "href": "5-cnefe.html#limitações",
     "title": "5  CNEFE",
     "section": "5.6 Limitações",
-    "text": "5.6 Limitações\n\n\n\n\n\n\n\nDicaConexão com a Parte 2\n\n\n\nAs contagens de oportunidades produzidas aqui são exatamente o insumo de destinos usado no cálculo dos indicadores de acessibilidade do capítulo 9.",
+    "text": "5.6 Limitações\n\n\n\n\n\n\n\nDicaConexão com a Parte 2\n\n\n\nA grade de hexágonos usada na Parte 2 traz o número de empregos por célula, e é do CNEFE que essa contagem vem. As oportunidades localizadas aqui são o insumo de destinos do cálculo dos indicadores de acessibilidade do capítulo 9. O pacote cnefetools (Pedreira Junior & Stabile, 2026) automatiza boa parte desse processamento.\n\n\n\n\n\n\nPedreira Junior, J. U., & Stabile, B. H. M. (2026). cnefetools: Access and Analysis of Brazilian CNEFE Address Data. https://github.com/pedreirajr/cnefetools",
     "crumbs": [
       "PARTE 1: DADOS CENSITÁRIOS",
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>CNEFE</span>"
@@ -442,11 +442,11 @@
     ]
   },
   {
-    "objectID": "6-grade-estatistica.html#preparação-das-origens-e-destinos",
-    "href": "6-grade-estatistica.html#preparação-das-origens-e-destinos",
+    "objectID": "6-grade-estatistica.html#da-grade-do-ibge-à-grade-hexagonal",
+    "href": "6-grade-estatistica.html#da-grade-do-ibge-à-grade-hexagonal",
     "title": "6  Grade estatística",
-    "section": "6.4 Preparação das origens e destinos",
-    "text": "6.4 Preparação das origens e destinos\n\npontos &lt;- grade_ana |&gt;\n  filter(populacao &gt; 0) |&gt;\n  st_centroid() |&gt;\n  st_transform(4326)\n\n# formato exigido pelo r5r\npontos_r5 &lt;- pontos |&gt;\n  mutate(\n    id  = as.character(id_grade),\n    lon = st_coordinates(geometry)[, 1],\n    lat = st_coordinates(geometry)[, 2]\n  ) |&gt;\n  st_drop_geometry()\n\n\n\n\n\n\n\nDicaFim da Parte 1\n\n\n\nO arquivo de pontos produzido aqui reúne, em uma mesma tabela, onde as pessoas moram e onde estão as oportunidades. É com ele que a Parte 2 começa.",
+    "section": "6.4 Da grade do IBGE à grade hexagonal",
+    "text": "6.4 Da grade do IBGE à grade hexagonal\n\n\npontos &lt;- grade_ana |&gt;\n  filter(populacao &gt; 0) |&gt;\n  st_centroid() |&gt;\n  st_transform(4326)\n\n# formato exigido pelo r5r\npontos_r5 &lt;- pontos |&gt;\n  mutate(\n    id  = as.character(id_grade),\n    lon = st_coordinates(geometry)[, 1],\n    lat = st_coordinates(geometry)[, 2]\n  ) |&gt;\n  st_drop_geometry()\n\n\n\n\n\n\nDicaFim da Parte 1\n\n\n\nA Parte 2 começa com uma grade hexagonal de Anápolis que já traz população, renda média e número de empregos por célula. Todas essas informações vêm dos produtos percorridos nesta Parte, e o cnefetools (Pedreira Junior & Stabile, 2026) automatiza a etapa de contagem de oportunidades a partir do CNEFE.\n\n\n\n\n\n\nPedreira Junior, J. U., & Stabile, B. H. M. (2026). cnefetools: Access and Analysis of Brazilian CNEFE Address Data. https://github.com/pedreirajr/cnefetools",
     "crumbs": [
       "PARTE 1: DADOS CENSITÁRIOS",
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Grade estatística</span>"
@@ -457,7 +457,18 @@
     "href": "7-instalacao-r5r.html",
     "title": "7  Instalação e ajustes iniciais",
     "section": "",
-    "text": "7.1 Java\nA Parte 2 exige um ambiente mais exigente que a Parte 1. O cálculo de matrizes de tempo de viagem é feito pelo R5, um motor de roteamento escrito em Java, e o pacote r5r funciona como ponte entre o R e esse motor. Isso significa que é preciso ter Java instalado, na versão correta, e memória suficiente reservada para a máquina virtual. Este capítulo trata dessa preparação, que costuma ser o principal ponto de travamento em oficinas de acessibilidade.",
+    "text": "7.1 Pacotes de R\nA Parte 2 exige um ambiente mais exigente que a Parte 1. O cálculo de matrizes de tempo de viagem é feito pelo R5, um motor de roteamento escrito em Java, e o pacote r5r funciona como ponte entre o R e esse motor. Faltam então duas coisas, os pacotes de R e o Java. Este capítulo trata das duas, e é o ponto que mais trava oficinas de acessibilidade.\nEste curso assume que você já tem R e RStudio instalados.\npacotes &lt;- c(\n  \"r5r\", \"accessibility\", \"rJavaEnv\", \"sf\", \"terra\", \"dplyr\",\n  \"data.table\", \"ggplot2\", \"mapview\"\n)\n\nfaltando &lt;- pacotes[!pacotes %in% rownames(installed.packages())]\n\nif (length(faltando) &gt; 0) {\n  install.packages(faltando, repos = \"https://cloud.r-project.org\")\n}\nO pacote accessibility muda rápido. Esta Parte usa funções de desigualdade e pobreza (palma_ratio(), concentration_index(), theil_t(), fgt_poverty(), gini_index()) que só existem a partir da versão 1.5.0. Confira e, se preciso, atualize.\nif (packageVersion(\"accessibility\") &lt; \"1.5.0\") {\n  install.packages(\"accessibility\", repos = \"https://cloud.r-project.org\")\n}",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
+    ]
+  },
+  {
+    "objectID": "7-instalacao-r5r.html#pacotes-de-r",
+    "href": "7-instalacao-r5r.html#pacotes-de-r",
+    "title": "7  Instalação e ajustes iniciais",
+    "section": "",
+    "text": "Dica\n\n\n\nEm algumas instalações de R mais antigas, o install.packages(\"accessibility\") tenta compilar o pacote Hmisc (uma dependência) a partir do código-fonte e falha por falta de compilador Fortran ou C. Se isso acontecer, instale o Hmisc como binário antes.\ninstall.packages(\"Hmisc\", repos = \"https://cloud.r-project.org\", type = \"binary\")\ninstall.packages(\"accessibility\", repos = \"https://cloud.r-project.org\")",
     "crumbs": [
       "PARTE 2: ACESSIBILIDADE URBANA",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
@@ -467,52 +478,19 @@
     "objectID": "7-instalacao-r5r.html#java",
     "href": "7-instalacao-r5r.html#java",
     "title": "7  Instalação e ajustes iniciais",
-    "section": "",
-    "text": "# confere qual Java o R está enxergando\nSys.getenv(\"JAVA_HOME\")\nsystem(\"java -version\")",
+    "section": "7.2 Java",
+    "text": "7.2 Java\nO r5r usa o R5, motor de roteamento escrito em Java. A partir da versão 2.x do r5r, é necessário Java 21, e versões antigas, como 8 ou 11, não funcionam mais.\nEm vez de instalar o JDK manualmente no sistema, o que normalmente exige permissão de administrador, usamos o pacote rJavaEnv. Ele baixa uma distribuição do Java (Amazon Corretto) para uma pasta de cache do seu usuário e aponta o R para ela, sem precisar de admin ou root. Isso funciona mesmo em computadores institucionais travados.\n\nlibrary(rJavaEnv)\n\n# dá o consentimento para o rJavaEnv baixar e gerenciar o Java (só precisa rodar uma vez)\nrje_consent(provided = TRUE)\n\n# baixa e instala o Java 21, se ainda não estiver em cache\njava_quick_install(version = 21)\n\n# aponta esta sessão do R para o Java 21 recém instalado\nuse_java(21)\n\n# confirma a versão que o R, via rJava, está enxergando\njava_check_version_rjava()\n\n\n\n\n\n\n\nNota\n\n\n\nDa primeira vez, java_quick_install() baixa uns 180 MB e demora um pouco. Nas próximas vezes ele reaproveita o cache e é instantâneo. Em qualquer sessão nova do R, rode rJavaEnv::use_java(21) de novo antes de usar o r5r, porque é isso que aponta o R para esse Java. O PATH do sistema não é alterado, de propósito, para não interferir em outros programas.\n\n\n\n\n\n\n\n\nImportante\n\n\n\nSe sua rede bloquear o download automático, por proxy corporativo ou firewall, baixe manualmente o Eclipse Temurin JDK 21 em https://adoptium.net/temurin/releases/?version=21 e instale normalmente. Nesse caso, o r5r encontra o Java do sistema mesmo sem o use_java().",
     "crumbs": [
       "PARTE 2: ACESSIBILIDADE URBANA",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
     ]
   },
   {
-    "objectID": "7-instalacao-r5r.html#memória-da-máquina-virtual",
-    "href": "7-instalacao-r5r.html#memória-da-máquina-virtual",
+    "objectID": "7-instalacao-r5r.html#carregando-os-pacotes-e-configurando-a-memória-do-java",
+    "href": "7-instalacao-r5r.html#carregando-os-pacotes-e-configurando-a-memória-do-java",
     "title": "7  Instalação e ajustes iniciais",
-    "section": "7.2 Memória da máquina virtual",
-    "text": "7.2 Memória da máquina virtual\n\n# deve vir antes de library(r5r)\noptions(java.parameters = \"-Xmx4G\")\nlibrary(r5r)\n\n\n\n\n\n\nAvisoA ordem importa\n\n\n\nSe o r5r for carregado antes da linha de options, a memória padrão da JVM permanece em vigor e a mudança só passa a valer após reiniciar a sessão do R.",
-    "crumbs": [
-      "PARTE 2: ACESSIBILIDADE URBANA",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
-    ]
-  },
-  {
-    "objectID": "7-instalacao-r5r.html#instalação-dos-pacotes",
-    "href": "7-instalacao-r5r.html#instalação-dos-pacotes",
-    "title": "7  Instalação e ajustes iniciais",
-    "section": "7.3 Instalação dos pacotes",
-    "text": "7.3 Instalação dos pacotes\n\npacotes &lt;- c(\n  \"r5r\",           # roteamento multimodal e matrizes de tempo de viagem\n  \"accessibility\", # cálculo de indicadores de acessibilidade\n  \"gtfstools\",     # leitura e edição de dados GTFS\n  \"aopdata\",       # dados do Projeto Acesso a Oportunidades\n  \"sf\", \"dplyr\", \"ggplot2\"\n)\n\ninstall.packages(setdiff(pacotes, rownames(installed.packages())))",
-    "crumbs": [
-      "PARTE 2: ACESSIBILIDADE URBANA",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
-    ]
-  },
-  {
-    "objectID": "7-instalacao-r5r.html#teste-do-ambiente",
-    "href": "7-instalacao-r5r.html#teste-do-ambiente",
-    "title": "7  Instalação e ajustes iniciais",
-    "section": "7.4 Teste do ambiente",
-    "text": "7.4 Teste do ambiente",
-    "crumbs": [
-      "PARTE 2: ACESSIBILIDADE URBANA",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
-    ]
-  },
-  {
-    "objectID": "7-instalacao-r5r.html#problemas-mais-comuns",
-    "href": "7-instalacao-r5r.html#problemas-mais-comuns",
-    "title": "7  Instalação e ajustes iniciais",
-    "section": "7.5 Problemas mais comuns",
-    "text": "7.5 Problemas mais comuns",
+    "section": "7.3 Carregando os pacotes e configurando a memória do Java",
+    "text": "7.3 Carregando os pacotes e configurando a memória do Java\nO R5 roda dentro de uma máquina virtual Java (JVM), que precisa de um limite de memória definido antes de carregar o r5r. Para o tamanho de Anápolis, 4 a 6 GB são suficientes.\n\noptions(java.parameters = \"-Xmx6G\")\n\nlibrary(r5r)\nlibrary(accessibility)\nlibrary(sf)\nlibrary(terra)\nlibrary(dplyr)\nlibrary(data.table)\nlibrary(ggplot2)\nlibrary(mapview)\n\n\n\n\n\n\n\nAvisoA ordem importa\n\n\n\nSe o r5r for carregado antes da linha de options, a memória padrão da JVM permanece em vigor e a mudança só passa a valer após reiniciar a sessão do R.\n\n\nSe tudo rodou sem erro, o ambiente está pronto para o próximo capítulo.\n\n\n\n\n\n\nNotaVersões usadas neste material\n\n\n\nO material foi escrito e testado com r5r 2.4.0 e accessibility 1.5.0 (Pereira et al., 2021). Nomes de funções e argumentos podem mudar em versões futuras. Em caso de erro, confira packageVersion(\"r5r\") e packageVersion(\"accessibility\").\n\n\n\n\n\n\nPereira, R. H. M., Saraiva, M., Herszenhut, D., Braga, C. K. V., & Conway, M. W. (2021). r5r: Rapid Realistic Routing on Multimodal Transport Networks with R5 in R. Findings. https://doi.org/10.32866/001c.21262",
     "crumbs": [
       "PARTE 2: ACESSIBILIDADE URBANA",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
@@ -523,62 +501,95 @@
     "href": "8-rede.html",
     "title": "8  Leitura dos arquivos e montagem da rede",
     "section": "",
-    "text": "8.1 Os insumos da rede\nMedir acessibilidade exige saber quanto tempo se leva para ir de cada origem a cada destino, por cada modo de interesse. Esse cálculo depende de uma representação computacional da rede de transportes, montada a partir de arquivos de origens distintas. Este capítulo trata dos insumos, mostra onde cada um deve estar, constrói a rede multimodal de Anápolis com o r5r e produz a matriz de tempos de viagem que sustenta todo o restante da Parte 2.",
+    "text": "8.1 Os dados da oficina\nMedir acessibilidade exige saber quanto tempo se leva para ir de cada origem a cada destino, por cada modo de interesse. Esse cálculo depende de uma representação computacional da rede de transportes, montada a partir de arquivos de origens distintas. Este capítulo apresenta os quatro insumos usados na oficina, mostra como obtê-los e inspecioná-los, e constrói com eles a rede de roteamento de Anápolis.\nOs arquivos que não são produzidos por código são distribuídos como assets de um release do repositório da oficina.\nO bloco abaixo baixa o que ainda não estiver na máquina. Rodá-lo mais de uma vez não repete o download.\nurl_base &lt;- \"https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados\"\n\nbaixa_dado &lt;- function(arquivo, destino) {\n  caminho &lt;- file.path(destino, arquivo)\n\n  if (!file.exists(caminho)) {\n    dir.create(destino, recursive = TRUE, showWarnings = FALSE)\n    download.file(paste0(url_base, \"/\", arquivo), caminho, mode = \"wb\")\n  }\n\n  caminho\n}\n\npasta_rede &lt;- \"dados/r5\"\npasta_geo  &lt;- \"dados/geo\"\n\ninvisible(lapply(\n  c(\"anapolis.pbf\", \"Anapolis.tif\", \"GTFS_ANL.zip\"),\n  baixa_dado,\n  destino = pasta_rede\n))\n\narq_grade &lt;- baixa_dado(\n  \"grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg\",\n  destino = pasta_geo\n)\n\nlist.files(pasta_rede)",
     "crumbs": [
       "PARTE 2: ACESSIBILIDADE URBANA",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Leitura dos arquivos e montagem da rede</span>"
     ]
   },
   {
-    "objectID": "8-rede.html#os-insumos-da-rede",
-    "href": "8-rede.html#os-insumos-da-rede",
+    "objectID": "8-rede.html#os-dados-da-oficina",
+    "href": "8-rede.html#os-dados-da-oficina",
     "title": "8  Leitura dos arquivos e montagem da rede",
     "section": "",
-    "text": "ImportanteOnde os arquivos devem estar\n\n\n\nO r5r monta a rede a partir de uma única pasta, lendo todos os arquivos reconhecidos que encontrar nela. Coloque os insumos em dados/r5/ e não misture arquivos de cenários diferentes no mesmo diretório.\n\n\ndados/r5/\n├── anapolis.osm.pbf     rede viária (obrigatório)\n├── anapolis_gtfs.zip    transporte coletivo (opcional)\n└── anapolis_dem.tif     modelo digital de elevação (opcional)\n\n\n8.1.1 Rede viária\n\n\n\n8.1.2 Transporte coletivo\n\n\n\n8.1.3 Relevo",
+    "text": "Arquivo\nConteúdo\nPasta\n\n\n\n\nanapolis.pbf\nRede viária (OpenStreetMap) do município\ndados/r5/\n\n\nAnapolis.tif\nModelo digital de elevação (MDE), usado para custo de caminhada e bicicleta em ladeiras\ndados/r5/\n\n\nGTFS_ANL.zip\nFeed GTFS do transporte público de Anápolis\ndados/r5/\n\n\ngrade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg\nGrade de hexágonos H3 (resolução 9) com número de empregos, população, renda média e classificação urbano/rural\ndados/geo/",
     "crumbs": [
       "PARTE 2: ACESSIBILIDADE URBANA",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Leitura dos arquivos e montagem da rede</span>"
     ]
   },
   {
-    "objectID": "8-rede.html#origens-e-destinos",
-    "href": "8-rede.html#origens-e-destinos",
+    "objectID": "8-rede.html#grade-de-uso-do-solo-h3-resolução-9",
+    "href": "8-rede.html#grade-de-uso-do-solo-h3-resolução-9",
     "title": "8  Leitura dos arquivos e montagem da rede",
-    "section": "8.2 Origens e destinos",
-    "text": "8.2 Origens e destinos\n\nlibrary(dplyr)\n\npontos &lt;- readr::read_csv(\"dados/geo/pontos_anapolis.csv\")",
+    "section": "8.2 Grade de uso do solo (H3, resolução 9)",
+    "text": "8.2 Grade de uso do solo (H3, resolução 9)\nA grade é um conjunto de hexágonos H3 cobrindo todo o município, com número de empregos, população, renda média e uma classificação urbano ou rural por hexágono. Ela foi elaborada a partir de dados do IBGE, com os produtos tratados na Parte 1.\n\ngrade &lt;- st_read(arq_grade, quiet = TRUE)\n\nglimpse(sf::st_drop_geometry(grade))\n\n\nid_hex, identificador do hexágono H3\nJobs, número de empregos no hexágono\npop_ph, população residente no hexágono\navg_inc_resp, renda média domiciliar per capita dos residentes\nclasse_urbano, \"Urbano\" ou \"Rural\"\n\n\ntable(grade$classe_urbano)\n\nA maior parte da área do município é rural, mas concentra pouca população e quase nenhum emprego. O grosso da atividade urbana está nos cerca de 1.700 hexágonos classificados como \"Urbano\". É neles que o cálculo de acessibilidade vai focar, para manter o processamento leve e o resultado interpretável.\n\nmapview(\n  grade |&gt;\n    filter(classe_urbano == \"Urbano\"),\n  zcol = \"Jobs\",\n  layer.name = \"Empregos por hexágono\"\n)\n\n\nmapview(\n  grade |&gt;\n    filter(classe_urbano == \"Urbano\"),\n  zcol = \"avg_inc_resp\",\n  layer.name = \"Renda média (R$)\"\n)",
     "crumbs": [
       "PARTE 2: ACESSIBILIDADE URBANA",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Leitura dos arquivos e montagem da rede</span>"
     ]
   },
   {
-    "objectID": "8-rede.html#construção-da-rede",
-    "href": "8-rede.html#construção-da-rede",
+    "objectID": "8-rede.html#rede-viária-openstreetmap",
+    "href": "8-rede.html#rede-viária-openstreetmap",
     "title": "8  Leitura dos arquivos e montagem da rede",
-    "section": "8.3 Construção da rede",
-    "text": "8.3 Construção da rede\n\noptions(java.parameters = \"-Xmx4G\")\nlibrary(r5r)\n\nr5r_core &lt;- setup_r5(data_path = \"dados/r5\")",
+    "section": "8.3 Rede viária (OpenStreetMap)",
+    "text": "8.3 Rede viária (OpenStreetMap)\nO arquivo anapolis.pbf é um extrato do OpenStreetMap. O GDAL, por meio do sf, lê .pbf com o driver OSM, que expõe a rede em várias camadas.\n\nst_layers(file.path(pasta_rede, \"anapolis.pbf\"))\n\nA camada lines traz as vias (ruas, avenidas, ciclovias e outras), usada pelo r5r para caminhada, bicicleta e carro.\n\nvias &lt;- st_read(\n  file.path(pasta_rede, \"anapolis.pbf\"),\n  layer = \"lines\",\n  quiet = TRUE\n)\n\nggplot(vias) +\n  geom_sf(linewidth = 0.15, color = \"gray30\") +\n  theme_minimal() +\n  labs(title = \"Rede viária de Anápolis (OSM)\")",
     "crumbs": [
       "PARTE 2: ACESSIBILIDADE URBANA",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Leitura dos arquivos e montagem da rede</span>"
     ]
   },
   {
-    "objectID": "8-rede.html#matriz-de-tempos-de-viagem",
-    "href": "8-rede.html#matriz-de-tempos-de-viagem",
+    "objectID": "8-rede.html#elevação-mde",
+    "href": "8-rede.html#elevação-mde",
     "title": "8  Leitura dos arquivos e montagem da rede",
-    "section": "8.4 Matriz de tempos de viagem",
-    "text": "8.4 Matriz de tempos de viagem\n\nttm &lt;- travel_time_matrix(\n  r5r_core,\n  origins      = pontos,\n  destinations = pontos,\n  mode         = c(\"WALK\", \"TRANSIT\"),\n  departure_datetime = as.POSIXct(\"2026-09-09 07:00:00\"),\n  max_trip_duration  = 60\n)",
+    "section": "8.4 Elevação (MDE)",
+    "text": "8.4 Elevação (MDE)\nAnapolis.tif é um modelo digital de elevação cobrindo a mesma área do extrato OSM. O r5r usa esse raster para estimar o efeito de subidas e descidas no tempo de caminhada e de bicicleta.\n\nmde &lt;- rast(file.path(pasta_rede, \"Anapolis.tif\"))\nmde &lt;- setMinMax(mde)\n\nplot(mde, main = \"Modelo digital de elevação - Anápolis (m)\")\n\n\nc(\n  min  = global(mde, \"min\", na.rm = TRUE)[1, 1],\n  max  = global(mde, \"max\", na.rm = TRUE)[1, 1],\n  mean = global(mde, \"mean\", na.rm = TRUE)[1, 1]\n)\n\nO terreno varia de aproximadamente 686 a 1.158 metros, desnível relevante o suficiente para impactar tempos de caminhada e de bicicleta em algumas regiões do município.",
     "crumbs": [
       "PARTE 2: ACESSIBILIDADE URBANA",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Leitura dos arquivos e montagem da rede</span>"
     ]
   },
   {
-    "objectID": "8-rede.html#inspeção-e-validação",
-    "href": "8-rede.html#inspeção-e-validação",
+    "objectID": "8-rede.html#transporte-público-gtfs",
+    "href": "8-rede.html#transporte-público-gtfs",
     "title": "8  Leitura dos arquivos e montagem da rede",
-    "section": "8.5 Inspeção e validação",
-    "text": "8.5 Inspeção e validação\n\n\n\n\n\n\n\nAvisoEncerre a sessão do R5\n\n\n\nAo terminar, chame stop_r5(r5r_core) para liberar a memória da máquina virtual. Sem isso, a JVM continua ocupando a RAM até o fim da sessão do R.",
+    "section": "8.5 Transporte público (GTFS)",
+    "text": "8.5 Transporte público (GTFS)\nGTFS_ANL.zip é o feed de transporte público. Não precisamos descompactá-lo manualmente para usar no r5r, que lê o .zip diretamente, mas vale explorar seu conteúdo antes.\n\ngtfs_dir &lt;- file.path(tempdir(), \"gtfs_anl\")\nunzip(file.path(pasta_rede, \"GTFS_ANL.zip\"), exdir = gtfs_dir)\n\nlist.files(gtfs_dir)\n\n\ncalendario &lt;- fread(file.path(gtfs_dir, \"calendar.txt\"))\ncalendario\n\n\n\n\n\n\n\nAvisoAtenção à data de validade do feed\n\n\n\nEste feed tem um único service_id, válido apenas em 22/07/2026 (start_date = end_date = 20260722). Isso significa que, ao rotear por transporte público com o r5r, o departure_datetime precisa cair nessa data. Qualquer outra data não terá viagens programadas. Essa é a data usada no capítulo seguinte.\n\n\n\nparadas &lt;- fread(file.path(gtfs_dir, \"stops.txt\")) |&gt;\n  st_as_sf(coords = c(\"stop_lon\", \"stop_lat\"), crs = 4326)\n\nmapview(paradas, layer.name = \"Paradas de ônibus\")\n\nCom os quatro insumos conferidos, rede viária, elevação, GTFS e uso do solo, podemos construir a rede de roteamento.",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Leitura dos arquivos e montagem da rede</span>"
+    ]
+  },
+  {
+    "objectID": "8-rede.html#construindo-a-rede-de-transporte",
+    "href": "8-rede.html#construindo-a-rede-de-transporte",
+    "title": "8  Leitura dos arquivos e montagem da rede",
+    "section": "8.6 Construindo a rede de transporte",
+    "text": "8.6 Construindo a rede de transporte\nO r5r::build_network() exige que todos os insumos estejam na mesma pasta, um único arquivo .pbf, opcionalmente um ou mais .zip de GTFS e opcionalmente um .tif de elevação. Ele também grava nessa pasta o arquivo network.dat, com a rede já processada em cache, e um gtfs_errors.csv.\n\n\n\n\n\n\nImportanteUma pasta só para a rede\n\n\n\nMantenha em dados/r5/ apenas os insumos da rede. Se a pasta estiver sincronizada com um serviço de nuvem, considere movê-la para um diretório local, porque o network.dat pode ficar com dezenas de megabytes e seria sincronizado sem necessidade.\n\n\n\nr5r_network &lt;- build_network(\n  data_path = pasta_rede,\n  elevation = \"TOBLER\",\n  overwrite = FALSE\n)\n\nr5r_network\n\n\nelevation = \"TOBLER\" faz o R5 penalizar o tempo de caminhada e de bicicleta em ladeiras, usando o Anapolis.tif que está na pasta.\nDa primeira vez, o build_network() demora, porque compila o grafo a partir do .pbf e do GTFS. Nas próximas vezes, com overwrite = FALSE (o padrão), ele reaproveita o network.dat já salvo e carrega quase instantaneamente.\nSe algo no GTFS ou no .pbf mudar, rode com overwrite = TRUE para reconstruir do zero.",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Leitura dos arquivos e montagem da rede</span>"
+    ]
+  },
+  {
+    "objectID": "8-rede.html#conferindo-erros-do-gtfs",
+    "href": "8-rede.html#conferindo-erros-do-gtfs",
+    "title": "8  Leitura dos arquivos e montagem da rede",
+    "section": "8.7 Conferindo erros do GTFS",
+    "text": "8.7 Conferindo erros do GTFS\nO build_network() valida o GTFS e salva os problemas encontrados em gtfs_errors.csv. Vale sempre checar.\n\nerros_gtfs &lt;- get_gtfs_errors(r5r_network)\nerros_gtfs\n\nErros de prioridade \"HIGH\" impedem a construção da rede, caso em que o build_network() já teria parado com um erro. Erros de prioridade mais baixa não bloqueiam, mas vale entender o que significam antes de confiar nos resultados de transporte público.\nNo GTFS de Anápolis usado nesta oficina aparecem cerca de 867 avisos, todos de prioridade LOW ou MEDIUM, a maioria DuplicateKeyError em stop_id (paradas cadastradas mais de uma vez) e RangeError em parent_station (referência a uma estação-mãe que não existe no stops.txt). Isso é comum em feeds GTFS reais e não impede o roteamento, mas é um bom lembrete de que “os dados vieram de um pacote” não significa “os dados estão limpos”.",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Leitura dos arquivos e montagem da rede</span>"
+    ]
+  },
+  {
+    "objectID": "8-rede.html#visualizando-a-rede",
+    "href": "8-rede.html#visualizando-a-rede",
+    "title": "8  Leitura dos arquivos e montagem da rede",
+    "section": "8.8 Visualizando a rede",
+    "text": "8.8 Visualizando a rede\n\nrede_viaria &lt;- street_network_to_sf(r5r_network)\n\nggplot() +\n  geom_sf(data = rede_viaria$edges, linewidth = 0.15, color = \"gray40\") +\n  theme_minimal() +\n  labs(title = \"Rede viária utilizada pelo R5\")\n\nCom a rede construída, já podemos calcular matrizes de tempo de viagem e acessibilidade.",
     "crumbs": [
       "PARTE 2: ACESSIBILIDADE URBANA",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Leitura dos arquivos e montagem da rede</span>"
@@ -589,142 +600,98 @@
     "href": "9-indicadores.html",
     "title": "9  Cômputo dos indicadores",
     "section": "",
-    "text": "9.1 Famílias de medidas\nCom a matriz de tempos pronta e as oportunidades localizadas no território, calcular acessibilidade vira uma operação direta. A parte difícil está antes e depois, na escolha da medida e na leitura do resultado. Medidas diferentes respondem a perguntas diferentes, e um mapa de acessibilidade só significa alguma coisa quando se sabe qual pergunta ele responde. Este capítulo apresenta as principais famílias de medidas, calcula-as para Anápolis e discute como interpretá-las.",
+    "text": "9.1 Pontos de origem e destino\nCom a rede construída, o caminho até um indicador de acessibilidade tem duas etapas. Primeiro se calcula quanto tempo se leva de cada origem a cada destino, o que produz uma matriz de tempos de viagem. Depois se combina essa matriz com a distribuição das oportunidades no território, o que produz o indicador. Este capítulo percorre as duas etapas para quatro modos, a pé, de bicicleta, de carro e por transporte público, e compara os resultados.\nUsamos o centroide de cada hexágono urbano como ponto de origem e destino. O r5r espera um data.frame ou sf com colunas id, lon e lat, em WGS84.\ngrade_urbana &lt;- grade |&gt;\n  filter(classe_urbano == \"Urbano\") |&gt;\n  st_transform(4326)\n\npontos &lt;- grade_urbana |&gt;\n  st_centroid() |&gt;\n  mutate(\n    lon = st_coordinates(geom)[, 1],\n    lat = st_coordinates(geom)[, 2]\n  ) |&gt;\n  st_drop_geometry() |&gt;\n  transmute(id = id_hex, lon, lat)\n\nnrow(pontos)\nE a tabela de uso do solo, com os nomes de coluna que o accessibility espera.\nuso_solo &lt;- grade_urbana |&gt;\n  st_drop_geometry() |&gt;\n  transmute(\n    id = id_hex,\n    jobs = Jobs,\n    population = pop_ph,\n    income = avg_inc_resp\n  )\n\nhead(uso_solo)",
     "crumbs": [
       "PARTE 2: ACESSIBILIDADE URBANA",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Cômputo dos indicadores</span>"
     ]
   },
   {
-    "objectID": "9-indicadores.html#famílias-de-medidas",
-    "href": "9-indicadores.html#famílias-de-medidas",
+    "objectID": "9-indicadores.html#pontos-de-origem-e-destino",
+    "href": "9-indicadores.html#pontos-de-origem-e-destino",
     "title": "9  Cômputo dos indicadores",
     "section": "",
-    "text": "9.1.1 Medidas cumulativas\n\n\n\n9.1.2 Medidas gravitacionais\n\n\n\n9.1.3 Custo mínimo\n\n\n\n9.1.4 Oportunidade flutuante",
+    "text": "DicaAmostra para teste rápido\n\n\n\nPara um teste rápido durante a aula ao vivo, use uma amostra de hexágonos em vez do conjunto completo. O cálculo fica bem mais rápido e serve para conferir que o código funciona antes de rodar tudo.\npontos_demo &lt;- pontos |&gt;\n  slice_sample(n = 300)\nTroque pontos por pontos_demo nas chamadas abaixo e depois volte para pontos para o resultado completo.",
     "crumbs": [
       "PARTE 2: ACESSIBILIDADE URBANA",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Cômputo dos indicadores</span>"
     ]
   },
   {
-    "objectID": "9-indicadores.html#cálculo-com-o-pacote-accessibility",
-    "href": "9-indicadores.html#cálculo-com-o-pacote-accessibility",
+    "objectID": "9-indicadores.html#matrizes-de-tempo-de-viagem",
+    "href": "9-indicadores.html#matrizes-de-tempo-de-viagem",
     "title": "9  Cômputo dos indicadores",
-    "section": "9.2 Cálculo com o pacote accessibility",
-    "text": "9.2 Cálculo com o pacote accessibility\n\nlibrary(accessibility)\n\nacc_cum &lt;- cumulative_cutoff(\n  travel_matrix = ttm,\n  land_use_data = oportunidades,\n  opportunity   = \"ensino\",\n  travel_cost   = \"travel_time_p50\",\n  cutoff        = 30\n)",
+    "section": "9.2 Matrizes de tempo de viagem",
+    "text": "9.2 Matrizes de tempo de viagem\nO transporte público só tem viagens programadas em 22/07/2026, como visto no capítulo anterior, então usamos essa data também nos outros modos, por consistência. Para caminhada, bicicleta e carro o horário não muda o resultado, porque não há tabela de horários envolvida.\n\ndata_viagem &lt;- as.POSIXct(\"22-07-2026 07:00:00\", format = \"%d-%m-%Y %H:%M:%S\")\n\n\n9.2.1 A pé\n\nttm_pe &lt;- travel_time_matrix(\n  r5r_network = r5r_network,\n  origins = pontos,\n  destinations = pontos,\n  mode = \"WALK\",\n  departure_datetime = data_viagem,\n  max_trip_duration = 60\n)\n\nhead(ttm_pe)\n\n\n\n9.2.2 Bicicleta\n\nttm_bike &lt;- travel_time_matrix(\n  r5r_network = r5r_network,\n  origins = pontos,\n  destinations = pontos,\n  mode = \"BICYCLE\",\n  departure_datetime = data_viagem,\n  max_lts = 2,\n  max_trip_duration = 60\n)\n\n\n\n9.2.3 Carro\n\nttm_carro &lt;- travel_time_matrix(\n  r5r_network = r5r_network,\n  origins = pontos,\n  destinations = pontos,\n  mode = \"CAR\",\n  departure_datetime = data_viagem,\n  max_trip_duration = 60\n)\n\n\n\n9.2.4 Transporte público\nPara transporte público, o modo de acesso e egresso a pé (\"WALK\") é combinado com \"TRANSIT\". Usar uma janela de tempo (time_window) maior deixa a estimativa mais robusta a variações de horário, e também mais lenta. Trinta minutos é um bom equilíbrio para uma aula.\n\nttm_transporte_publico &lt;- travel_time_matrix(\n  r5r_network = r5r_network,\n  origins = pontos,\n  destinations = pontos,\n  mode = c(\"WALK\", \"TRANSIT\"),\n  departure_datetime = data_viagem,\n  time_window = 30,\n  max_walk_time = 30,\n  max_trip_duration = 90\n)",
     "crumbs": [
       "PARTE 2: ACESSIBILIDADE URBANA",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Cômputo dos indicadores</span>"
     ]
   },
   {
-    "objectID": "9-indicadores.html#escolha-de-parâmetros",
-    "href": "9-indicadores.html#escolha-de-parâmetros",
+    "objectID": "9-indicadores.html#acessibilidade-cumulativa-oportunidades-cumulativas",
+    "href": "9-indicadores.html#acessibilidade-cumulativa-oportunidades-cumulativas",
     "title": "9  Cômputo dos indicadores",
-    "section": "9.3 Escolha de parâmetros",
-    "text": "9.3 Escolha de parâmetros",
+    "section": "9.3 Acessibilidade cumulativa (oportunidades cumulativas)",
+    "text": "9.3 Acessibilidade cumulativa (oportunidades cumulativas)\nQuantos empregos são alcançáveis em até 30 minutos, por hexágono, em cada modo? Usamos accessibility::cumulative_cutoff(), que espera a coluna de custo travel_time_p50, o tempo mediano de viagem dentro da janela usada.\n\nacess_pe &lt;- cumulative_cutoff(\n  travel_matrix = ttm_pe,\n  land_use_data = uso_solo,\n  opportunity = \"jobs\",\n  travel_cost = \"travel_time_p50\",\n  cutoff = 30\n)\n\nacess_bike &lt;- cumulative_cutoff(\n  travel_matrix = ttm_bike,\n  land_use_data = uso_solo,\n  opportunity = \"jobs\",\n  travel_cost = \"travel_time_p50\",\n  cutoff = 30\n)\n\nacess_carro &lt;- cumulative_cutoff(\n  travel_matrix = ttm_carro,\n  land_use_data = uso_solo,\n  opportunity = \"jobs\",\n  travel_cost = \"travel_time_p50\",\n  cutoff = 30\n)\n\nacess_tp &lt;- cumulative_cutoff(\n  travel_matrix = ttm_transporte_publico,\n  land_use_data = uso_solo,\n  opportunity = \"jobs\",\n  travel_cost = \"travel_time_p50\",\n  cutoff = 30\n)\n\nJuntando os quatro resultados em uma única tabela, para comparar.\n\nacess_modos &lt;- bind_rows(\n  acess_pe |&gt;\n    mutate(modo = \"A pe\"),\n  acess_bike |&gt;\n    mutate(modo = \"Bicicleta\"),\n  acess_carro |&gt;\n    mutate(modo = \"Carro\"),\n  acess_tp |&gt;\n    mutate(modo = \"Transporte publico\")\n)\n\nggplot(acess_modos, aes(x = modo, y = jobs, fill = modo)) +\n  geom_boxplot(show.legend = FALSE) +\n  labs(\n    title = \"Empregos alcançáveis em até 30 minutos, por modo\",\n    x = NULL, y = \"Empregos acessíveis\"\n  ) +\n  theme_minimal()\n\nE em mapa, para o transporte público.\n\ngrade_urbana |&gt;\n  left_join(acess_tp, by = c(\"id_hex\" = \"id\")) |&gt;\n  ggplot() +\n  geom_sf(aes(fill = jobs), color = NA) +\n  scale_fill_viridis_c(name = \"Empregos\\nem até 30 min\") +\n  theme_minimal() +\n  labs(title = \"Acessibilidade a empregos por transporte público\")",
     "crumbs": [
       "PARTE 2: ACESSIBILIDADE URBANA",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Cômputo dos indicadores</span>"
     ]
   },
   {
-    "objectID": "9-indicadores.html#mapas-de-acessibilidade",
-    "href": "9-indicadores.html#mapas-de-acessibilidade",
+    "objectID": "9-indicadores.html#acessibilidade-por-gravidade",
+    "href": "9-indicadores.html#acessibilidade-por-gravidade",
     "title": "9  Cômputo dos indicadores",
-    "section": "9.4 Mapas de acessibilidade",
-    "text": "9.4 Mapas de acessibilidade",
+    "section": "9.4 Acessibilidade por gravidade",
+    "text": "9.4 Acessibilidade por gravidade\nA abordagem de oportunidades cumulativas usa um corte rígido, em que 30 minutos “conta” e 31 minutos “não conta”. Uma alternativa é ponderar as oportunidades pelo tempo de viagem com uma função de decaimento, por exemplo uma decaída exponencial, em que oportunidades mais distantes pesam cada vez menos.\n\nacess_grav_tp &lt;- gravity(\n  travel_matrix = ttm_transporte_publico,\n  land_use_data = uso_solo,\n  opportunity = \"jobs\",\n  travel_cost = \"travel_time_p50\",\n  decay_function = decay_exponential(decay_value = 0.1)\n)\n\nhead(acess_grav_tp)\n\nOutras funções de decaimento disponíveis no accessibility são decay_binary(), decay_linear(), decay_logistic(), decay_power() e decay_stepped(), todas documentadas em ?decay_exponential e na vinheta de funções de decaimento do pacote.\nCom a acessibilidade calculada para os quatro modos, o próximo passo é olhar para quem se beneficia mais ou menos dela.",
     "crumbs": [
       "PARTE 2: ACESSIBILIDADE URBANA",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Cômputo dos indicadores</span>"
     ]
   },
   {
-    "objectID": "9-indicadores.html#distribuição-social-da-acessibilidade",
-    "href": "9-indicadores.html#distribuição-social-da-acessibilidade",
-    "title": "9  Cômputo dos indicadores",
-    "section": "9.5 Distribuição social da acessibilidade",
-    "text": "9.5 Distribuição social da acessibilidade\n\n\n\n\n\n\n\nDicaRetomando a Parte 1\n\n\n\nO indicador de qualidade do entorno construído no capítulo 3 qualifica a leitura dos mapas de caminhada. Uma célula com bom acesso calculado pela rede viária pode ter caminhabilidade ruim na prática, e o dado do entorno é o que revela essa diferença.",
-    "crumbs": [
-      "PARTE 2: ACESSIBILIDADE URBANA",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Cômputo dos indicadores</span>"
-    ]
-  },
-  {
-    "objectID": "10-cenarios.html",
-    "href": "10-cenarios.html",
-    "title": "10  Avaliação de cenários",
+    "objectID": "10-equidade.html",
+    "href": "10-equidade.html",
+    "title": "10  Equidade e pobreza de acessibilidade",
     "section": "",
-    "text": "10.1 A lógica do antes e depois\nUm mapa de acessibilidade descreve a cidade como ela é. O uso mais interessante da ferramenta, porém, está em perguntar como ela ficaria. Avaliar cenários significa alterar um insumo da rede, recalcular tudo e comparar o antes e o depois, procedimento que transforma a análise de acessibilidade em instrumento de apoio à decisão. Este capítulo monta um cenário de intervenção em Anápolis e mede seus efeitos, com atenção especial a quem ganha e a quem não ganha.",
+    "text": "10.1 Preparando os dados sociodemográficos\nCalcular acessibilidade não basta para entender a justiça de um sistema de transportes. Dois modos podem gerar acessibilidade média parecida e distribuí-la de formas muito diferentes entre ricos e pobres. O pacote accessibility traz medidas de desigualdade (Palma, Gini, índice de concentração, Theil) e de pobreza de acessibilidade (família FGT) para responder a essa pergunta.\nSeguimos usando acess_pe, acess_bike, acess_carro, acess_tp e uso_solo, calculados no capítulo anterior.\nAs medidas de desigualdade precisam de renda e população sem valores faltantes. Hexágonos sem moradores (population == 0) não têm renda média definida (NA) e não fazem sentido nessas contas, então os removemos.\nuso_solo_equidade &lt;- uso_solo |&gt;\n  filter(population &gt; 0, !is.na(income))\n\nnrow(uso_solo)\nnrow(uso_solo_equidade)",
     "crumbs": [
       "PARTE 2: ACESSIBILIDADE URBANA",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Avaliação de cenários</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Equidade e pobreza de acessibilidade</span>"
     ]
   },
   {
-    "objectID": "10-cenarios.html#a-lógica-do-antes-e-depois",
-    "href": "10-cenarios.html#a-lógica-do-antes-e-depois",
-    "title": "10  Avaliação de cenários",
-    "section": "",
-    "text": "ImportanteUma pasta por cenário\n\n\n\nCada cenário exige sua própria pasta de insumos e sua própria rede construída. Misturar arquivos de cenários diferentes no mesmo diretório é a causa mais frequente de resultado inexplicável.\n\n\ndados/r5/\n├── base/         cenário de referência\n└── cenario_1/    cenário alternativo",
+    "objectID": "10-equidade.html#calculando-as-medidas-para-cada-modo",
+    "href": "10-equidade.html#calculando-as-medidas-para-cada-modo",
+    "title": "10  Equidade e pobreza de acessibilidade",
+    "section": "10.2 Calculando as medidas para cada modo",
+    "text": "10.2 Calculando as medidas para cada modo\nCriamos uma função pequena para não repetir a mesma sequência de chamadas quatro vezes.\n\nmedidas_equidade &lt;- function(acess_df, land_use) {\n  linha_pobreza &lt;- quantile(acess_df$jobs, 0.25, na.rm = TRUE)\n\n  palma &lt;- palma_ratio(\n    accessibility_data = acess_df,\n    sociodemographic_data = land_use,\n    opportunity = \"jobs\",\n    population = \"population\",\n    income = \"income\"\n  )\n\n  gini &lt;- gini_index(\n    accessibility_data = acess_df,\n    sociodemographic_data = land_use,\n    opportunity = \"jobs\",\n    population = \"population\"\n  )\n\n  concentracao &lt;- concentration_index(\n    accessibility_data = acess_df,\n    sociodemographic_data = land_use,\n    opportunity = \"jobs\",\n    population = \"population\",\n    income = \"income\",\n    type = \"corrected\"\n  )\n\n  theil &lt;- theil_t(\n    accessibility_data = acess_df,\n    sociodemographic_data = land_use,\n    opportunity = \"jobs\",\n    population = \"population\"\n  )\n\n  pobreza &lt;- fgt_poverty(\n    accessibility_data = acess_df,\n    sociodemographic_data = land_use,\n    opportunity = \"jobs\",\n    population = \"population\",\n    poverty_line = linha_pobreza\n  )\n\n  bind_cols(palma, gini, concentracao, theil, pobreza)\n}\n\nequidade_modos &lt;- bind_rows(\n  medidas_equidade(acess_pe, uso_solo_equidade) |&gt;\n    mutate(modo = \"A pe\"),\n  medidas_equidade(acess_bike, uso_solo_equidade) |&gt;\n    mutate(modo = \"Bicicleta\"),\n  medidas_equidade(acess_carro, uso_solo_equidade) |&gt;\n    mutate(modo = \"Carro\"),\n  medidas_equidade(acess_tp, uso_solo_equidade) |&gt;\n    mutate(modo = \"Transporte publico\")\n) |&gt;\n  relocate(modo)\n\nequidade_modos",
     "crumbs": [
       "PARTE 2: ACESSIBILIDADE URBANA",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Avaliação de cenários</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Equidade e pobreza de acessibilidade</span>"
     ]
   },
   {
-    "objectID": "10-cenarios.html#construção-do-cenário",
-    "href": "10-cenarios.html#construção-do-cenário",
-    "title": "10  Avaliação de cenários",
-    "section": "10.2 Construção do cenário",
-    "text": "10.2 Construção do cenário\n\n\n10.2.1 Alteração do serviço de transporte coletivo\n\nlibrary(gtfstools)\n\ngtfs &lt;- read_gtfs(\"dados/r5/base/anapolis_gtfs.zip\")\n\n# altera a frequência da linha de interesse e grava o feed do cenário\nwrite_gtfs(gtfs, \"dados/r5/cenario_1/anapolis_gtfs.zip\")\n\n\n10.2.2 Alteração da rede viária",
+    "objectID": "10-equidade.html#como-ler-os-resultados",
+    "href": "10-equidade.html#como-ler-os-resultados",
+    "title": "10  Equidade e pobreza de acessibilidade",
+    "section": "10.3 Como ler os resultados",
+    "text": "10.3 Como ler os resultados\n\nPalma ratio, razão entre a acessibilidade média dos 10% mais ricos e dos 40% mais pobres. Quanto maior, mais desigual. O valor 1 seria “igualdade” nessa comparação de extremos.\nGini, desigualdade geral da distribuição de acessibilidade, de 0 (igualdade perfeita) a 1 (toda a acessibilidade concentrada em uma pessoa ou hexágono).\nÍndice de concentração, varia de -1 a +1. Negativo indica que a desigualdade favorece os mais pobres, e positivo, que favorece os mais ricos, um viés pró-rico. É o indicador mais direto de quem se beneficia mais (Erreygers, 2009).\nTheil T, outra medida geral de desigualdade, sensível a diferenças na cauda superior da distribuição.\nFGT0, FGT1 e FGT2, proporção de pessoas “pobres de acessibilidade”, abaixo do 25º percentil neste caso. O FGT0 é a incidência, ou seja, quantos são pobres, o FGT1 pondera pela profundidade da pobreza e o FGT2 dá peso extra a quem está mais distante da linha de pobreza.\n\n\nggplot(equidade_modos, aes(x = modo, y = concentration_index, fill = modo)) +\n  geom_col(show.legend = FALSE) +\n  geom_hline(yintercept = 0, linetype = \"dashed\") +\n  labs(\n    title = \"Índice de concentração da acessibilidade a empregos, por modo\",\n    subtitle = \"Negativo = favorece os mais pobres; positivo = favorece os mais ricos\",\n    x = NULL, y = \"Índice de concentração\"\n  ) +\n  theme_minimal()\n\nEm geral, é comum encontrar padrões como acessibilidade a pé mais equitativa, pouco correlacionada com renda porque todo mundo anda, acessibilidade de carro fortemente pró-rico, já que poucos têm carro e moram em áreas bem servidas de vias, e transporte público em posição intermediária. O padrão real de Anápolis pode ser diferente, e é isso que os números acima mostram (Levinson & King, 2020; Pereira & Karner, 2021).",
     "crumbs": [
       "PARTE 2: ACESSIBILIDADE URBANA",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Avaliação de cenários</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Equidade e pobreza de acessibilidade</span>"
     ]
   },
   {
-    "objectID": "10-cenarios.html#recálculo-e-comparação",
-    "href": "10-cenarios.html#recálculo-e-comparação",
-    "title": "10  Avaliação de cenários",
-    "section": "10.3 Recálculo e comparação",
-    "text": "10.3 Recálculo e comparação\n\nr5r_cenario &lt;- setup_r5(data_path = \"dados/r5/cenario_1\")\n\n# mesmos parâmetros do capítulo 8, alterando apenas os insumos",
+    "objectID": "10-equidade.html#para-continuar",
+    "href": "10-equidade.html#para-continuar",
+    "title": "10  Equidade e pobreza de acessibilidade",
+    "section": "10.4 Para continuar",
+    "text": "10.4 Para continuar\n\n\n\n\n\n\nDica\n\n\n\nPara reproduzir a extração de rede viária, GTFS e uso do solo para outros municípios, os pacotes osmextract (rede OSM), tidytransit (GTFS) e cnefetools (dados de população e renda do IBGE a partir do CNEFE) automatizam boa parte desse trabalho (Pedreira Junior & Stabile, 2026).\n\n\nO Projeto Acesso a Oportunidades, acessível pelo pacote aopdata, oferece indicadores prontos para as maiores cidades brasileiras e serve de referência para comparação (Pereira et al., 2022). A oficina de acessibilidade da ANPET 2025 e o livro Pereira & Herszenhut (2023) aprofundam todos os temas tratados nesta Parte.\n\n\n\n\nErreygers, G. (2009). Correcting the Concentration Index. Journal of Health Economics, 28(2), 504–515.\n\n\nLevinson, D., & King, D. (2020). Transport Access Manual: A Guide for Measuring Connection between People and Places. Committee of the Transport Access Manual, University of Sydney.\n\n\nPedreira Junior, J. U., & Stabile, B. H. M. (2026). cnefetools: Access and Analysis of Brazilian CNEFE Address Data. https://github.com/pedreirajr/cnefetools\n\n\nPereira, R. H. M., & Herszenhut, D. (2023). Introdução à acessibilidade urbana: um guia prático em R. Instituto de Pesquisa Econômica Aplicada (Ipea). https://ipeagit.github.io/intro_access_book/\n\n\nPereira, R. H. M., Herszenhut, D., Braga, C. K. V., Bazzo, J. P., Oliveira, J. L. A., Parga, J. P., Saraiva, M., Silva, L. P., Tomasiello, D. B., & Warwar, L. (2022). Distribuição espacial de características sociodemográficas e localização de empregos e serviços públicos das vinte maiores cidades do Brasil (Texto para Discussão N. 2772). Instituto de Pesquisa Econômica Aplicada (Ipea). https://doi.org/10.38116/td2772\n\n\nPereira, R. H. M., & Karner, A. (2021). Transportation Accessibility. Em International Encyclopedia of Transportation. Elsevier.",
     "crumbs": [
       "PARTE 2: ACESSIBILIDADE URBANA",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Avaliação de cenários</span>"
-    ]
-  },
-  {
-    "objectID": "10-cenarios.html#mapas-e-tabelas-de-diferença",
-    "href": "10-cenarios.html#mapas-e-tabelas-de-diferença",
-    "title": "10  Avaliação de cenários",
-    "section": "10.4 Mapas e tabelas de diferença",
-    "text": "10.4 Mapas e tabelas de diferença",
-    "crumbs": [
-      "PARTE 2: ACESSIBILIDADE URBANA",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Avaliação de cenários</span>"
-    ]
-  },
-  {
-    "objectID": "10-cenarios.html#quem-ganha-e-quem-perde",
-    "href": "10-cenarios.html#quem-ganha-e-quem-perde",
-    "title": "10  Avaliação de cenários",
-    "section": "10.5 Quem ganha e quem perde",
-    "text": "10.5 Quem ganha e quem perde",
-    "crumbs": [
-      "PARTE 2: ACESSIBILIDADE URBANA",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Avaliação de cenários</span>"
-    ]
-  },
-  {
-    "objectID": "10-cenarios.html#limites-da-análise",
-    "href": "10-cenarios.html#limites-da-análise",
-    "title": "10  Avaliação de cenários",
-    "section": "10.6 Limites da análise",
-    "text": "10.6 Limites da análise\n\n\n\n\n\n\n\nDicaPara continuar\n\n\n\nO material citado na apresentação aprofunda todos os temas tratados aqui. O Projeto Acesso a Oportunidades, acessível pelo pacote aopdata, oferece indicadores prontos para as maiores cidades brasileiras e serve de referência para comparação (Pereira et al., 2022).\n\n\n\n\n\n\nPereira, R. H. M., Herszenhut, D., Braga, C. K. V., Bazzo, J. P., Oliveira, J. L. A., Parga, J. P., Saraiva, M., Silva, L. P., Tomasiello, D. B., & Warwar, L. (2022). Distribuição espacial de características sociodemográficas e localização de empregos e serviços públicos das vinte maiores cidades do Brasil (Texto para Discussão N. 2772). Instituto de Pesquisa Econômica Aplicada (Ipea). https://doi.org/10.38116/td2772",
-    "crumbs": [
-      "PARTE 2: ACESSIBILIDADE URBANA",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Avaliação de cenários</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Equidade e pobreza de acessibilidade</span>"
     ]
   },
   {
@@ -732,7 +699,7 @@
     "href": "referencias.html",
     "title": "Referências",
     "section": "",
-    "text": "Pedreira Junior, J. U. (2026). Censo demográfico no R:\nConceitos e aplicações para a análise do território brasileiro. https://pedreirajr.github.io/rcensolivro/\n\n\nPereira, R. H. M., & Herszenhut, D. (2023). Introdução à\nacessibilidade urbana: Um guia prático em R. Instituto\nde Pesquisa Econômica Aplicada (Ipea). https://ipeagit.github.io/intro_access_book/\n\n\nPereira, R. H. M., Herszenhut, D., Braga, C. K. V., Bazzo, J. P.,\nOliveira, J. L. A., Parga, J. P., Saraiva, M., Silva, L. P., Tomasiello,\nD. B., & Warwar, L. (2022). Distribuição espacial de\ncaracterísticas sociodemográficas e localização de empregos e serviços\npúblicos das vinte maiores cidades do Brasil (Texto\nPara Discussão No. 2772). Instituto de Pesquisa Econômica Aplicada\n(Ipea). https://doi.org/10.38116/td2772",
+    "text": "Erreygers, G. (2009). Correcting the Concentration\nIndex. Journal of Health Economics,\n28(2), 504–515.\n\n\nLevinson, D., & King, D. (2020). Transport Access\nManual: A Guide for\nMeasuring Connection between\nPeople and Places. Committee of the\nTransport Access Manual, University of Sydney.\n\n\nPedreira Junior, J. U. (2026). Censo demográfico no R:\nConceitos e aplicações para a análise do território brasileiro. https://pedreirajr.github.io/rcensolivro/\n\n\nPedreira Junior, J. U., & Stabile, B. H. M. (2026). cnefetools: Access and\nAnalysis of Brazilian CNEFE\nAddress Data. https://github.com/pedreirajr/cnefetools\n\n\nPereira, R. H. M., & Herszenhut, D. (2023). Introdução à\nacessibilidade urbana: Um guia prático em R. Instituto\nde Pesquisa Econômica Aplicada (Ipea). https://ipeagit.github.io/intro_access_book/\n\n\nPereira, R. H. M., Herszenhut, D., Braga, C. K. V., Bazzo, J. P.,\nOliveira, J. L. A., Parga, J. P., Saraiva, M., Silva, L. P., Tomasiello,\nD. B., & Warwar, L. (2022). Distribuição espacial de\ncaracterísticas sociodemográficas e localização de empregos e serviços\npúblicos das vinte maiores cidades do Brasil (Texto\nPara Discussão No. 2772). Instituto de Pesquisa Econômica Aplicada\n(Ipea). https://doi.org/10.38116/td2772\n\n\nPereira, R. H. M., & Karner, A. (2021). Transportation\nAccessibility. In International encyclopedia of\ntransportation. Elsevier.\n\n\nPereira, R. H. M., Saraiva, M., Herszenhut, D., Braga, C. K. V., &\nConway, M. W. (2021). r5r: Rapid Realistic\nRouting on Multimodal Transport\nNetworks with R5 in R.\nFindings. https://doi.org/10.32866/001c.21262",
     "crumbs": [
       "Referências"
     ]
