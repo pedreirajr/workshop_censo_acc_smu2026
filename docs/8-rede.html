@@ -314,44 +314,52 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="os-dados-da-oficina" class="level2" data-number="8.1">
 <h2 data-number="8.1" class="anchored" data-anchor-id="os-dados-da-oficina"><span class="header-section-number">8.1</span> Os dados da oficina</h2>
-<p>Os arquivos que não são produzidos por código são distribuídos como <em>assets</em> de um <a href="https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/tag/dados"><em>release</em></a> do repositório da oficina.</p>
+<p>Quatro arquivos sustentam toda a Parte 2. Nenhum deles é produzido por código, então todos são distribuídos como <em>assets</em> de um <a href="https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/tag/dados"><em>release</em></a> do repositório da oficina, e cada nome na tabela abaixo é o link direto de download.</p>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Arquivo</th>
 <th>Conteúdo</th>
-<th>Pasta</th>
+<th>Destino no projeto</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>anapolis.pbf</code></td>
+<td><a href="https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/anapolis.pbf"><code>anapolis.pbf</code></a></td>
 <td>Rede viária (OpenStreetMap) do município</td>
 <td><code>dados/r5/</code></td>
 </tr>
 <tr class="even">
-<td><code>Anapolis.tif</code></td>
+<td><a href="https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/Anapolis.tif"><code>Anapolis.tif</code></a></td>
 <td>Modelo digital de elevação (MDE), usado para custo de caminhada e bicicleta em ladeiras</td>
 <td><code>dados/r5/</code></td>
 </tr>
 <tr class="odd">
-<td><code>GTFS_ANL.zip</code></td>
+<td><a href="https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/GTFS_ANL.zip"><code>GTFS_ANL.zip</code></a></td>
 <td>Feed GTFS do transporte público de Anápolis</td>
 <td><code>dados/r5/</code></td>
 </tr>
 <tr class="even">
-<td><code>grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg</code></td>
+<td><a href="https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg"><code>grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg</code></a></td>
 <td>Grade de hexágonos H3 (resolução 9) com número de empregos, população, renda média e classificação urbano/rural</td>
 <td><code>dados/geo/</code></td>
 </tr>
 </tbody>
 </table>
-<p>O bloco abaixo baixa o que ainda não estiver na máquina. Rodá-lo mais de uma vez não repete o download.</p>
+<p>Não é preciso baixar nada à mão. O bloco abaixo cria as pastas dentro do projeto do RStudio e busca cada arquivo na URL do <em>release</em>. Ele confere antes se o arquivo já existe, então rodá-lo de novo em outra sessão não repete o download.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Importante</span>Rode isto dentro do projeto do RStudio
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Os caminhos são relativos à raiz do projeto. Abra o <code>workshop_censo_acc_smu2026.Rproj</code> antes de executar, ou o R vai criar a pasta <code>dados/</code> em outro lugar.</p>
+</div>
+</div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>url_base <span class="ot">&lt;-</span> <span class="st">"https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados"</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -369,19 +377,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>pasta_rede <span class="ot">&lt;-</span> <span class="st">"dados/r5"</span></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>pasta_geo  <span class="ot">&lt;-</span> <span class="st">"dados/geo"</span></span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">lapply</span>(</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"anapolis.pbf"</span>, <span class="st">"Anapolis.tif"</span>, <span class="st">"GTFS_ANL.zip"</span>),</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  baixa_dado,</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">destino =</span> pasta_rede</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>arq_grade <span class="ot">&lt;-</span> <span class="fu">baixa_dado</span>(</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="st">"grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg"</span>,</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">destino =</span> pasta_geo</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(pasta_rede)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># insumos da rede de roteamento</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">lapply</span>(</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"anapolis.pbf"</span>, <span class="st">"Anapolis.tif"</span>, <span class="st">"GTFS_ANL.zip"</span>),</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  baixa_dado,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">destino =</span> pasta_rede</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># grade de uso do solo</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>arq_grade <span class="ot">&lt;-</span> <span class="fu">baixa_dado</span>(</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="st">"grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg"</span>,</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">destino =</span> pasta_geo</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="fu">c</span>(pasta_rede, pasta_geo), <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>São cerca de 30 MB no total, então o primeiro download leva alguns minutos em conexão lenta. Da segunda vez em diante é instantâneo.</p>
 </section>
 <section id="grade-de-uso-do-solo-h3-resolução-9" class="level2" data-number="8.2">
 <h2 data-number="8.2" class="anchored" data-anchor-id="grade-de-uso-do-solo-h3-resolução-9"><span class="header-section-number">8.2</span> Grade de uso do solo (H3, resolução 9)</h2>
@@ -517,7 +528,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>r5r_network</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
-<li><code>elevation = "TOBLER"</code> faz o R5 penalizar o tempo de caminhada e de bicicleta em ladeiras, usando o <code>Anapolis.tif</code> que está na pasta.</li>
+<li><code>elevation = "TOBLER"</code> faz o R5 penalizar o tempo de caminhada e de bicicleta em ladeiras, usando o <code>Anapolis.tif</code> que o bloco de download colocou em <code>dados/r5/</code>.</li>
 <li>Da primeira vez, o <code>build_network()</code> demora, porque compila o grafo a partir do <code>.pbf</code> e do GTFS. Nas próximas vezes, com <code>overwrite = FALSE</code> (o padrão), ele reaproveita o <code>network.dat</code> já salvo e carrega quase instantaneamente.</li>
 <li>Se algo no GTFS ou no <code>.pbf</code> mudar, rode com <code>overwrite = TRUE</code> para reconstruir do zero.</li>
 </ul>

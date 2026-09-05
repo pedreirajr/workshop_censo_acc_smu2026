@@ -127,17 +127,3 @@ dados urbanos e uso de bases de dados institucionais brasileiras. Autor de
 :::
 
 :::
-
-## Como citar {.unnumbered}
-
-> Pedreira Junior, J. U., Louro, T., & Assis, L. (2026). *Dados Censitários e Acessibilidade
-> Urbana em R: material prático da oficina do Simpósio de Mobilidade Urbana*.
-> <https://pedreirajr.github.io/workshop_censo_acc_smu2026/>
-
-## Agradecimentos {.unnumbered}
-
-Este material se apoia inteiramente em bens públicos produzidos por duas instituições. O Instituto
-Brasileiro de Geografia e Estatística (IBGE) produz e disponibiliza os dados do Censo Demográfico
-tratados na Parte 1. O Instituto de Pesquisa Econômica Aplicada (Ipea) desenvolve e mantém os
-pacotes `geobr`, `censobr`, `r5r`, `accessibility` e `aopdata`, sem os quais nada do que se faz
-aqui caberia em 4 horas de oficina.

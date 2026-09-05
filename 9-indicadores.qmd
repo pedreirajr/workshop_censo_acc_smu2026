@@ -10,6 +10,13 @@ viagem. Depois se combina essa matriz com a distribuição das oportunidades no 
 produz o indicador. Este capítulo percorre as duas etapas para quatro modos, a pé, de bicicleta, de
 carro e por transporte público, e compara os resultados.
 
+::: {.callout-warning}
+## Continuação da mesma sessão
+
+Este capítulo usa os objetos `grade` e `r5r_network`, criados no capítulo
+[8](8-rede.qmd). Se você reiniciou o R, rode aquele capítulo antes deste.
+:::
+
 ::: {.callout-note}
 ## Nesta seção você vai
 

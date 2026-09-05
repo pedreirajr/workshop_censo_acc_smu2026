@@ -22,19 +22,28 @@ roteamento de Anápolis.
 
 ## Os dados da oficina
 
-Os arquivos que não são produzidos por código são distribuídos como *assets* de um
+Quatro arquivos sustentam toda a Parte 2. Nenhum deles é produzido por código, então todos são
+distribuídos como *assets* de um
 [*release*](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/tag/dados) do
-repositório da oficina.
+repositório da oficina, e cada nome na tabela abaixo é o link direto de download.
 
-| Arquivo | Conteúdo | Pasta |
+| Arquivo | Conteúdo | Destino no projeto |
 |---|---|---|
-| `anapolis.pbf` | Rede viária (OpenStreetMap) do município | `dados/r5/` |
-| `Anapolis.tif` | Modelo digital de elevação (MDE), usado para custo de caminhada e bicicleta em ladeiras | `dados/r5/` |
-| `GTFS_ANL.zip` | Feed GTFS do transporte público de Anápolis | `dados/r5/` |
-| `grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg` | Grade de hexágonos H3 (resolução 9) com número de empregos, população, renda média e classificação urbano/rural | `dados/geo/` |
+| [`anapolis.pbf`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/anapolis.pbf) | Rede viária (OpenStreetMap) do município | `dados/r5/` |
+| [`Anapolis.tif`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/Anapolis.tif) | Modelo digital de elevação (MDE), usado para custo de caminhada e bicicleta em ladeiras | `dados/r5/` |
+| [`GTFS_ANL.zip`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/GTFS_ANL.zip) | Feed GTFS do transporte público de Anápolis | `dados/r5/` |
+| [`grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg) | Grade de hexágonos H3 (resolução 9) com número de empregos, população, renda média e classificação urbano/rural | `dados/geo/` |
 
-O bloco abaixo baixa o que ainda não estiver na máquina. Rodá-lo mais de uma vez não repete o
-download.
+Não é preciso baixar nada à mão. O bloco abaixo cria as pastas dentro do projeto do RStudio e busca
+cada arquivo na URL do *release*. Ele confere antes se o arquivo já existe, então rodá-lo de novo em
+outra sessão não repete o download.
+
+::: {.callout-important}
+## Rode isto dentro do projeto do RStudio
+
+Os caminhos são relativos à raiz do projeto. Abra o `workshop_censo_acc_smu2026.Rproj` antes de
+executar, ou o R vai criar a pasta `dados/` em outro lugar.
+:::
 
 ```{r}
 url_base <- "https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados"
@@ -53,19 +62,24 @@ baixa_dado <- function(arquivo, destino) {
 pasta_rede <- "dados/r5"
 pasta_geo  <- "dados/geo"
 
+# insumos da rede de roteamento
 invisible(lapply(
   c("anapolis.pbf", "Anapolis.tif", "GTFS_ANL.zip"),
   baixa_dado,
   destino = pasta_rede
 ))
 
+# grade de uso do solo
 arq_grade <- baixa_dado(
   "grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg",
   destino = pasta_geo
 )
 
-list.files(pasta_rede)
+list.files(c(pasta_rede, pasta_geo), full.names = TRUE)
 ```
+
+São cerca de 30 MB no total, então o primeiro download leva alguns minutos em conexão lenta. Da
+segunda vez em diante é instantâneo.
 
 ## Grade de uso do solo (H3, resolução 9)
 
@@ -221,7 +235,7 @@ r5r_network
 ```
 
 - `elevation = "TOBLER"` faz o R5 penalizar o tempo de caminhada e de bicicleta em ladeiras, usando o
-  `Anapolis.tif` que está na pasta.
+  `Anapolis.tif` que o bloco de download colocou em `dados/r5/`.
 - Da primeira vez, o `build_network()` demora, porque compila o grafo a partir do `.pbf` e do GTFS.
   Nas próximas vezes, com `overwrite = FALSE` (o padrão), ele reaproveita o `network.dat` já salvo e
   carrega quase instantaneamente.
