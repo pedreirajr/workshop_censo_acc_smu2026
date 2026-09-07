@@ -9,8 +9,8 @@ Material prático da oficina **Dados Censitários e Acessibilidade Urbana em R**
 ## Instrutores
 
 - Jorge Ubirajara Pedreira Junior
-- Thiago Louro
-- Lucas Assis
+- Thiago Vinícius Louro
+- Lucas Brandão Monteiro de Assis
 
 ## Conteúdo
 
