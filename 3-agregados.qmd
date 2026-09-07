@@ -2,22 +2,25 @@
 title: "Agregados por setor censitário"
 ---
 
-Os Agregados por Setor Censitário são o produto mais usado do Censo Demográfico e o ponto de
-entrada natural para quem precisa de um retrato sociodemográfico com boa resolução geográfica. São
-tabelas do universo, calculadas para todos os setores do país, que descrevem população, domicílios,
-responsáveis e características do entorno. Este capítulo mostra como lê-las, como transformar
-contagens brutas em indicadores comparáveis e como mapeá-las, encerrando com as características
-urbanísticas do entorno dos domicílios sob a ótica de transportes.
+Quem procura variável de transporte nos Agregados por Setor Censitário não encontra. O questionário
+básico do Censo, aplicado a todos os domicílios do país, não pergunta sobre viagem, modo de
+deslocamento ou posse de veículo. Ainda assim, os agregados são um dos insumos mais usados no
+planejamento de transportes, porque respondem à pergunta que antecede todas as outras, que é onde
+estão as pessoas e os domicílios e como eles são. Distribuição da população no território, estrutura
+etária, renda e tipo de moradia são exatamente o que alimenta um modelo de demanda, uma análise de
+cobertura de rede ou um cálculo de acessibilidade. E vêm na resolução espacial mais fina que o IBGE
+divulga para o universo, o setor censitário.
 
 ::: {.callout-note}
 ## Nesta seção você vai
 
-- entender o que os agregados cobrem e o que ficou de fora
-- ler os agregados de Anápolis com o `censobr`
-- navegar pelo dicionário de variáveis
-- construir indicadores derivados a partir de contagens
-- unir os dados à malha e produzir mapas coropléticos
-- explorar as características urbanísticas do entorno com recorte de transportes
+- consultar o dicionário de variáveis dos agregados
+- ler quatro arquivos temáticos com o `censobr` e montar uma base única
+- transformar contagens brutas em indicadores comparáveis entre setores
+- mapear os indicadores sobre a malha de setores
+- reagregar os dados do Censo para a grade H3 e para os bairros com o `cnefetools`
+- explorar as características do entorno dos domicílios, que é onde o Censo enxerga infraestrutura
+  de transportes
 :::
 
 ::: {.callout-tip}
@@ -28,73 +31,384 @@ apresentado a seguir. Se ainda não tiver o projeto, volte ao
 [Capítulo 1](1-instalacao.qmd).
 :::
 
+```{r}
+#| label: pacotes-cap3
+#| message: false
+#| warning: false
+library(censobr)
+library(cnefetools)
+library(geobr)
+library(sf)
+library(dplyr)
+library(ggplot2)
+```
 
 ## O que são os agregados
 
-<!-- ESBOÇO: dados do universo, apurados para a totalidade dos domicílios, organizados por tema.
-     Diferenciar de microdados e de tabelas do SIDRA. Comentar arredondamento e supressão por
-     confidencialidade, e por que setores com poucos domicílios exigem cautela. -->
+Os Agregados por Setor Censitário são tabelas do **universo**, apuradas para a totalidade dos
+domicílios recenseados e divulgadas por setor. Não são amostra, então não têm peso amostral nem
+intervalo de confiança, e trazem a contagem efetiva. Em troca dessa cobertura completa, o conjunto
+de perguntas é curto, restrito ao questionário básico.
 
-## Leitura dos dados com o censobr
-
-<!-- ESBOÇO: uso da função de leitura dos agregados, argumento de ano e retorno em formato Arrow.
-     Mostrar por que collect() só deve vir depois do filtro do município. Filtrar Anápolis pelo
-     código de município embutido no código do setor. -->
-
-```r
-library(censobr)
-library(dplyr)
-
-agregados <- read_tracts(year = 2022, dataset = "Basico", as_data_frame = FALSE)
-
-agregados_ana <- agregados |>
-  filter(code_muni == "5201108") |>
-  collect()
-```
+O conteúdo vem repartido em arquivos temáticos, e é preciso saber em qual deles está cada variável
+antes de escrever qualquer linha de código. Usaremos quatro. O **Basico**, com os totais do setor e
+a identificação geográfica. O **Pessoas**, com a demografia. O **ResponsavelRenda**, com a renda da
+pessoa responsável pelo domicílio. E o **Domicilio**, com as características da moradia. Mais
+adiante entra um quinto, o **Entorno**.
 
 ## O dicionário de variáveis
 
-<!-- ESBOÇO: como localizar o dicionário, a lógica de nomeação das variáveis por tema e a
-     importância de conferir a definição antes de calcular. Tabela com as variáveis usadas no
-     capítulo e sua descrição. -->
+Os nomes das variáveis são códigos sequenciais sem qualquer relação com o conteúdo, do tipo `V0001`
+ou `domicilio01_V00049`. Consultar o dicionário é, por isso, o primeiro passo obrigatório. O
+`censobr` o entrega pela função `data_dictionary()`, que para o Censo 2022 abre uma planilha no seu
+computador, com uma aba por arquivo temático.
 
-## De contagens a indicadores
+```{r}
+#| label: dicionario
+#| eval: false
+data_dictionary(year = 2022, dataset = "tracts")
+```
 
-<!-- ESBOÇO: densidade demográfica, razão de dependência, média de moradores por domicílio e renda
-     média do responsável. Enfatizar a necessidade de normalizar por população ou por área antes de
-     comparar setores. Um chunk com mutate encadeado. -->
+::: {.callout-tip}
+Deixe a planilha aberta em paralelo enquanto trabalha. Cada aba traz o nome da variável no
+`censobr`, o nome original do IBGE e a descrição completa, e é a descrição completa que evita o erro
+mais comum, que é pegar a variável quase certa. No arquivo Domicilio, por exemplo, existem
+`domicilio01_V00049` e `domicilio01_V00086`, ambas sobre apartamentos. A primeira conta domicílios
+do tipo apartamento e a segunda conta os moradores desses apartamentos. Dividir a segunda pelo total
+de domicílios devolve um número que parece um percentual e não significa nada.
+:::
 
-```r
-indicadores <- agregados_ana |>
+As variáveis deste capítulo são estas.
+
+| Arquivo | Variável | Descrição |
+|---|---|---|
+| Basico | `V0001` | Total de pessoas |
+| Pessoas | `demografia_V01040` | Pessoas de 60 a 69 anos |
+| Pessoas | `demografia_V01041` | Pessoas de 70 anos ou mais |
+| ResponsavelRenda | `V06004` | Rendimento nominal médio mensal das pessoas responsáveis com rendimento |
+| Domicilio | `domicilio01_V00001` | Domicílios particulares permanentes ocupados |
+| Domicilio | `domicilio01_V00049` | Domicílios particulares permanentes ocupados do tipo apartamento |
+
+## Leitura dos arquivos e montagem da base
+
+A função `read_tracts()` recebe o ano e o arquivo temático. Ela devolve uma tabela *Arrow*, que é
+uma tabela preguiçosa, no sentido de que nada é lido para a memória enquanto não se chamar
+`collect()`. Isso importa porque o arquivo nacional tem centenas de milhares de setores e centenas
+de colunas. Filtrar o município e selecionar as colunas **antes** do `collect()` faz o Arrow ler do
+disco apenas o pedaço que interessa.
+
+```{r}
+#| label: leitura-agregados
+#| cache: true
+#| message: false
+
+anp_code <- lookup_muni(year = 2022, name_muni = "Anápolis")$code_muni
+
+anp_basico <- read_tracts(year = 2022, dataset = "Basico", showProgress = FALSE) |>
+  filter(code_muni == anp_code) |>
+  select(code_tract, situacao, V0001) |>
+  collect()
+
+anp_pessoas <- read_tracts(year = 2022, dataset = "Pessoas", showProgress = FALSE) |>
+  filter(code_muni == anp_code) |>
+  select(code_tract, demografia_V01040, demografia_V01041) |>
+  collect()
+
+anp_renda <- read_tracts(year = 2022, dataset = "ResponsavelRenda", showProgress = FALSE) |>
+  filter(code_muni == anp_code) |>
+  select(code_tract, V06004) |>
+  collect()
+
+anp_domic <- read_tracts(year = 2022, dataset = "Domicilio", showProgress = FALSE) |>
+  filter(code_muni == anp_code) |>
+  select(code_tract, domicilio01_V00001, domicilio01_V00049) |>
+  collect()
+
+nrow(anp_basico)
+```
+
+Os quatro arquivos trazem uma linha por setor e compartilham a chave `code_tract`, o que permite
+uni-los em sequência. Na mesma passagem construímos os indicadores, porque contagem bruta não se
+compara entre setores de tamanhos diferentes. A população de 60 anos ou mais vira percentual da
+população do setor, e os apartamentos viram percentual dos domicílios particulares permanentes
+ocupados. A renda média do responsável já é uma média e entra como está.
+
+```{r}
+#| label: monta-base
+#| message: false
+
+anp_sc <- anp_basico |>
+  left_join(anp_pessoas, by = "code_tract") |>
+  left_join(anp_renda,   by = "code_tract") |>
+  left_join(anp_domic,   by = "code_tract") |>
+  rename(
+    pop     = V0001,
+    p60a69  = demografia_V01040,
+    p70mais = demografia_V01041,
+    renda   = V06004,
+    dpp     = domicilio01_V00001,
+    aptos   = domicilio01_V00049
+  ) |>
   mutate(
-    dens_hab_ha = populacao / (area_km2 * 100),
-    moradores_por_dom = populacao / domicilios
+    perc_60mais = 100 * (p60a69 + p70mais) / na_if(pop, 0),
+    perc_aptos  = 100 * aptos / na_if(dpp, 0)
+  )
+
+anp_sc |>
+  select(code_tract, pop, perc_60mais, renda, perc_aptos) |>
+  head()
+```
+
+O `na_if(pop, 0)` evita a divisão por zero. Setor sem morador existe, e sem essa proteção o
+resultado seria `Inf`, que estraga a escala de qualquer mapa. Vale conferir os totais do município
+antes de seguir.
+
+```{r}
+#| label: totais-municipio
+#| message: false
+
+anp_sc |>
+  summarize(
+    setores     = n(),
+    populacao   = sum(pop, na.rm = TRUE),
+    perc_60mais = 100 * sum(p60a69 + p70mais, na.rm = TRUE) / sum(pop, na.rm = TRUE),
+    domicilios  = sum(dpp, na.rm = TRUE),
+    perc_aptos  = 100 * sum(aptos, na.rm = TRUE) / sum(dpp, na.rm = TRUE)
   )
 ```
 
-## Junção com a malha e mapeamento
+## Mapeando os indicadores
 
-<!-- ESBOÇO: left_join dos indicadores com os setores lidos no capítulo 2, checagem de setores sem
-     correspondência e mapa coroplético com ggplot2. Discutir escolha de classes e de paleta.
-     Figura principal do capítulo. -->
+Os agregados vêm sem geometria, então precisamos da malha de setores do `geobr`, exatamente como no
+[Capítulo 2](2-recortes-territoriais.qmd). A junção é pela coluna `code_tract`, e é direta, porque
+os dois pacotes entregam o código como número.
 
-## Características urbanísticas do entorno
+```{r}
+#| label: junta-geometria
+#| cache: true
+#| message: false
 
-<!-- ESBOÇO: apresentar o levantamento do entorno, feito por observação do recenseador na face de
-     quadra, e a natureza da informação. Selecionar as variáveis de interesse para transportes,
-     como existência de calçada, rampa para cadeirante, pavimentação, iluminação pública e ponto
-     de ônibus ou de outro modo coletivo. -->
+anp_sc_geo22 <- read_census_tract(code_tract = anp_code, year = 2022,
+                                  simplified = FALSE, showProgress = FALSE)
 
-### Construção de um índice de qualidade do entorno
+anp_sc_map <- anp_sc_geo22 |>
+  select(code_tract) |>
+  left_join(anp_sc, by = "code_tract")
 
-<!-- ESBOÇO: normalizar cada variável pelo total de domicílios do setor, combinar em um índice
-     simples e mapear. Deixar explícito que a agregação é uma escolha metodológica, com
-     alternativas. Fechar apontando a ligação com a Parte 2, já que a caminhabilidade do entorno
-     condiciona o acesso ao transporte coletivo. -->
+sum(is.na(anp_sc_map$pop))
+```
 
-::: {.callout-tip}
-## Conexão com a Parte 2
+Como os setores rurais são enormes e quase vazios, o mapa do município inteiro é dominado por eles.
+Vale acompanhar os quatro painéis lembrando que a mancha densa no centro é a área urbana.
 
-O indicador de entorno construído aqui volta no capítulo [9](9-indicadores.qmd), como leitura
-complementar aos mapas de acessibilidade por caminhada.
+```{r}
+#| label: fig-agregados-anapolis
+#| fig-cap: "Indicadores dos agregados por setor censitário, Anápolis (GO), Censo 2022."
+#| fig-subcap:
+#|   - "População total"
+#|   - "Pessoas de 60 anos ou mais (%)"
+#|   - "Rendimento médio do responsável (R$)"
+#|   - "Domicílios do tipo apartamento (%)"
+#| layout-ncol: 2
+#| fig-width: 5
+#| fig-height: 5
+#| message: false
+
+mapa_base <- function(dados, variavel, paleta) {
+  ggplot(dados) +
+    geom_sf(aes(fill = .data[[variavel]]), color = NA) +
+    scale_fill_viridis_c(option = paleta, na.value = "gray90", name = NULL) +
+    theme_minimal() +
+    theme(axis.text = element_blank(), panel.grid = element_blank())
+}
+
+mapa_base(anp_sc_map, "pop",         "viridis")
+mapa_base(anp_sc_map, "perc_60mais", "magma")
+mapa_base(anp_sc_map, "renda",       "cividis")
+mapa_base(anp_sc_map, "perc_aptos",  "rocket")
+```
+
+A leitura conjunta dos quatro painéis já sugere as perguntas de transporte. A população se concentra
+em uma mancha contínua, e é sobre ela que qualquer rede de transporte coletivo precisa se apoiar. Os
+setores com maior proporção de idosos não coincidem necessariamente com os de maior renda, o que
+importa porque idade e renda puxam a demanda por transporte em direções diferentes. E os
+apartamentos se concentram em poucos setores, indicando onde a densidade construída comporta
+frequências maiores de atendimento.
+
+## Reagregando para outros recortes com o cnefetools
+
+O setor censitário é a unidade de divulgação, e raramente é a unidade de análise que se quer. Ele
+muda de desenho a cada censo, tem tamanhos muito desiguais e não coincide com bairro, com zona de
+tráfego nem com célula de grade. Levar o dado do setor para outro polígono exige **interpolação**, e
+a dificuldade está em que a população não se distribui de forma uniforme dentro do setor.
+
+O pacote `cnefetools` resolve isso usando o CNEFE como referência. Em vez de repartir a população do
+setor pela área, ele a reparte pelos endereços efetivamente cadastrados, que é uma aproximação bem
+melhor de onde as pessoas estão. As duas funções que usaremos seguem a mesma lógica e diferem apenas
+no destino. O argumento `vars` aceita um conjunto fixo de variáveis já preparadas pelo pacote, e
+usaremos duas, `pop_ph`, população em domicílios particulares, e `avg_inc_resp`, rendimento médio do
+responsável.
+
+### Grade hexagonal H3
+
+`tracts_to_h3()` gera as células H3 que cobrem o município e distribui as variáveis nelas. A
+resolução 9, apresentada no [Capítulo 2](2-recortes-territoriais.qmd), é a que a Parte 2 consome.
+
+```{r}
+#| label: h3-cnefetools
+#| cache: true
+#| message: false
+
+anp_h3 <- tracts_to_h3(
+  code_muni     = anp_code,
+  year          = 2022,
+  h3_resolution = 9,
+  vars          = c("pop_ph", "avg_inc_resp"),
+  verbose       = FALSE
+)
+
+nrow(anp_h3)
+```
+
+### Bairros
+
+`tracts_to_polygon()` faz o mesmo para qualquer camada de polígonos que você fornecer. O caso dos
+bairros é o mais instrutivo, porque as fronteiras de bairro cortam setores ao meio, situação em que
+uma junção espacial simples erraria feio. A malha de bairros de Anápolis não está no `geobr`, e vem
+da prefeitura, já preparada em `dados/geo/`.
+
+```{r}
+#| label: bairros-cnefetools
+#| cache: true
+#| message: false
+
+anp_bairros <- st_read("dados/geo/bairros_anapolis.gpkg", quiet = TRUE)
+
+anp_bairros_pop <- tracts_to_polygon(
+  code_muni = anp_code,
+  polygon   = anp_bairros,
+  year      = 2022,
+  vars      = c("pop_ph", "avg_inc_resp"),
+  verbose   = FALSE
+)
+
+nrow(anp_bairros_pop)
+```
+
+```{r}
+#| label: fig-recortes-cnefetools
+#| fig-cap: "População em domicílios particulares reagregada a partir dos setores censitários, Anápolis (GO), Censo 2022."
+#| fig-subcap:
+#|   - "Grade H3, resolução 9"
+#|   - "Bairros"
+#| layout-ncol: 2
+#| fig-width: 5
+#| fig-height: 5
+#| message: false
+
+mapa_base(filter(anp_h3, pop_ph > 0), "pop_ph", "viridis")
+mapa_base(anp_bairros_pop, "pop_ph", "viridis")
+```
+
+::: {.callout-warning}
+A camada de bairros cobre apenas a área urbana de Anápolis, e por isso não captura toda a população
+do município. O `tracts_to_polygon()` informa essa cobertura na saída, e vale sempre conferir a soma
+da população reagregada contra o total do município antes de usar o resultado. Perder gente na borda
+é o erro silencioso mais comum em interpolação.
 :::
+
+## O entorno dos domicílios
+
+Falta tratar do único produto do Censo que descreve infraestrutura de transportes de forma direta. O
+levantamento das **características urbanísticas do entorno dos domicílios** registra, por observação
+do recenseador na face de quadra, a presença ou a ausência de itens como pavimentação, calçada,
+rampa para cadeirante, ponto de ônibus e sinalização para bicicleta. Ele é divulgado como mais um
+arquivo temático dos agregados, o `Entorno`, e por isso cabe neste capítulo.
+
+Usamos o bloco de **domicílios** do arquivo, e não o de faces de quadra, porque contar faces mede
+extensão de via, enquanto contar domicílios mede quantas moradias estão diante de cada situação, que
+é o que interessa quando a pergunta é sobre pessoas.
+
+```{r}
+#| label: leitura-entorno
+#| cache: true
+#| message: false
+
+anp_entorno <- read_tracts(year = 2022, dataset = "Entorno", showProgress = FALSE) |>
+  filter(code_muni == anp_code) |>
+  select(code_tract,
+         domicilios_V05000,
+         num_range("domicilios_V050", c(6, 15, 18, 21, 27), width = 2)) |>
+  collect()
+
+nrow(anp_entorno)
+```
+
+Repare que vieram menos setores do que os do arquivo Básico. O entorno não é pesquisado em todo
+setor, então a primeira providência é medir o quanto ele cobre do município. O denominador de todos
+os indicadores é `domicilios_V05000`, o total de domicílios com entorno pesquisado, e não o total de
+domicílios do setor.
+
+```{r}
+#| label: cobertura-entorno
+#| message: false
+
+tibble(
+  setores_basico   = nrow(anp_basico),
+  setores_entorno  = nrow(anp_entorno),
+  dom_ocupados     = sum(anp_sc$dpp, na.rm = TRUE),
+  dom_investigados = sum(anp_entorno$domicilios_V05000, na.rm = TRUE)
+) |>
+  mutate(cobertura = 100 * dom_investigados / dom_ocupados)
+```
+
+A cobertura é alta, o que dá segurança à leitura. Municípios com forte presença rural apresentam
+cobertura bem menor, e a verificação deve ser refeita a cada caso.
+
+```{r}
+#| label: tbl-entorno-anapolis
+#| tbl-cap: "Presença de itens de infraestrutura no entorno dos domicílios, Anápolis (GO), Censo 2022."
+#| message: false
+
+totais <- anp_entorno |>
+  summarize(across(starts_with("domicilios_"), \(x) sum(x, na.rm = TRUE)))
+
+tibble(
+  Item = c("Via pavimentada", "Ponto de ônibus ou van",
+           "Via sinalizada para bicicleta", "Calçada", "Rampa para cadeirante"),
+  Sim  = c(totais$domicilios_V05006, totais$domicilios_V05015,
+           totais$domicilios_V05018, totais$domicilios_V05021,
+           totais$domicilios_V05027),
+  Denominador = c(rep(totais$domicilios_V05000, 4), totais$domicilios_V05021)
+) |>
+  mutate(`% com o item` = 100 * Sim / Denominador) |>
+  knitr::kable(digits = 1, format.args = list(big.mark = ".", decimal.mark = ","))
+```
+
+O retrato é o de uma cidade construída para o automóvel. A pavimentação está praticamente
+universalizada e a calçada acompanha, o que já distingue Anápolis de boa parte dos municípios
+brasileiros. O que falta aparece nos outros três itens. A rampa para cadeirante existe em uma fração
+pequena das calçadas, o que interdita a viagem a pé de quem usa cadeira de rodas mesmo onde há por
+onde andar. O ponto de ônibus alcança pouco mais de um décimo dos domicílios. E a sinalização para
+bicicleta é residual, abaixo de um por cento.
+
+Note que a rampa usa denominador próprio. O questionário só pergunta por rampa nas faces em que
+existe calçada, então dividir pelo total de domicílios investigados jogaria no denominador quem
+nunca teve chance de aparecer no numerador, misturando duas carências distintas, a de não ter
+calçada e a de ter calçada sem rampa.
+
+::: {.callout-warning}
+## Ponto de ônibus na face não é o mesmo que acesso ao transporte
+
+O quesito identifica sinalização visível de parada na face percorrida, na face confrontante e no
+canteiro central [@ibge_entorno2022]. Basta a sinalização em qualquer dos dois lados da rua, e nada
+é observado fora desse trecho, de modo que um ponto na esquina seguinte, a poucos minutos de
+caminhada, não entra na conta daquela face. O indicador é um bom primeiro indício, disponível para
+todo o país e comparável entre municípios, e não uma medida de cobertura do transporte coletivo.
+Medir acesso ao transporte exige saber quais linhas passam por cada ponto e com que frequência, que
+é justamente o que a Parte 2 fará com o GTFS.
+:::
+
+Com os agregados tratados, temos população, estrutura etária, renda e tipo de moradia por setor, e
+já sabemos levá-los para a grade H3 e para os bairros. O próximo capítulo passa aos microdados da
+amostra, onde o questionário é longo e as perguntas sobre deslocamento finalmente aparecem.

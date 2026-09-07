@@ -58,7 +58,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -112,10 +132,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="custom.css">
 <meta property="og:title" content="3&nbsp; Agregados por setor censitário – Dados Censitários e Acessibilidade Urbana em R">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://pedreirajr.github.io/workshop_censo_acc_smu2026/img/logo_smu.png">
+<meta property="og:image" content="https://pedreirajr.github.io/workshop_censo_acc_smu2026/3-agregados_files/figure-html/fig-agregados-anapolis-1.png">
 <meta property="og:site_name" content="Dados Censitários e Acessibilidade Urbana em R">
-<meta property="og:image:height" content="409">
-<meta property="og:image:width" content="1703">
+<meta property="og:image:height" content="960">
+<meta property="og:image:width" content="960">
 </head>
 
 <body class="nav-sidebar floating quarto-light">
@@ -260,14 +280,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#o-que-são-os-agregados" id="toc-o-que-são-os-agregados" class="nav-link active" data-scroll-target="#o-que-são-os-agregados"><span class="header-section-number">3.1</span> O que são os agregados</a></li>
-  <li><a href="#leitura-dos-dados-com-o-censobr" id="toc-leitura-dos-dados-com-o-censobr" class="nav-link" data-scroll-target="#leitura-dos-dados-com-o-censobr"><span class="header-section-number">3.2</span> Leitura dos dados com o censobr</a></li>
-  <li><a href="#o-dicionário-de-variáveis" id="toc-o-dicionário-de-variáveis" class="nav-link" data-scroll-target="#o-dicionário-de-variáveis"><span class="header-section-number">3.3</span> O dicionário de variáveis</a></li>
-  <li><a href="#de-contagens-a-indicadores" id="toc-de-contagens-a-indicadores" class="nav-link" data-scroll-target="#de-contagens-a-indicadores"><span class="header-section-number">3.4</span> De contagens a indicadores</a></li>
-  <li><a href="#junção-com-a-malha-e-mapeamento" id="toc-junção-com-a-malha-e-mapeamento" class="nav-link" data-scroll-target="#junção-com-a-malha-e-mapeamento"><span class="header-section-number">3.5</span> Junção com a malha e mapeamento</a></li>
-  <li><a href="#características-urbanísticas-do-entorno" id="toc-características-urbanísticas-do-entorno" class="nav-link" data-scroll-target="#características-urbanísticas-do-entorno"><span class="header-section-number">3.6</span> Características urbanísticas do entorno</a>
+  <li><a href="#o-dicionário-de-variáveis" id="toc-o-dicionário-de-variáveis" class="nav-link" data-scroll-target="#o-dicionário-de-variáveis"><span class="header-section-number">3.2</span> O dicionário de variáveis</a></li>
+  <li><a href="#leitura-dos-arquivos-e-montagem-da-base" id="toc-leitura-dos-arquivos-e-montagem-da-base" class="nav-link" data-scroll-target="#leitura-dos-arquivos-e-montagem-da-base"><span class="header-section-number">3.3</span> Leitura dos arquivos e montagem da base</a></li>
+  <li><a href="#mapeando-os-indicadores" id="toc-mapeando-os-indicadores" class="nav-link" data-scroll-target="#mapeando-os-indicadores"><span class="header-section-number">3.4</span> Mapeando os indicadores</a></li>
+  <li><a href="#reagregando-para-outros-recortes-com-o-cnefetools" id="toc-reagregando-para-outros-recortes-com-o-cnefetools" class="nav-link" data-scroll-target="#reagregando-para-outros-recortes-com-o-cnefetools"><span class="header-section-number">3.5</span> Reagregando para outros recortes com o cnefetools</a>
   <ul class="collapse">
-  <li><a href="#construção-de-um-índice-de-qualidade-do-entorno" id="toc-construção-de-um-índice-de-qualidade-do-entorno" class="nav-link" data-scroll-target="#construção-de-um-índice-de-qualidade-do-entorno"><span class="header-section-number">3.6.1</span> Construção de um índice de qualidade do entorno</a></li>
+  <li><a href="#grade-hexagonal-h3" id="toc-grade-hexagonal-h3" class="nav-link" data-scroll-target="#grade-hexagonal-h3"><span class="header-section-number">3.5.1</span> Grade hexagonal H3</a></li>
+  <li><a href="#bairros" id="toc-bairros" class="nav-link" data-scroll-target="#bairros"><span class="header-section-number">3.5.2</span> Bairros</a></li>
   </ul></li>
+  <li><a href="#o-entorno-dos-domicílios" id="toc-o-entorno-dos-domicílios" class="nav-link" data-scroll-target="#o-entorno-dos-domicílios"><span class="header-section-number">3.6</span> O entorno dos domicílios</a></li>
   </ul>
 </nav>
     </div>
@@ -293,7 +314,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Os Agregados por Setor Censitário são o produto mais usado do Censo Demográfico e o ponto de entrada natural para quem precisa de um retrato sociodemográfico com boa resolução geográfica. São tabelas do universo, calculadas para todos os setores do país, que descrevem população, domicílios, responsáveis e características do entorno. Este capítulo mostra como lê-las, como transformar contagens brutas em indicadores comparáveis e como mapeá-las, encerrando com as características urbanísticas do entorno dos domicílios sob a ótica de transportes.</p>
+<p>Quem procura variável de transporte nos Agregados por Setor Censitário não encontra. O questionário básico do Censo, aplicado a todos os domicílios do país, não pergunta sobre viagem, modo de deslocamento ou posse de veículo. Ainda assim, os agregados são um dos insumos mais usados no planejamento de transportes, porque respondem à pergunta que antecede todas as outras, que é onde estão as pessoas e os domicílios e como eles são. Distribuição da população no território, estrutura etária, renda e tipo de moradia são exatamente o que alimenta um modelo de demanda, uma análise de cobertura de rede ou um cálculo de acessibilidade. E vêm na resolução espacial mais fina que o IBGE divulga para o universo, o setor censitário.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -305,12 +326,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>entender o que os agregados cobrem e o que ficou de fora</li>
-<li>ler os agregados de Anápolis com o <code>censobr</code></li>
-<li>navegar pelo dicionário de variáveis</li>
-<li>construir indicadores derivados a partir de contagens</li>
-<li>unir os dados à malha e produzir mapas coropléticos</li>
-<li>explorar as características urbanísticas do entorno com recorte de transportes</li>
+<li>consultar o dicionário de variáveis dos agregados</li>
+<li>ler quatro arquivos temáticos com o <code>censobr</code> e montar uma base única</li>
+<li>transformar contagens brutas em indicadores comparáveis entre setores</li>
+<li>mapear os indicadores sobre a malha de setores</li>
+<li>reagregar os dados do Censo para a grade H3 e para os bairros com o <code>cnefetools</code></li>
+<li>explorar as características do entorno dos domicílios, que é onde o Censo enxerga infraestrutura de transportes</li>
 </ul>
 </div>
 </div>
@@ -327,77 +348,475 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Abra o arquivo <code>scripts/3-agregados.R</code> no projeto da oficina. É nele que vai o código apresentado a seguir. Se ainda não tiver o projeto, volte ao <a href="./1-instalacao.html">Capítulo 1</a>.</p>
 </div>
 </div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(censobr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cnefetools)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(geobr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <section id="o-que-são-os-agregados" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="o-que-são-os-agregados"><span class="header-section-number">3.1</span> O que são os agregados</h2>
-<!-- ESBOÇO: dados do universo, apurados para a totalidade dos domicílios, organizados por tema.
-     Diferenciar de microdados e de tabelas do SIDRA. Comentar arredondamento e supressão por
-     confidencialidade, e por que setores com poucos domicílios exigem cautela. -->
+<p>Os Agregados por Setor Censitário são tabelas do <strong>universo</strong>, apuradas para a totalidade dos domicílios recenseados e divulgadas por setor. Não são amostra, então não têm peso amostral nem intervalo de confiança, e trazem a contagem efetiva. Em troca dessa cobertura completa, o conjunto de perguntas é curto, restrito ao questionário básico.</p>
+<p>O conteúdo vem repartido em arquivos temáticos, e é preciso saber em qual deles está cada variável antes de escrever qualquer linha de código. Usaremos quatro. O <strong>Basico</strong>, com os totais do setor e a identificação geográfica. O <strong>Pessoas</strong>, com a demografia. O <strong>ResponsavelRenda</strong>, com a renda da pessoa responsável pelo domicílio. E o <strong>Domicilio</strong>, com as características da moradia. Mais adiante entra um quinto, o <strong>Entorno</strong>.</p>
 </section>
-<section id="leitura-dos-dados-com-o-censobr" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="leitura-dos-dados-com-o-censobr"><span class="header-section-number">3.2</span> Leitura dos dados com o censobr</h2>
-<!-- ESBOÇO: uso da função de leitura dos agregados, argumento de ano e retorno em formato Arrow.
-     Mostrar por que collect() só deve vir depois do filtro do município. Filtrar Anápolis pelo
-     código de município embutido no código do setor. -->
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(censobr)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>agregados <span class="ot">&lt;-</span> <span class="fu">read_tracts</span>(<span class="at">year =</span> <span class="dv">2022</span>, <span class="at">dataset =</span> <span class="st">"Basico"</span>, <span class="at">as_data_frame =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>agregados_ana <span class="ot">&lt;-</span> agregados <span class="sc">|&gt;</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(code_muni <span class="sc">==</span> <span class="st">"5201108"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="o-dicionário-de-variáveis" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="o-dicionário-de-variáveis"><span class="header-section-number">3.3</span> O dicionário de variáveis</h2>
-<!-- ESBOÇO: como localizar o dicionário, a lógica de nomeação das variáveis por tema e a
-     importância de conferir a definição antes de calcular. Tabela com as variáveis usadas no
-     capítulo e sua descrição. -->
-</section>
-<section id="de-contagens-a-indicadores" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="de-contagens-a-indicadores"><span class="header-section-number">3.4</span> De contagens a indicadores</h2>
-<!-- ESBOÇO: densidade demográfica, razão de dependência, média de moradores por domicílio e renda
-     média do responsável. Enfatizar a necessidade de normalizar por população ou por área antes de
-     comparar setores. Um chunk com mutate encadeado. -->
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>indicadores <span class="ot">&lt;-</span> agregados_ana <span class="sc">|&gt;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">dens_hab_ha =</span> populacao <span class="sc">/</span> (area_km2 <span class="sc">*</span> <span class="dv">100</span>),</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">moradores_por_dom =</span> populacao <span class="sc">/</span> domicilios</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="junção-com-a-malha-e-mapeamento" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="junção-com-a-malha-e-mapeamento"><span class="header-section-number">3.5</span> Junção com a malha e mapeamento</h2>
-<!-- ESBOÇO: left_join dos indicadores com os setores lidos no capítulo 2, checagem de setores sem
-     correspondência e mapa coroplético com ggplot2. Discutir escolha de classes e de paleta.
-     Figura principal do capítulo. -->
-</section>
-<section id="características-urbanísticas-do-entorno" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="características-urbanísticas-do-entorno"><span class="header-section-number">3.6</span> Características urbanísticas do entorno</h2>
-<!-- ESBOÇO: apresentar o levantamento do entorno, feito por observação do recenseador na face de
-     quadra, e a natureza da informação. Selecionar as variáveis de interesse para transportes,
-     como existência de calçada, rampa para cadeirante, pavimentação, iluminação pública e ponto
-     de ônibus ou de outro modo coletivo. -->
-<section id="construção-de-um-índice-de-qualidade-do-entorno" class="level3" data-number="3.6.1">
-<h3 data-number="3.6.1" class="anchored" data-anchor-id="construção-de-um-índice-de-qualidade-do-entorno"><span class="header-section-number">3.6.1</span> Construção de um índice de qualidade do entorno</h3>
-<!-- ESBOÇO: normalizar cada variável pelo total de domicílios do setor, combinar em um índice
-     simples e mapear. Deixar explícito que a agregação é uma escolha metodológica, com
-     alternativas. Fechar apontando a ligação com a Parte 2, já que a caminhabilidade do entorno
-     condiciona o acesso ao transporte coletivo. -->
+<section id="o-dicionário-de-variáveis" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="o-dicionário-de-variáveis"><span class="header-section-number">3.2</span> O dicionário de variáveis</h2>
+<p>Os nomes das variáveis são códigos sequenciais sem qualquer relação com o conteúdo, do tipo <code>V0001</code> ou <code>domicilio01_V00049</code>. Consultar o dicionário é, por isso, o primeiro passo obrigatório. O <code>censobr</code> o entrega pela função <code>data_dictionary()</code>, que para o Censo 2022 abre uma planilha no seu computador, com uma aba por arquivo temático.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data_dictionary</span>(<span class="at">year =</span> <span class="dv">2022</span>, <span class="at">dataset =</span> <span class="st">"tracts"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Dica</span>Conexão com a Parte 2
+Dica
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>O indicador de entorno construído aqui volta no capítulo <a href="./9-indicadores.html">9</a>, como leitura complementar aos mapas de acessibilidade por caminhada.</p>
+<p>Deixe a planilha aberta em paralelo enquanto trabalha. Cada aba traz o nome da variável no <code>censobr</code>, o nome original do IBGE e a descrição completa, e é a descrição completa que evita o erro mais comum, que é pegar a variável quase certa. No arquivo Domicilio, por exemplo, existem <code>domicilio01_V00049</code> e <code>domicilio01_V00086</code>, ambas sobre apartamentos. A primeira conta domicílios do tipo apartamento e a segunda conta os moradores desses apartamentos. Dividir a segunda pelo total de domicílios devolve um número que parece um percentual e não significa nada.</p>
 </div>
 </div>
-
-
+<p>As variáveis deste capítulo são estas.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arquivo</th>
+<th>Variável</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Basico</td>
+<td><code>V0001</code></td>
+<td>Total de pessoas</td>
+</tr>
+<tr class="even">
+<td>Pessoas</td>
+<td><code>demografia_V01040</code></td>
+<td>Pessoas de 60 a 69 anos</td>
+</tr>
+<tr class="odd">
+<td>Pessoas</td>
+<td><code>demografia_V01041</code></td>
+<td>Pessoas de 70 anos ou mais</td>
+</tr>
+<tr class="even">
+<td>ResponsavelRenda</td>
+<td><code>V06004</code></td>
+<td>Rendimento nominal médio mensal das pessoas responsáveis com rendimento</td>
+</tr>
+<tr class="odd">
+<td>Domicilio</td>
+<td><code>domicilio01_V00001</code></td>
+<td>Domicílios particulares permanentes ocupados</td>
+</tr>
+<tr class="even">
+<td>Domicilio</td>
+<td><code>domicilio01_V00049</code></td>
+<td>Domicílios particulares permanentes ocupados do tipo apartamento</td>
+</tr>
+</tbody>
+</table>
 </section>
+<section id="leitura-dos-arquivos-e-montagem-da-base" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="leitura-dos-arquivos-e-montagem-da-base"><span class="header-section-number">3.3</span> Leitura dos arquivos e montagem da base</h2>
+<p>A função <code>read_tracts()</code> recebe o ano e o arquivo temático. Ela devolve uma tabela <em>Arrow</em>, que é uma tabela preguiçosa, no sentido de que nada é lido para a memória enquanto não se chamar <code>collect()</code>. Isso importa porque o arquivo nacional tem centenas de milhares de setores e centenas de colunas. Filtrar o município e selecionar as colunas <strong>antes</strong> do <code>collect()</code> faz o Arrow ler do disco apenas o pedaço que interessa.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>anp_code <span class="ot">&lt;-</span> <span class="fu">lookup_muni</span>(<span class="at">year =</span> <span class="dv">2022</span>, <span class="at">name_muni =</span> <span class="st">"Anápolis"</span>)<span class="sc">$</span>code_muni</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>anp_basico <span class="ot">&lt;-</span> <span class="fu">read_tracts</span>(<span class="at">year =</span> <span class="dv">2022</span>, <span class="at">dataset =</span> <span class="st">"Basico"</span>, <span class="at">showProgress =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(code_muni <span class="sc">==</span> anp_code) <span class="sc">|&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(code_tract, situacao, V0001) <span class="sc">|&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>anp_pessoas <span class="ot">&lt;-</span> <span class="fu">read_tracts</span>(<span class="at">year =</span> <span class="dv">2022</span>, <span class="at">dataset =</span> <span class="st">"Pessoas"</span>, <span class="at">showProgress =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(code_muni <span class="sc">==</span> anp_code) <span class="sc">|&gt;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(code_tract, demografia_V01040, demografia_V01041) <span class="sc">|&gt;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>anp_renda <span class="ot">&lt;-</span> <span class="fu">read_tracts</span>(<span class="at">year =</span> <span class="dv">2022</span>, <span class="at">dataset =</span> <span class="st">"ResponsavelRenda"</span>, <span class="at">showProgress =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(code_muni <span class="sc">==</span> anp_code) <span class="sc">|&gt;</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(code_tract, V06004) <span class="sc">|&gt;</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>anp_domic <span class="ot">&lt;-</span> <span class="fu">read_tracts</span>(<span class="at">year =</span> <span class="dv">2022</span>, <span class="at">dataset =</span> <span class="st">"Domicilio"</span>, <span class="at">showProgress =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(code_muni <span class="sc">==</span> anp_code) <span class="sc">|&gt;</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(code_tract, domicilio01_V00001, domicilio01_V00049) <span class="sc">|&gt;</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(anp_basico)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 593</code></pre>
+</div>
+</div>
+<p>Os quatro arquivos trazem uma linha por setor e compartilham a chave <code>code_tract</code>, o que permite uni-los em sequência. Na mesma passagem construímos os indicadores, porque contagem bruta não se compara entre setores de tamanhos diferentes. A população de 60 anos ou mais vira percentual da população do setor, e os apartamentos viram percentual dos domicílios particulares permanentes ocupados. A renda média do responsável já é uma média e entra como está.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>anp_sc <span class="ot">&lt;-</span> anp_basico <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(anp_pessoas, <span class="at">by =</span> <span class="st">"code_tract"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(anp_renda,   <span class="at">by =</span> <span class="st">"code_tract"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(anp_domic,   <span class="at">by =</span> <span class="st">"code_tract"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">pop     =</span> V0001,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">p60a69  =</span> demografia_V01040,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">p70mais =</span> demografia_V01041,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">renda   =</span> V06004,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">dpp     =</span> domicilio01_V00001,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">aptos   =</span> domicilio01_V00049</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">perc_60mais =</span> <span class="dv">100</span> <span class="sc">*</span> (p60a69 <span class="sc">+</span> p70mais) <span class="sc">/</span> <span class="fu">na_if</span>(pop, <span class="dv">0</span>),</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">perc_aptos  =</span> <span class="dv">100</span> <span class="sc">*</span> aptos <span class="sc">/</span> <span class="fu">na_if</span>(dpp, <span class="dv">0</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>anp_sc <span class="sc">|&gt;</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(code_tract, pop, perc_60mais, renda, perc_aptos) <span class="sc">|&gt;</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    code_tract pop perc_60mais   renda perc_aptos
+1 5.201108e+14 212    48.11321 5813.86   65.34653
+2 5.201108e+14 188    44.14894 5727.62   72.38095
+3 5.201108e+14 354    31.92090 3331.56   52.79503
+4 5.201108e+14 301    38.87043 4451.48   60.00000
+5 5.201108e+14 242    38.84298 7508.43   39.81481
+6 5.201108e+14 197    37.05584 5805.88   61.90476</code></pre>
+</div>
+</div>
+<p>O <code>na_if(pop, 0)</code> evita a divisão por zero. Setor sem morador existe, e sem essa proteção o resultado seria <code>Inf</code>, que estraga a escala de qualquer mapa. Vale conferir os totais do município antes de seguir.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>anp_sc <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">setores     =</span> <span class="fu">n</span>(),</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">populacao   =</span> <span class="fu">sum</span>(pop, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">perc_60mais =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">sum</span>(p60a69 <span class="sc">+</span> p70mais, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span> <span class="fu">sum</span>(pop, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">domicilios  =</span> <span class="fu">sum</span>(dpp, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">perc_aptos  =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">sum</span>(aptos, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span> <span class="fu">sum</span>(dpp, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  setores populacao perc_60mais domicilios perc_aptos
+1     593    398869    14.11491     142325   11.76111</code></pre>
+</div>
+</div>
+</section>
+<section id="mapeando-os-indicadores" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="mapeando-os-indicadores"><span class="header-section-number">3.4</span> Mapeando os indicadores</h2>
+<p>Os agregados vêm sem geometria, então precisamos da malha de setores do <code>geobr</code>, exatamente como no <a href="./2-recortes-territoriais.html">Capítulo 2</a>. A junção é pela coluna <code>code_tract</code>, e é direta, porque os dois pacotes entregam o código como número.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>anp_sc_geo22 <span class="ot">&lt;-</span> <span class="fu">read_census_tract</span>(<span class="at">code_tract =</span> anp_code, <span class="at">year =</span> <span class="dv">2022</span>,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">simplified =</span> <span class="cn">FALSE</span>, <span class="at">showProgress =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>anp_sc_map <span class="ot">&lt;-</span> anp_sc_geo22 <span class="sc">|&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(code_tract) <span class="sc">|&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(anp_sc, <span class="at">by =</span> <span class="st">"code_tract"</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(anp_sc_map<span class="sc">$</span>pop))</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<p>Como os setores rurais são enormes e quase vazios, o mapa do município inteiro é dominado por eles. Vale acompanhar os quatro painéis lembrando que a mancha densa no centro é a área urbana.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mapa_base <span class="ot">&lt;-</span> <span class="cf">function</span>(dados, variavel, paleta) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(dados) <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> .data[[variavel]]), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> paleta, <span class="at">na.value =</span> <span class="st">"gray90"</span>, <span class="at">name =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_blank</span>(), <span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mapa_base</span>(anp_sc_map, <span class="st">"pop"</span>,         <span class="st">"viridis"</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="fu">mapa_base</span>(anp_sc_map, <span class="st">"perc_60mais"</span>, <span class="st">"magma"</span>)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="fu">mapa_base</span>(anp_sc_map, <span class="st">"renda"</span>,       <span class="st">"cividis"</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="fu">mapa_base</span>(anp_sc_map, <span class="st">"perc_aptos"</span>,  <span class="st">"rocket"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="fig-agregados-anapolis" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-agregados-anapolis-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;3.1: Indicadores dos agregados por setor censitário, Anápolis (GO), Censo 2022.
+</figcaption>
+<div aria-describedby="fig-agregados-anapolis-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-agregados-anapolis" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-agregados-anapolis-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-fig" id="fig-agregados-anapolis-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) População total
+</figcaption>
+<div aria-describedby="fig-agregados-anapolis-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="3-agregados_files/figure-html/fig-agregados-anapolis-1.png" class="img-fluid figure-img" data-ref-parent="fig-agregados-anapolis" width="480">
+</div>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-agregados-anapolis" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-agregados-anapolis-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-fig" id="fig-agregados-anapolis-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Pessoas de 60 anos ou mais (%)
+</figcaption>
+<div aria-describedby="fig-agregados-anapolis-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="3-agregados_files/figure-html/fig-agregados-anapolis-2.png" class="img-fluid figure-img" data-ref-parent="fig-agregados-anapolis" width="480">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-agregados-anapolis" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-agregados-anapolis-3" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-fig" id="fig-agregados-anapolis-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c) Rendimento médio do responsável (R$)
+</figcaption>
+<div aria-describedby="fig-agregados-anapolis-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="3-agregados_files/figure-html/fig-agregados-anapolis-3.png" class="img-fluid figure-img" data-ref-parent="fig-agregados-anapolis" width="480">
+</div>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-agregados-anapolis" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-agregados-anapolis-4" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-fig" id="fig-agregados-anapolis-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(d) Domicílios do tipo apartamento (%)
+</figcaption>
+<div aria-describedby="fig-agregados-anapolis-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="3-agregados_files/figure-html/fig-agregados-anapolis-4.png" class="img-fluid figure-img" data-ref-parent="fig-agregados-anapolis" width="480">
+</div>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</figure>
+</div>
+<p>A leitura conjunta dos quatro painéis já sugere as perguntas de transporte. A população se concentra em uma mancha contínua, e é sobre ela que qualquer rede de transporte coletivo precisa se apoiar. Os setores com maior proporção de idosos não coincidem necessariamente com os de maior renda, o que importa porque idade e renda puxam a demanda por transporte em direções diferentes. E os apartamentos se concentram em poucos setores, indicando onde a densidade construída comporta frequências maiores de atendimento.</p>
+</section>
+<section id="reagregando-para-outros-recortes-com-o-cnefetools" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="reagregando-para-outros-recortes-com-o-cnefetools"><span class="header-section-number">3.5</span> Reagregando para outros recortes com o cnefetools</h2>
+<p>O setor censitário é a unidade de divulgação, e raramente é a unidade de análise que se quer. Ele muda de desenho a cada censo, tem tamanhos muito desiguais e não coincide com bairro, com zona de tráfego nem com célula de grade. Levar o dado do setor para outro polígono exige <strong>interpolação</strong>, e a dificuldade está em que a população não se distribui de forma uniforme dentro do setor.</p>
+<p>O pacote <code>cnefetools</code> resolve isso usando o CNEFE como referência. Em vez de repartir a população do setor pela área, ele a reparte pelos endereços efetivamente cadastrados, que é uma aproximação bem melhor de onde as pessoas estão. As duas funções que usaremos seguem a mesma lógica e diferem apenas no destino. O argumento <code>vars</code> aceita um conjunto fixo de variáveis já preparadas pelo pacote, e usaremos duas, <code>pop_ph</code>, população em domicílios particulares, e <code>avg_inc_resp</code>, rendimento médio do responsável.</p>
+<section id="grade-hexagonal-h3" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="grade-hexagonal-h3"><span class="header-section-number">3.5.1</span> Grade hexagonal H3</h3>
+<p><code>tracts_to_h3()</code> gera as células H3 que cobrem o município e distribui as variáveis nelas. A resolução 9, apresentada no <a href="./2-recortes-territoriais.html">Capítulo 2</a>, é a que a Parte 2 consome.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>anp_h3 <span class="ot">&lt;-</span> <span class="fu">tracts_to_h3</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">code_muni     =</span> anp_code,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">year          =</span> <span class="dv">2022</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">h3_resolution =</span> <span class="dv">9</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">vars          =</span> <span class="fu">c</span>(<span class="st">"pop_ph"</span>, <span class="st">"avg_inc_resp"</span>),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose       =</span> <span class="cn">FALSE</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(anp_h3)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8440</code></pre>
+</div>
+</div>
+</section>
+<section id="bairros" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="bairros"><span class="header-section-number">3.5.2</span> Bairros</h3>
+<p><code>tracts_to_polygon()</code> faz o mesmo para qualquer camada de polígonos que você fornecer. O caso dos bairros é o mais instrutivo, porque as fronteiras de bairro cortam setores ao meio, situação em que uma junção espacial simples erraria feio. A malha de bairros de Anápolis não está no <code>geobr</code>, e vem da prefeitura, já preparada em <code>dados/geo/</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>anp_bairros <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">"dados/geo/bairros_anapolis.gpkg"</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>anp_bairros_pop <span class="ot">&lt;-</span> <span class="fu">tracts_to_polygon</span>(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">code_muni =</span> anp_code,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">polygon   =</span> anp_bairros,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">year      =</span> <span class="dv">2022</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">vars      =</span> <span class="fu">c</span>(<span class="st">"pop_ph"</span>, <span class="st">"avg_inc_resp"</span>),</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose   =</span> <span class="cn">FALSE</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(anp_bairros_pop)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 292</code></pre>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mapa_base</span>(<span class="fu">filter</span>(anp_h3, pop_ph <span class="sc">&gt;</span> <span class="dv">0</span>), <span class="st">"pop_ph"</span>, <span class="st">"viridis"</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mapa_base</span>(anp_bairros_pop, <span class="st">"pop_ph"</span>, <span class="st">"viridis"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="fig-recortes-cnefetools" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-recortes-cnefetools-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;3.2: População em domicílios particulares reagregada a partir dos setores censitários, Anápolis (GO), Censo 2022.
+</figcaption>
+<div aria-describedby="fig-recortes-cnefetools-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-recortes-cnefetools" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-recortes-cnefetools-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-fig" id="fig-recortes-cnefetools-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Grade H3, resolução 9
+</figcaption>
+<div aria-describedby="fig-recortes-cnefetools-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="3-agregados_files/figure-html/fig-recortes-cnefetools-1.png" class="img-fluid figure-img" data-ref-parent="fig-recortes-cnefetools" width="480">
+</div>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-recortes-cnefetools" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-recortes-cnefetools-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-fig" id="fig-recortes-cnefetools-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Bairros
+</figcaption>
+<div aria-describedby="fig-recortes-cnefetools-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="3-agregados_files/figure-html/fig-recortes-cnefetools-2.png" class="img-fluid figure-img" data-ref-parent="fig-recortes-cnefetools" width="480">
+</div>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</figure>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Aviso
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A camada de bairros cobre apenas a área urbana de Anápolis, e por isso não captura toda a população do município. O <code>tracts_to_polygon()</code> informa essa cobertura na saída, e vale sempre conferir a soma da população reagregada contra o total do município antes de usar o resultado. Perder gente na borda é o erro silencioso mais comum em interpolação.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="o-entorno-dos-domicílios" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="o-entorno-dos-domicílios"><span class="header-section-number">3.6</span> O entorno dos domicílios</h2>
+<p>Falta tratar do único produto do Censo que descreve infraestrutura de transportes de forma direta. O levantamento das <strong>características urbanísticas do entorno dos domicílios</strong> registra, por observação do recenseador na face de quadra, a presença ou a ausência de itens como pavimentação, calçada, rampa para cadeirante, ponto de ônibus e sinalização para bicicleta. Ele é divulgado como mais um arquivo temático dos agregados, o <code>Entorno</code>, e por isso cabe neste capítulo.</p>
+<p>Usamos o bloco de <strong>domicílios</strong> do arquivo, e não o de faces de quadra, porque contar faces mede extensão de via, enquanto contar domicílios mede quantas moradias estão diante de cada situação, que é o que interessa quando a pergunta é sobre pessoas.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>anp_entorno <span class="ot">&lt;-</span> <span class="fu">read_tracts</span>(<span class="at">year =</span> <span class="dv">2022</span>, <span class="at">dataset =</span> <span class="st">"Entorno"</span>, <span class="at">showProgress =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(code_muni <span class="sc">==</span> anp_code) <span class="sc">|&gt;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(code_tract,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>         domicilios_V05000,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>         <span class="fu">num_range</span>(<span class="st">"domicilios_V050"</span>, <span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">15</span>, <span class="dv">18</span>, <span class="dv">21</span>, <span class="dv">27</span>), <span class="at">width =</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(anp_entorno)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 563</code></pre>
+</div>
+</div>
+<p>Repare que vieram menos setores do que os do arquivo Básico. O entorno não é pesquisado em todo setor, então a primeira providência é medir o quanto ele cobre do município. O denominador de todos os indicadores é <code>domicilios_V05000</code>, o total de domicílios com entorno pesquisado, e não o total de domicílios do setor.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">setores_basico   =</span> <span class="fu">nrow</span>(anp_basico),</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">setores_entorno  =</span> <span class="fu">nrow</span>(anp_entorno),</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">dom_ocupados     =</span> <span class="fu">sum</span>(anp_sc<span class="sc">$</span>dpp, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">dom_investigados =</span> <span class="fu">sum</span>(anp_entorno<span class="sc">$</span>domicilios_V05000, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cobertura =</span> <span class="dv">100</span> <span class="sc">*</span> dom_investigados <span class="sc">/</span> dom_ocupados)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 5
+  setores_basico setores_entorno dom_ocupados dom_investigados cobertura
+           &lt;int&gt;           &lt;int&gt;        &lt;dbl&gt;            &lt;dbl&gt;     &lt;dbl&gt;
+1            593             563       142325           139667      98.1</code></pre>
+</div>
+</div>
+<p>A cobertura é alta, o que dá segurança à leitura. Municípios com forte presença rural apresentam cobertura bem menor, e a verificação deve ser refeita a cada caso.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>totais <span class="ot">&lt;-</span> anp_entorno <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">"domicilios_"</span>), \(x) <span class="fu">sum</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Item =</span> <span class="fu">c</span>(<span class="st">"Via pavimentada"</span>, <span class="st">"Ponto de ônibus ou van"</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Via sinalizada para bicicleta"</span>, <span class="st">"Calçada"</span>, <span class="st">"Rampa para cadeirante"</span>),</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">Sim  =</span> <span class="fu">c</span>(totais<span class="sc">$</span>domicilios_V05006, totais<span class="sc">$</span>domicilios_V05015,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>           totais<span class="sc">$</span>domicilios_V05018, totais<span class="sc">$</span>domicilios_V05021,</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>           totais<span class="sc">$</span>domicilios_V05027),</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Denominador =</span> <span class="fu">c</span>(<span class="fu">rep</span>(totais<span class="sc">$</span>domicilios_V05000, <span class="dv">4</span>), totais<span class="sc">$</span>domicilios_V05021)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">% com o item</span><span class="st">`</span> <span class="ot">=</span> <span class="dv">100</span> <span class="sc">*</span> Sim <span class="sc">/</span> Denominador) <span class="sc">|&gt;</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">1</span>, <span class="at">format.args =</span> <span class="fu">list</span>(<span class="at">big.mark =</span> <span class="st">"."</span>, <span class="at">decimal.mark =</span> <span class="st">","</span>))</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="tbl-entorno-anapolis" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-entorno-anapolis-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;3.1: Presença de itens de infraestrutura no entorno dos domicílios, Anápolis (GO), Censo 2022.
+</figcaption>
+<div aria-describedby="tbl-entorno-anapolis-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Item</th>
+<th style="text-align: right;">Sim</th>
+<th style="text-align: right;">Denominador</th>
+<th style="text-align: right;">% com o item</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Via pavimentada</td>
+<td style="text-align: right;">138.079</td>
+<td style="text-align: right;">139.667</td>
+<td style="text-align: right;">98,9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ponto de ônibus ou van</td>
+<td style="text-align: right;">17.372</td>
+<td style="text-align: right;">139.667</td>
+<td style="text-align: right;">12,4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Via sinalizada para bicicleta</td>
+<td style="text-align: right;">676</td>
+<td style="text-align: right;">139.667</td>
+<td style="text-align: right;">0,5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Calçada</td>
+<td style="text-align: right;">136.502</td>
+<td style="text-align: right;">139.667</td>
+<td style="text-align: right;">97,7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rampa para cadeirante</td>
+<td style="text-align: right;">20.072</td>
+<td style="text-align: right;">136.502</td>
+<td style="text-align: right;">14,7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>O retrato é o de uma cidade construída para o automóvel. A pavimentação está praticamente universalizada e a calçada acompanha, o que já distingue Anápolis de boa parte dos municípios brasileiros. O que falta aparece nos outros três itens. A rampa para cadeirante existe em uma fração pequena das calçadas, o que interdita a viagem a pé de quem usa cadeira de rodas mesmo onde há por onde andar. O ponto de ônibus alcança pouco mais de um décimo dos domicílios. E a sinalização para bicicleta é residual, abaixo de um por cento.</p>
+<p>Note que a rampa usa denominador próprio. O questionário só pergunta por rampa nas faces em que existe calçada, então dividir pelo total de domicílios investigados jogaria no denominador quem nunca teve chance de aparecer no numerador, misturando duas carências distintas, a de não ter calçada e a de ter calçada sem rampa.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Aviso</span>Ponto de ônibus na face não é o mesmo que acesso ao transporte
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>O quesito identifica sinalização visível de parada na face percorrida, na face confrontante e no canteiro central <span class="citation" data-cites="ibge_entorno2022">(<a href="referencias.html#ref-ibge_entorno2022" role="doc-biblioref">IBGE, 2025</a>)</span>. Basta a sinalização em qualquer dos dois lados da rua, e nada é observado fora desse trecho, de modo que um ponto na esquina seguinte, a poucos minutos de caminhada, não entra na conta daquela face. O indicador é um bom primeiro indício, disponível para todo o país e comparável entre municípios, e não uma medida de cobertura do transporte coletivo. Medir acesso ao transporte exige saber quais linhas passam por cada ponto e com que frequência, que é justamente o que a Parte 2 fará com o GTFS.</p>
+</div>
+</div>
+<p>Com os agregados tratados, temos população, estrutura etária, renda e tipo de moradia por setor, e já sabemos levá-los para a grade H3 e para os bairros. O próximo capítulo passa aos microdados da amostra, onde o questionário é longo e as perguntas sobre deslocamento finalmente aparecem.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-ibge_entorno2022" class="csl-entry" role="listitem">
+IBGE. (2025). <em>Características Urbanísticas do Entorno dos Domicílios: <span>Censo Demográfico</span> 2022</em>. IBGE. <a href="https://biblioteca.ibge.gov.br/visualizacao/livros/liv102168.pdf">https://biblioteca.ibge.gov.br/visualizacao/livros/liv102168.pdf</a>
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
