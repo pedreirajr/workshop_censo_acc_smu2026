@@ -58,7 +58,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -108,6 +128,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="custom.css">
 <meta property="og:title" content="9&nbsp; Cômputo dos indicadores – Dados Censitários e Acessibilidade Urbana em R">
@@ -259,16 +308,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Índice do Capítulo</h2>
    
   <ul>
-  <li><a href="#pontos-de-origem-e-destino" id="toc-pontos-de-origem-e-destino" class="nav-link active" data-scroll-target="#pontos-de-origem-e-destino"><span class="header-section-number">9.1</span> Pontos de origem e destino</a></li>
-  <li><a href="#matrizes-de-tempo-de-viagem" id="toc-matrizes-de-tempo-de-viagem" class="nav-link" data-scroll-target="#matrizes-de-tempo-de-viagem"><span class="header-section-number">9.2</span> Matrizes de tempo de viagem</a>
+  <li><a href="#matrizes-de-tempo-de-viagem" id="toc-matrizes-de-tempo-de-viagem" class="nav-link active" data-scroll-target="#matrizes-de-tempo-de-viagem"><span class="header-section-number">9.1</span> Matrizes de tempo de viagem</a>
   <ul class="collapse">
-  <li><a href="#a-pé" id="toc-a-pé" class="nav-link" data-scroll-target="#a-pé"><span class="header-section-number">9.2.1</span> A pé</a></li>
-  <li><a href="#bicicleta" id="toc-bicicleta" class="nav-link" data-scroll-target="#bicicleta"><span class="header-section-number">9.2.2</span> Bicicleta</a></li>
-  <li><a href="#carro" id="toc-carro" class="nav-link" data-scroll-target="#carro"><span class="header-section-number">9.2.3</span> Carro</a></li>
-  <li><a href="#transporte-público" id="toc-transporte-público" class="nav-link" data-scroll-target="#transporte-público"><span class="header-section-number">9.2.4</span> Transporte público</a></li>
+  <li><a href="#pontos-de-origem-e-destino" id="toc-pontos-de-origem-e-destino" class="nav-link" data-scroll-target="#pontos-de-origem-e-destino"><span class="header-section-number">9.1.1</span> Pontos de origem e destino</a></li>
+  <li><a href="#uso-do-solo" id="toc-uso-do-solo" class="nav-link" data-scroll-target="#uso-do-solo"><span class="header-section-number">9.1.2</span> Uso do solo</a></li>
+  <li><a href="#a-pé" id="toc-a-pé" class="nav-link" data-scroll-target="#a-pé"><span class="header-section-number">9.1.3</span> A pé</a></li>
+  <li><a href="#bicicleta" id="toc-bicicleta" class="nav-link" data-scroll-target="#bicicleta"><span class="header-section-number">9.1.4</span> Bicicleta</a></li>
+  <li><a href="#carro" id="toc-carro" class="nav-link" data-scroll-target="#carro"><span class="header-section-number">9.1.5</span> Carro</a></li>
+  <li><a href="#transporte-público" id="toc-transporte-público" class="nav-link" data-scroll-target="#transporte-público"><span class="header-section-number">9.1.6</span> Transporte público</a></li>
   </ul></li>
-  <li><a href="#acessibilidade-cumulativa-oportunidades-cumulativas" id="toc-acessibilidade-cumulativa-oportunidades-cumulativas" class="nav-link" data-scroll-target="#acessibilidade-cumulativa-oportunidades-cumulativas"><span class="header-section-number">9.3</span> Acessibilidade cumulativa (oportunidades cumulativas)</a></li>
-  <li><a href="#acessibilidade-por-gravidade" id="toc-acessibilidade-por-gravidade" class="nav-link" data-scroll-target="#acessibilidade-por-gravidade"><span class="header-section-number">9.4</span> Acessibilidade por gravidade</a></li>
+  <li><a href="#acessibilidade" id="toc-acessibilidade" class="nav-link" data-scroll-target="#acessibilidade"><span class="header-section-number">9.2</span> Acessibilidade</a>
+  <ul class="collapse">
+  <li><a href="#acessibilidade-cumulativa-oportunidades-cumulativas" id="toc-acessibilidade-cumulativa-oportunidades-cumulativas" class="nav-link" data-scroll-target="#acessibilidade-cumulativa-oportunidades-cumulativas"><span class="header-section-number">9.2.1</span> Acessibilidade cumulativa (oportunidades cumulativas)</a></li>
+  <li><a href="#acessibilidade-por-gravidade" id="toc-acessibilidade-por-gravidade" class="nav-link" data-scroll-target="#acessibilidade-por-gravidade"><span class="header-section-number">9.2.2</span> Acessibilidade por gravidade</a></li>
+  <li><a href="#custo-mínimo-proximidade" id="toc-custo-mínimo-proximidade" class="nav-link" data-scroll-target="#custo-mínimo-proximidade"><span class="header-section-number">9.2.3</span> Custo mínimo (proximidade)</a></li>
+  <li><a href="#medidas-com-competição" id="toc-medidas-com-competição" class="nav-link" data-scroll-target="#medidas-com-competição"><span class="header-section-number">9.2.4</span> Medidas com competição</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -294,20 +349,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Com a rede construída, o caminho até um indicador de acessibilidade tem duas etapas. Primeiro se calcula quanto tempo se leva de cada origem a cada destino, o que produz uma matriz de tempos de viagem. Depois se combina essa matriz com a distribuição das oportunidades no território, o que produz o indicador. Este capítulo percorre as duas etapas para quatro modos, a pé, de bicicleta, de carro e por transporte público, e compara os resultados.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Aviso</span>Continuação da mesma sessão
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Este capítulo usa os objetos <code>grade</code> e <code>r5r_network</code>, criados no capítulo <a href="./8-rede.html">8</a>. Se você reiniciou o R, rode aquele capítulo antes deste.</p>
-</div>
-</div>
+<p>Com a rede construída, o caminho até um indicador de acessibilidade tem duas etapas. Primeiro se calcula quanto tempo se leva de cada origem a cada destino, o que produz uma matriz de tempos de viagem. Depois se combina essa matriz com a distribuição das oportunidades no território, o que produz o indicador. Este capítulo trata as duas etapas em separado, porque cada uma envolve decisões diferentes: a matriz de tempos depende de como cada modo é modelado (velocidade, relevo, estresse de tráfego, congestionamento), enquanto o indicador de acessibilidade depende de como se escolhe combinar tempo e oportunidades.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -319,17 +361,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>preparar os pontos de origem e destino a partir da grade H3</li>
-<li>calcular matrizes de tempo de viagem para quatro modos</li>
-<li>calcular acessibilidade cumulativa a empregos</li>
-<li>calcular acessibilidade com função de decaimento (gravidade)</li>
-<li>comparar os quatro modos em gráfico e em mapa</li>
+<li>calcular matrizes de tempo de viagem para quatro modos, e explorar variações de cada uma (relevo, estresse de tráfego, congestionamento, dados do Visum)</li>
+<li>calcular acessibilidade a empregos, cumulativa e por gravidade</li>
+<li>calcular acessibilidade a saúde, pelo tempo mínimo até a unidade mais próxima e pela competição por vagas (FCA)</li>
+<li>comparar tudo em gráficos e mapas</li>
 </ul>
 </div>
 </div>
-<section id="pontos-de-origem-e-destino" class="level2" data-number="9.1">
-<h2 data-number="9.1" class="anchored" data-anchor-id="pontos-de-origem-e-destino"><span class="header-section-number">9.1</span> Pontos de origem e destino</h2>
-<p>Usamos o centroide de cada hexágono <strong>urbano</strong> como ponto de origem e destino. O <code>r5r</code> espera um <code>data.frame</code> ou <code>sf</code> com colunas <code>id</code>, <code>lon</code> e <code>lat</code>, em WGS84.</p>
+<section id="matrizes-de-tempo-de-viagem" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="matrizes-de-tempo-de-viagem"><span class="header-section-number">9.1</span> Matrizes de tempo de viagem</h2>
+<p>Uma matriz de tempo de viagem traz, para cada par origem-destino, quanto tempo se leva para ir de um ao outro por um modo específico. É o insumo de qualquer indicador de acessibilidade baseado em tempo, e cada modo tem uma forma diferente de ser modelado dentro do R5.</p>
+<section id="pontos-de-origem-e-destino" class="level3" data-number="9.1.1">
+<h3 data-number="9.1.1" class="anchored" data-anchor-id="pontos-de-origem-e-destino"><span class="header-section-number">9.1.1</span> Pontos de origem e destino</h3>
+<p>Usamos o centroide de cada hexágono <strong>urbano</strong> como ponto de origem. Na maior parte deste capítulo, o destino também é o centroide desses mesmos hexágonos, mas isso não é uma regra fixa: mais adiante, na seção de custo mínimo, os destinos são as coordenadas reais das unidades de saúde, não hexágonos. Em qualquer um dos casos, o <code>r5r</code> espera um <code>data.frame</code> ou <code>sf</code> com colunas <code>id</code>, <code>lon</code> e <code>lat</code>, em WGS84.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>grade_urbana <span class="ot">&lt;-</span> grade <span class="sc">|&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(classe_urbano <span class="sc">==</span> <span class="st">"Urbano"</span>) <span class="sc">|&gt;</span></span>
@@ -346,73 +390,101 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(pontos)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</section>
+<section id="uso-do-solo" class="level3" data-number="9.1.2">
+<h3 data-number="9.1.2" class="anchored" data-anchor-id="uso-do-solo"><span class="header-section-number">9.1.2</span> Uso do solo</h3>
+<p>A tabela de uso do solo traz as oportunidades de cada hexágono, com os nomes de coluna que o <code>accessibility</code> espera.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>uso_solo <span class="ot">&lt;-</span> grade_urbana <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">id =</span> id_hex,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">jobs =</span> Jobs,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">population =</span> pop_ph,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">income =</span> avg_inc_resp,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    atencao_basica, capacidade_ab, hospital, emergencia</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(uso_solo)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>O transporte público só tem viagens programadas em <strong>22/07/2026</strong>, como visto no capítulo anterior, então essa data é usada também nos outros modos, por consistência. Para caminhada, bicicleta e carro o horário não muda o resultado por padrão, porque não há tabela de horários envolvida, mas o carro com dados do Visum, visto adiante, é uma exceção: os volumes de tráfego já embutem um recorte de horário.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data_viagem <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(<span class="st">"22-07-2026 07:00:00"</span>, <span class="at">format =</span> <span class="st">"%d-%m-%Y %H:%M:%S"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="a-pé" class="level3" data-number="9.1.3">
+<h3 data-number="9.1.3" class="anchored" data-anchor-id="a-pé"><span class="header-section-number">9.1.3</span> A pé</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ttm_pe <span class="ot">&lt;-</span> <span class="fu">travel_time_matrix</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">r5r_network =</span> r5r_network,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">origins =</span> pontos,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">destinations =</span> pontos,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">"WALK"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">departure_datetime =</span> data_viagem,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_trip_duration =</span> <span class="dv">60</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ttm_pe)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>O único parâmetro que muda o resultado aqui é <code>max_trip_duration</code>: sem tabela de horários e sem congestionamento, o tempo de caminhada de cada par origem-destino é fixo. Mas ele não é uma simples distância dividida por uma velocidade constante. No capítulo anterior, o <code>build_network()</code> recebeu <code>elevation = "TOBLER"</code>, o que faz o R5 carregar o <code>Anapolis.tif</code> e recalcular o tempo de cada trecho da rede em função da declividade.</p>
+<p>A relação usada é a <strong>função de caminhada de Tobler</strong> <span class="citation" data-cites="tobler1993">(<a href="referencias.html#ref-tobler1993" role="doc-biblioref">Tobler, 1993</a>)</span>:</p>
+<p><span class="math display">\[W = 6 \cdot e^{-3.5 \cdot \left| \frac{dh}{dx} + 0.05 \right|}\]</span></p>
+<p>em que <span class="math inline">\(W\)</span> é a velocidade de caminhada em km/h e <span class="math inline">\(dh/dx\)</span> é a declividade do trecho (a razão entre a variação de altitude e a distância horizontal). Em terreno plano (<span class="math inline">\(dh/dx = 0\)</span>), a função resulta em aproximadamente 5 km/h; o pico de velocidade (por volta de 6 km/h) ocorre numa leve descida, e a velocidade cai de forma acentuada tanto em subidas fortes quanto em descidas muito íngremes. O R5 aplica essa velocidade trecho a trecho ao longo da rede viária, então dois pares origem-destino com a mesma distância em linha reta podem ter tempos de caminhada bem diferentes se um deles atravessa um terreno mais acidentado.</p>
+</section>
+<section id="bicicleta" class="level3" data-number="9.1.4">
+<h3 data-number="9.1.4" class="anchored" data-anchor-id="bicicleta"><span class="header-section-number">9.1.4</span> Bicicleta</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ttm_bike <span class="ot">&lt;-</span> <span class="fu">travel_time_matrix</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">r5r_network =</span> r5r_network,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">origins =</span> pontos,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">destinations =</span> pontos,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">"BICYCLE"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">departure_datetime =</span> data_viagem,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_lts =</span> <span class="dv">2</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_trip_duration =</span> <span class="dv">60</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>O <code>max_lts</code> define o <strong>nível de estresse de tráfego</strong> (<em>Level of Traffic Stress</em>, LTS) que um ciclista está disposto a enfrentar, numa escala de 1 a 4: LTS 1 é a mais conservadora (só vias bem protegidas do tráfego motorizado), e LTS 4 aceita qualquer via. O R5 infere o LTS de cada trecho a partir da velocidade, da hierarquia viária e da presença de infraestrutura cicloviária nas tags do OpenStreetMap. Usamos <code>max_lts = 2</code> (vias de baixo a médio estresse), um valor comum na literatura para representar o ciclista médio, nem o mais cauteloso nem o mais tolerante a tráfego.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Dica</span>Amostra para teste rápido
+<span class="screen-reader-only">Dica</span>Sobrescrevendo o LTS com dados próprios
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Para um teste rápido durante a aula ao vivo, use uma amostra de hexágonos em vez do conjunto completo. O cálculo fica bem mais rápido e serve para conferir que o código funciona antes de rodar tudo.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pontos_demo <span class="ot">&lt;-</span> pontos <span class="sc">|&gt;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">300</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Troque <code>pontos</code> por <code>pontos_demo</code> nas chamadas abaixo e depois volte para <code>pontos</code> para o resultado completo.</p>
-</div>
-</div>
-<p>E a tabela de uso do solo, com os nomes de coluna que o <code>accessibility</code> espera.</p>
+<p>O <code>r5r</code> permite substituir a classificação de LTS inferida do OSM por valores próprios, por meio do argumento <code>new_lts</code> de <code>travel_time_matrix()</code>, de duas formas: um <code>data.frame</code> com colunas <code>osm_id</code> e <code>lts</code>, ou um objeto espacial de linhas (<code>LINESTRING</code>), caso em que o R5 localiza a via mais próxima de cada linha informada. Nesse segundo caso, as colunas exigidas são <code>line_id</code> (<code>character</code>), <code>lts</code> (<code>integer</code>), <code>priority</code> (<code>integer</code>, usado para desempatar quando duas linhas se sobrepõem na mesma via) e a geometria, que precisa se chamar literalmente <code>geometry</code>.</p>
+<p>Isso é útil, por exemplo, para simular o efeito de uma ciclovia nova que ainda não está mapeada no OSM, ou para corrigir trechos classificados incorretamente. <code>proposta_ciclo.gpkg</code> traz uma rede cicloviária proposta para Anápolis, com um traçado simplificado (uma linha por corredor, não o detalhamento por segmento do OSM). Para testar o efeito dela na acessibilidade de bicicleta, basta assumir que toda essa rede proposta vira infraestrutura protegida, ou seja, LTS 1:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>uso_solo <span class="ot">&lt;-</span> grade_urbana <span class="sc">|&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">id =</span> id_hex,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">jobs =</span> Jobs,</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">population =</span> pop_ph,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">income =</span> avg_inc_resp</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(uso_solo)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>proposta_ciclo <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="fu">file.path</span>(pasta_geo, <span class="st">"proposta_ciclo.gpkg"</span>), <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>ttm_bike_ciclovia <span class="ot">&lt;-</span> <span class="fu">travel_time_matrix</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">r5r_network =</span> r5r_network,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">origins =</span> pontos,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">destinations =</span> pontos,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">"BICYCLE"</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">departure_datetime =</span> data_viagem,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_lts =</span> <span class="dv">2</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_trip_duration =</span> <span class="dv">60</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">new_lts =</span> proposta_ciclo <span class="sc">|&gt;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">line_id  =</span> <span class="fu">as.character</span>(<span class="fu">row_number</span>()),</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">lts      =</span> <span class="dv">1</span>L, <span class="co"># toda a rede proposta reclassificada como LTS 1</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">priority =</span> <span class="dv">1</span>L  <span class="co"># desempate entre linhas sobrepostas; sem sobreposição real aqui</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(line_id, lts, priority, <span class="at">geometry =</span> geom)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Comparar <code>ttm_bike</code> com <code>ttm_bike_ciclovia</code> mostra, em minutos, o ganho de acessibilidade de bicicleta que a rede cicloviária proposta traria.</p>
+</div>
 </div>
 </section>
-<section id="matrizes-de-tempo-de-viagem" class="level2" data-number="9.2">
-<h2 data-number="9.2" class="anchored" data-anchor-id="matrizes-de-tempo-de-viagem"><span class="header-section-number">9.2</span> Matrizes de tempo de viagem</h2>
-<p>O transporte público só tem viagens programadas em <strong>22/07/2026</strong>, como visto no capítulo anterior, então usamos essa data também nos outros modos, por consistência. Para caminhada, bicicleta e carro o horário não muda o resultado, porque não há tabela de horários envolvida.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data_viagem <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(<span class="st">"22-07-2026 07:00:00"</span>, <span class="at">format =</span> <span class="st">"%d-%m-%Y %H:%M:%S"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<section id="a-pé" class="level3" data-number="9.2.1">
-<h3 data-number="9.2.1" class="anchored" data-anchor-id="a-pé"><span class="header-section-number">9.2.1</span> A pé</h3>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ttm_pe <span class="ot">&lt;-</span> <span class="fu">travel_time_matrix</span>(</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">r5r_network =</span> r5r_network,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">origins =</span> pontos,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">destinations =</span> pontos,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">"WALK"</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">departure_datetime =</span> data_viagem,</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_trip_duration =</span> <span class="dv">60</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ttm_pe)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="bicicleta" class="level3" data-number="9.2.2">
-<h3 data-number="9.2.2" class="anchored" data-anchor-id="bicicleta"><span class="header-section-number">9.2.2</span> Bicicleta</h3>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ttm_bike <span class="ot">&lt;-</span> <span class="fu">travel_time_matrix</span>(</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">r5r_network =</span> r5r_network,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">origins =</span> pontos,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">destinations =</span> pontos,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">"BICYCLE"</span>,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">departure_datetime =</span> data_viagem,</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_lts =</span> <span class="dv">2</span>,</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_trip_duration =</span> <span class="dv">60</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="carro" class="level3" data-number="9.2.3">
-<h3 data-number="9.2.3" class="anchored" data-anchor-id="carro"><span class="header-section-number">9.2.3</span> Carro</h3>
+<section id="carro" class="level3" data-number="9.1.5">
+<h3 data-number="9.1.5" class="anchored" data-anchor-id="carro"><span class="header-section-number">9.1.5</span> Carro</h3>
+<p>Para o carro, três versões da mesma matriz são calculadas, cada uma representando um jeito diferente de lidar com congestionamento.</p>
+<p><strong>1. Fluxo livre.</strong> É o padrão do R5: cada trecho é percorrido na velocidade indicada pela via (limite de velocidade do OSM, ou uma estimativa por hierarquia viária quando a tag não existe), sem nenhum efeito de tráfego.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ttm_carro <span class="ot">&lt;-</span> <span class="fu">travel_time_matrix</span>(</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">r5r_network =</span> r5r_network,</span>
@@ -423,110 +495,345 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_trip_duration =</span> <span class="dv">60</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section id="transporte-público" class="level3" data-number="9.2.4">
-<h3 data-number="9.2.4" class="anchored" data-anchor-id="transporte-público"><span class="header-section-number">9.2.4</span> Transporte público</h3>
-<p>Para transporte público, o modo de acesso e egresso a pé (<code>"WALK"</code>) é combinado com <code>"TRANSIT"</code>. Usar uma janela de tempo (<code>time_window</code>) maior deixa a estimativa mais robusta a variações de horário, e também mais lenta. Trinta minutos é um bom equilíbrio para uma aula.</p>
+<p><strong>2. Congestionamento por hierarquia viária.</strong> O argumento <code>new_carspeeds</code> recebe um <code>data.frame</code> com colunas <code>osm_id</code>, <code>max_speed</code> e <code>speed_type</code>, e permite escalar (<code>speed_type = "scale"</code>) ou fixar (<code>speed_type = "km/h"</code>) a velocidade de trechos específicos. Uma forma simples de simular congestionamento sem nenhum dado externo é assumir que vias de hierarquia maior perdem mais velocidade em relação ao fluxo livre, por concentrarem mais tráfego:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ttm_transporte_publico <span class="ot">&lt;-</span> <span class="fu">travel_time_matrix</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">r5r_network =</span> r5r_network,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">origins =</span> pontos,</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">destinations =</span> pontos,</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"WALK"</span>, <span class="st">"TRANSIT"</span>),</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">departure_datetime =</span> data_viagem,</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_window =</span> <span class="dv">30</span>,</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_walk_time =</span> <span class="dv">30</span>,</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_trip_duration =</span> <span class="dv">90</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>vias_osm <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="fu">file.path</span>(pasta_rede, <span class="st">"anapolis.pbf"</span>), <span class="at">layer =</span> <span class="st">"lines"</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>tipos_via <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"motorway"</span>, <span class="st">"primary"</span>, <span class="st">"secondary"</span>, <span class="st">"tertiary"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>fator_congestionamento <span class="ot">&lt;-</span> vias_osm <span class="sc">|&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(osm_id, highway) <span class="sc">|&gt;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(highway <span class="sc">%in%</span> tipos_via) <span class="sc">|&gt;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">osm_id =</span> <span class="fu">as.numeric</span>(osm_id),</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_speed =</span> <span class="fu">case_when</span>(</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>      highway <span class="sc">==</span> <span class="st">"motorway"</span>  <span class="sc">~</span> <span class="fl">0.75</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>      highway <span class="sc">==</span> <span class="st">"primary"</span>   <span class="sc">~</span> <span class="fl">0.80</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>      highway <span class="sc">==</span> <span class="st">"secondary"</span> <span class="sc">~</span> <span class="fl">0.85</span>,</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>      highway <span class="sc">==</span> <span class="st">"tertiary"</span>  <span class="sc">~</span> <span class="fl">0.90</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">speed_type =</span> <span class="st">"scale"</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>()</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>ttm_carro_congestionado <span class="ot">&lt;-</span> <span class="fu">travel_time_matrix</span>(</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">r5r_network =</span> r5r_network,</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">origins =</span> pontos,</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">destinations =</span> pontos,</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">"CAR"</span>,</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">departure_datetime =</span> data_viagem,</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_trip_duration =</span> <span class="dv">60</span>,</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">new_carspeeds =</span> fator_congestionamento</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p><strong>3. Velocidades de um modelo macroscópico (Visum).</strong> Quando já existe um modelo de tráfego calibrado, como o modelo Visum de Anápolis distribuído em <code>dados/geo/links_visum_anapolis.gpkg</code>, faz mais sentido usar a velocidade que ele já estimou para cada trecho do que arbitrar um fator de escala. O modelo Visum tem sua própria malha de links, que não compartilha identificadores com a malha OSM usada pelo R5, então a ligação entre as duas é espacial: para cada via do OSM, busca-se o link do Visum mais próximo e usa-se a velocidade corrente dele (<code>VCur_PrTSys_CAR</code>, que já reflete o volume alocado no modelo, e não a velocidade de fluxo livre).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>links_visum <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="fu">file.path</span>(pasta_geo, <span class="st">"links_visum_anapolis.gpkg"</span>), <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># confira sempre os nomes de coluna: podem variar conforme a versão da exportação do Visum</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(links_visum)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Cada via aparece duas vezes nesse arquivo, uma por sentido (<code>No</code> repetido, <code>FromNodeNo</code>/<code>ToNodeNo</code> invertidos), com a mesma geometria e velocidades diferentes entre si. Como o pareamento com o OSM não distingue sentido, tirar a média das duas velocidades antes de parear evita que o resultado dependa de qual sentido o pareamento escolher:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>links_visum_agregado <span class="ot">&lt;-</span> links_visum <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(No, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(No, geom) <span class="sc">|&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    links_visum <span class="sc">|&gt;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">summarise</span>(<span class="at">velocidade_media =</span> <span class="fu">mean</span>(VCur_PrTSys_CAR, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.by =</span> No),</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"No"</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>vias_pareadas <span class="ot">&lt;-</span> vias_osm <span class="sc">|&gt;</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(osm_id, highway) <span class="sc">|&gt;</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">indice_visum =</span> <span class="fu">st_nearest_feature</span>(vias_osm, links_visum_agregado),</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">distancia_m =</span> <span class="fu">as.numeric</span>(</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_distance</span>(geometry, links_visum_agregado<span class="sc">$</span>geom[indice_visum], <span class="at">by_element =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">velocidade_visum =</span> links_visum_agregado<span class="sc">$</span>velocidade_media[indice_visum]</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>novas_velocidades_visum <span class="ot">&lt;-</span> vias_pareadas <span class="sc">|&gt;</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(distancia_m <span class="sc">&lt;</span> <span class="dv">30</span>) <span class="sc">|&gt;</span> <span class="co"># descarta pareamentos distantes demais para serem confiáveis</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">osm_id =</span> <span class="fu">as.numeric</span>(osm_id),</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_speed =</span> velocidade_visum,</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">speed_type =</span> <span class="st">"km/h"</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>()</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>ttm_carro_visum <span class="ot">&lt;-</span> <span class="fu">travel_time_matrix</span>(</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">r5r_network =</span> r5r_network,</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">origins =</span> pontos,</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">destinations =</span> pontos,</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">"CAR"</span>,</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">departure_datetime =</span> data_viagem,</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_trip_duration =</span> <span class="dv">60</span>,</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">new_carspeeds =</span> novas_velocidades_visum</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>“Mais próximo” no <code>st_nearest_feature()</code> significa só a menor distância entre as duas geometrias, não que elas percorrem o mesmo trajeto. Um trecho curto de OSM perto de um cruzamento, por exemplo, pode acabar pareado com o link do Visum de uma rua transversal, só porque ela passa mais perto naquele ponto específico, mesmo representando uma via diferente. Para um estudo publicável, vale um pareamento mais cuidadoso, que leve em conta a sobreposição ao longo de todo o trecho, não só a distância num ponto. Para o objetivo didático daqui, o resultado já mostra como conectar a saída de uma modelagem macroscópica ao roteamento do R5.</p>
+</div>
+</div>
+<p>Com essas três matrizes, é possível comparar não só a acessibilidade de carro em condições ideais, mas também sob duas hipóteses diferentes de congestionamento, uma arbitrária e outra baseada em simulação de tráfego real.</p>
+</section>
+<section id="transporte-público" class="level3" data-number="9.1.6">
+<h3 data-number="9.1.6" class="anchored" data-anchor-id="transporte-público"><span class="header-section-number">9.1.6</span> Transporte público</h3>
+<p>Para transporte público, o modo de acesso e egresso a pé (<code>"WALK"</code>) é combinado com <code>"TRANSIT"</code>, e a chamada tem mais parâmetros relevantes do que os outros três modos, porque o resultado depende de uma tabela de horários:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ttm_transporte_publico <span class="ot">&lt;-</span> <span class="fu">travel_time_matrix</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">r5r_network =</span> r5r_network,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">origins =</span> pontos,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">destinations =</span> pontos,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"WALK"</span>, <span class="st">"TRANSIT"</span>),</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">departure_datetime =</span> data_viagem,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_window =</span> <span class="dv">30</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_walk_time =</span> <span class="dv">30</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_trip_duration =</span> <span class="dv">90</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li><strong><code>mode = c("WALK", "TRANSIT")</code></strong>: define os modos de acesso, transferência e viagem no veículo. <code>mode_egress</code> (não usado aqui, e cujo padrão já é <code>"WALK"</code>) controla separadamente o trecho a pé até o destino final, e poderia ser trocado por <code>"BICYCLE"</code> para simular quem pedala até a estação mas anda até o ponto de embarque, por exemplo.</li>
+<li><strong><code>time_window = 30</code></strong>: em vez de rotear uma única vez às 07:00, o R5 sorteia vários horários de partida dentro da janela de 30 minutos seguintes (<code>draws_per_minute</code>, com padrão de 5 sorteios por minuto do horário de partida), para não depender de pegar exatamente o minuto de um ônibus passando. O resultado reportado é o <strong>percentil 50</strong> dessas simulações (<code>percentiles</code>, com padrão 50), ou seja, a mediana do tempo de viagem dentro da janela. Janelas maiores deixam a estimativa mais robusta a variações de horário, mas também mais lentas de calcular; 30 minutos é um equilíbrio razoável para uma aula.</li>
+<li><strong><code>max_walk_time = 30</code></strong>: limite de tempo a pé em qualquer trecho a pé da viagem (acesso, transferência ou egresso), não só o trecho até a primeira parada.</li>
+<li><strong><code>max_trip_duration = 90</code></strong>: teto para a viagem inteira, incluindo espera e transferências.</li>
+<li>Outros parâmetros não usados aqui, mas que valem conhecer: <code>max_rides</code> (padrão 3, número máximo de embarques numa mesma viagem) e <code>fare_structure</code>/<code>max_fare</code>, que permitem levar em conta o custo da passagem e não só o tempo, caso se tenha uma estrutura tarifária mapeada para o sistema.</li>
+</ul>
 </section>
 </section>
-<section id="acessibilidade-cumulativa-oportunidades-cumulativas" class="level2" data-number="9.3">
-<h2 data-number="9.3" class="anchored" data-anchor-id="acessibilidade-cumulativa-oportunidades-cumulativas"><span class="header-section-number">9.3</span> Acessibilidade cumulativa (oportunidades cumulativas)</h2>
+<section id="acessibilidade" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="acessibilidade"><span class="header-section-number">9.2</span> Acessibilidade</h2>
+<p>Com as matrizes de tempo de viagem calculadas, o próximo passo é combiná-las com a distribuição das oportunidades no território. Usamos as quatro matrizes de base, a pé, bicicleta (LTS 2), carro (fluxo livre) e transporte público, para manter a comparação entre modos simples; as variações de relevo, congestionamento e Visum vistas acima podem entrar nas mesmas funções abaixo, bastando trocar a matriz de entrada.</p>
+<p>As duas primeiras medidas, cumulativa e por gravidade, usam empregos como oportunidade e são <strong>baseadas em lugares</strong>: cada hexágono recebe um valor de acessibilidade, sem levar em conta que vários hexágonos competem pelas mesmas vagas de emprego ou pelas mesmas vagas de atendimento de saúde. As duas últimas, custo mínimo e medidas com competição, trazem as unidades de saúde do capítulo anterior para dentro da conta, e a segunda corrige exatamente essa limitação.</p>
+<section id="acessibilidade-cumulativa-oportunidades-cumulativas" class="level3" data-number="9.2.1">
+<h3 data-number="9.2.1" class="anchored" data-anchor-id="acessibilidade-cumulativa-oportunidades-cumulativas"><span class="header-section-number">9.2.1</span> Acessibilidade cumulativa (oportunidades cumulativas)</h3>
 <p>Quantos empregos são alcançáveis em até 30 minutos, por hexágono, em cada modo? Usamos <code>accessibility::cumulative_cutoff()</code>, que espera a coluna de custo <code>travel_time_p50</code>, o tempo mediano de viagem dentro da janela usada.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>acess_pe <span class="ot">&lt;-</span> <span class="fu">cumulative_cutoff</span>(</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_matrix =</span> ttm_pe,</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">land_use_data =</span> uso_solo,</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_cost =</span> <span class="st">"travel_time_p50"</span>,</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff =</span> <span class="dv">30</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>acess_bike <span class="ot">&lt;-</span> <span class="fu">cumulative_cutoff</span>(</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_matrix =</span> ttm_bike,</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">land_use_data =</span> uso_solo,</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_cost =</span> <span class="st">"travel_time_p50"</span>,</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff =</span> <span class="dv">30</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>acess_carro <span class="ot">&lt;-</span> <span class="fu">cumulative_cutoff</span>(</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_matrix =</span> ttm_carro,</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">land_use_data =</span> uso_solo,</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_cost =</span> <span class="st">"travel_time_p50"</span>,</span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff =</span> <span class="dv">30</span></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>acess_tp <span class="ot">&lt;-</span> <span class="fu">cumulative_cutoff</span>(</span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_matrix =</span> ttm_transporte_publico,</span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">land_use_data =</span> uso_solo,</span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_cost =</span> <span class="st">"travel_time_p50"</span>,</span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff =</span> <span class="dv">30</span></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Juntando os quatro resultados em uma única tabela, para comparar.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>acess_modos <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  acess_pe <span class="sc">|&gt;</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">modo =</span> <span class="st">"A pe"</span>),</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  acess_bike <span class="sc">|&gt;</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">modo =</span> <span class="st">"Bicicleta"</span>),</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  acess_carro <span class="sc">|&gt;</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">modo =</span> <span class="st">"Carro"</span>),</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  acess_tp <span class="sc">|&gt;</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">modo =</span> <span class="st">"Transporte publico"</span>)</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(acess_modos, <span class="fu">aes</span>(<span class="at">x =</span> modo, <span class="at">y =</span> jobs, <span class="at">fill =</span> modo)) <span class="sc">+</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Empregos alcançáveis em até 30 minutos, por modo"</span>,</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Empregos acessíveis"</span></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>E em mapa, para o transporte público.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>grade_urbana <span class="sc">|&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(acess_tp, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"id_hex"</span> <span class="ot">=</span> <span class="st">"id"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> jobs), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Empregos</span><span class="sc">\n</span><span class="st">em até 30 min"</span>) <span class="sc">+</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Acessibilidade a empregos por transporte público"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="acessibilidade-por-gravidade" class="level2" data-number="9.4">
-<h2 data-number="9.4" class="anchored" data-anchor-id="acessibilidade-por-gravidade"><span class="header-section-number">9.4</span> Acessibilidade por gravidade</h2>
-<p>A abordagem de oportunidades cumulativas usa um corte rígido, em que 30 minutos “conta” e 31 minutos “não conta”. Uma alternativa é ponderar as oportunidades pelo tempo de viagem com uma função de decaimento, por exemplo uma decaída exponencial, em que oportunidades mais distantes pesam cada vez menos.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>acess_grav_tp <span class="ot">&lt;-</span> <span class="fu">gravity</span>(</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_matrix =</span> ttm_transporte_publico,</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>acess_pe <span class="ot">&lt;-</span> <span class="fu">cumulative_cutoff</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_matrix =</span> ttm_pe,</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">land_use_data =</span> uso_solo,</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_cost =</span> <span class="st">"travel_time_p50"</span>,</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">decay_function =</span> <span class="fu">decay_exponential</span>(<span class="at">decay_value =</span> <span class="fl">0.1</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff =</span> <span class="dv">30</span></span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(acess_grav_tp)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>acess_bike <span class="ot">&lt;-</span> <span class="fu">cumulative_cutoff</span>(</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_matrix =</span> ttm_bike,</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">land_use_data =</span> uso_solo,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_cost =</span> <span class="st">"travel_time_p50"</span>,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff =</span> <span class="dv">30</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>acess_carro <span class="ot">&lt;-</span> <span class="fu">cumulative_cutoff</span>(</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_matrix =</span> ttm_carro,</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">land_use_data =</span> uso_solo,</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_cost =</span> <span class="st">"travel_time_p50"</span>,</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff =</span> <span class="dv">30</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>acess_tp <span class="ot">&lt;-</span> <span class="fu">cumulative_cutoff</span>(</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_matrix =</span> ttm_transporte_publico,</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">land_use_data =</span> uso_solo,</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_cost =</span> <span class="st">"travel_time_p50"</span>,</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff =</span> <span class="dv">30</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Outras funções de decaimento disponíveis no <code>accessibility</code> são <code>decay_binary()</code>, <code>decay_linear()</code>, <code>decay_logistic()</code>, <code>decay_power()</code> e <code>decay_stepped()</code>, todas documentadas em <code>?decay_exponential</code> e na <a href="https://ipeagit.github.io/accessibility/articles/decay_functions.html">vinheta de funções de decaimento</a> do pacote.</p>
-<p>Com a acessibilidade calculada para os quatro modos, o próximo passo é olhar para quem se beneficia mais ou menos dela.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Dica</span>Múltiplos cortes, em vez de um só
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Em vez de fixar 30 minutos, o <code>cumulative_cutoff()</code> aceita um vetor em <code>cutoff</code> e calcula a acessibilidade para todos os cortes de uma vez, numa tabela só (uma linha por hexágono e por corte):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cumulative_cutoff</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_matrix =</span> ttm_pe,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">land_use_data =</span> uso_solo,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_cost =</span> <span class="st">"travel_time_p50"</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cutoff =</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">30</span>, <span class="dv">45</span>, <span class="dv">60</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Para resumir a acessibilidade dentro de uma faixa de tempo, em vez de um ponto ou de vários pontos separados, o <code>accessibility::cumulative_interval()</code> calcula minuto a minuto dentro do intervalo informado e resume o resultado com uma função (mediana, por padrão): <code>interval = c(40, 60)</code> dá a acessibilidade típica entre 40 e 60 minutos, por exemplo.</p>
+</div>
+</div>
+<p>Juntando os quatro resultados em uma única tabela, para comparar. Como o número absoluto de empregos alcançáveis depende do tamanho da cidade, o resultado também é expresso como <strong>percentual do total de empregos de Anápolis</strong>, o que facilita a leitura e a comparação com outros municípios.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>total_empregos <span class="ot">&lt;-</span> <span class="fu">sum</span>(uso_solo<span class="sc">$</span>jobs)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>acess_modos <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  acess_pe <span class="sc">|&gt;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">modo =</span> <span class="st">"A pe"</span>),</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  acess_bike <span class="sc">|&gt;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">modo =</span> <span class="st">"Bicicleta"</span>),</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  acess_carro <span class="sc">|&gt;</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">modo =</span> <span class="st">"Carro"</span>),</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  acess_tp <span class="sc">|&gt;</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">modo =</span> <span class="st">"Transporte publico"</span>)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">jobs_pct =</span> jobs <span class="sc">/</span> total_empregos <span class="sc">*</span> <span class="dv">100</span>)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(acess_modos, <span class="fu">aes</span>(<span class="at">x =</span> modo, <span class="at">y =</span> jobs_pct, <span class="at">fill =</span> modo)) <span class="sc">+</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Empregos alcançáveis em até 30 minutos, por modo"</span>,</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"% dos empregos de Anápolis"</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>E em mapa, para o transporte público.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>grade_urbana <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(acess_tp, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"id_hex"</span> <span class="ot">=</span> <span class="st">"id"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> jobs), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Empregos</span><span class="sc">\n</span><span class="st">em até 30 min"</span>) <span class="sc">+</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Acessibilidade a empregos por transporte público"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="acessibilidade-por-gravidade" class="level3" data-number="9.2.2">
+<h3 data-number="9.2.2" class="anchored" data-anchor-id="acessibilidade-por-gravidade"><span class="header-section-number">9.2.2</span> Acessibilidade por gravidade</h3>
+<p>A abordagem de oportunidades cumulativas usa um corte rígido, em que 30 minutos “conta” e 31 minutos “não conta”. Uma alternativa é ponderar as oportunidades pelo tempo de viagem com uma função de decaimento, por exemplo uma decaída exponencial, em que oportunidades mais distantes pesam cada vez menos.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>acess_grav_tp <span class="ot">&lt;-</span> <span class="fu">gravity</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_matrix =</span> ttm_transporte_publico,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">land_use_data =</span> uso_solo,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">opportunity =</span> <span class="st">"jobs"</span>,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_cost =</span> <span class="st">"travel_time_p50"</span>,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">decay_function =</span> <span class="fu">decay_exponential</span>(<span class="at">decay_value =</span> <span class="fl">0.1</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(acess_grav_tp)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Outras funções de decaimento disponíveis no <code>accessibility</code> são <code>decay_binary()</code>, <code>decay_linear()</code>, <code>decay_logistic()</code>, <code>decay_power()</code> e <code>decay_stepped()</code>, todas documentadas em <code>?decay_exponential</code> e na <a href="https://cran.r-project.org/web/packages/accessibility/vignettes/decay_functions.html">vinheta de funções de decaimento</a> do pacote. O parâmetro de decaimento (<code>decay_value</code>) usado aqui foi arbitrário; na prática, ele costuma ser calibrado a partir de dados observados, por exemplo uma pesquisa origem-destino, ajustando a função à distribuição real dos tempos de viagem.</p>
+</section>
+<section id="custo-mínimo-proximidade" class="level3" data-number="9.2.3">
+<h3 data-number="9.2.3" class="anchored" data-anchor-id="custo-mínimo-proximidade"><span class="header-section-number">9.2.3</span> Custo mínimo (proximidade)</h3>
+<p>Nem toda pergunta de acessibilidade é “quantas oportunidades é possível alcançar”. Para serviços de saúde, principalmente hospital e emergência, a pergunta mais comum é outra: quanto tempo se leva até a unidade mais próxima? O <code>accessibility::cost_to_closest()</code> responde isso a partir de uma matriz de tempos, e são duas possibilidades: uma contagem de oportunidades por zona ou roteando direto até a cordenada real de cada estabelecimento, guardada em <code>unidades_saude</code>. Isso evita a imprecisão de considerar a localização da unidade no centroide do hexágono.</p>
+<p>Usamos a matriz de carro em fluxo livre, porque tempo de resposta a uma emergência é naturalmente pensado em termos de deslocamento motorizado, e porque hospital e emergência têm poucas unidades no município (9 e 3), o que deixaria tempos a pé ou por transporte público estourando o <code>max_trip_duration</code> em boa parte da cidade.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pontos_saude <span class="ot">&lt;-</span> unidades_saude <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="dv">4326</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">id =</span> <span class="fu">paste0</span>(tipo, <span class="st">"_"</span>, <span class="fu">row_number</span>()),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">lon =</span> <span class="fu">st_coordinates</span>(geom)[, <span class="dv">1</span>],</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">lat =</span> <span class="fu">st_coordinates</span>(geom)[, <span class="dv">2</span>]</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, tipo, lon, lat)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>ttm_saude <span class="ot">&lt;-</span> <span class="fu">travel_time_matrix</span>(</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">r5r_network =</span> r5r_network,</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">origins =</span> pontos,</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">destinations =</span> pontos_saude,</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">"CAR"</span>,</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">departure_datetime =</span> data_viagem,</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_trip_duration =</span> <span class="dv">60</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Com a matriz origem-hexágono → destino-estabelecimento em mãos, o tempo até a unidade mais próxima de cada tipo é só o mínimo entre os estabelecimentos daquele tipo, por hexágono de origem:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>tempo_min_saude <span class="ot">&lt;-</span> ttm_saude <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(pontos_saude <span class="sc">|&gt;</span> <span class="fu">select</span>(id, tipo), <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"to_id"</span> <span class="ot">=</span> <span class="st">"id"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">travel_time_p50 =</span> <span class="fu">min</span>(travel_time_p50, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> <span class="fu">c</span>(from_id, tipo)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">tipo =</span> <span class="fu">case_when</span>(</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>      tipo <span class="sc">==</span> <span class="st">"atencao_basica"</span> <span class="sc">~</span> <span class="st">"Atenção básica"</span>,</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>      tipo <span class="sc">==</span> <span class="st">"hospital"</span>       <span class="sc">~</span> <span class="st">"Hospital"</span>,</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>      tipo <span class="sc">==</span> <span class="st">"emergencia"</span>     <span class="sc">~</span> <span class="st">"Emergência"</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Mapeando lado a lado, a diferença de escala entre atenção básica e as outras duas categorias, já sugerida pelo mapa de pontos do capítulo anterior, fica explícita em minutos:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>grade_urbana <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(tempo_min_saude, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"id_hex"</span> <span class="ot">=</span> <span class="st">"from_id"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> travel_time_p50), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Minutos"</span>, <span class="at">option =</span> <span class="st">"inferno"</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>tipo) <span class="sc">+</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Tempo mínimo de carro até a unidade de saúde mais próxima"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>A atenção básica está desenhada para estar perto de todo mundo, então o tempo mínimo tende a ser curto e parecido em toda a cidade. Hospital e emergência se concentram perto do centro, então o tempo mínimo cresce rápido conforme o hexágono se afasta dali, o tipo de padrão que costuma reacender a discussão sobre onde abrir a próxima UPA.</p>
+</section>
+<section id="medidas-com-competição" class="level3" data-number="9.2.4">
+<h3 data-number="9.2.4" class="anchored" data-anchor-id="medidas-com-competição"><span class="header-section-number">9.2.4</span> Medidas com competição</h3>
+<p>As medidas anteriores tratam cada hexágono como se ele fosse o único disputando as oportunidades ao redor. Na prática, um posto de saúde com poucos profissionais atende a um número limitado de pacientes, e hexágonos vizinhos concorrem entre si por essa mesma capacidade. As medidas da família <em>floating catchment area</em> (FCA) <span class="citation" data-cites="accessibility_pkg">(<a href="referencias.html#ref-accessibility_pkg" role="doc-biblioref">Herszenhut &amp; Pereira, 2024</a>)</span> corrigem isso: para cada unidade de oferta, calculam uma razão oferta/demanda dentro de um raio de alcance, e depois somam essas razões para cada hexágono que consegue alcançar aquela unidade.</p>
+<p>Usamos <code>capacidade_ab</code> (soma de profissionais por hexágono, calculada no capítulo anterior) como oferta, população como demanda, e a mesma matriz de carro usada acima, para manter a comparação consistente com o custo mínimo:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>competicao_ab <span class="ot">&lt;-</span> <span class="fu">floating_catchment_area</span>(</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_matrix =</span> ttm_carro,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">land_use_data =</span> uso_solo,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">opportunity =</span> <span class="st">"capacidade_ab"</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">travel_cost =</span> <span class="st">"travel_time_p50"</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">demand =</span> <span class="st">"population"</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"2sfca"</span>,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">decay_function =</span> <span class="fu">decay_binary</span>(<span class="at">cutoff =</span> <span class="dv">15</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(competicao_ab)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>O <code>method = "2sfca"</code> implementa a versão original de duas etapas (<em>two-step floating catchment area</em>), e <code>decay_binary(cutoff = 15)</code> define o raio de alcance em 15 minutos: dentro dele, a unidade conta; fora, não conta nada. O resultado é um índice de profissionais por habitante “efetivamente alcançável”, não a simples contagem de profissionais no hexágono.</p>
+<p>A coluna resultante do <code>floating_catchment_area()</code> também se chama <code>capacidade_ab</code> (o nome vem do argumento <code>opportunity</code>), igual à coluna de oferta bruta já presente em <code>grade_urbana</code>. Para evitar essa colisão de nomes no <code>left_join()</code>, ela é renomeada antes de entrar no mapa:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>grade_urbana <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    competicao_ab <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="at">fca_atencao_basica =</span> capacidade_ab),</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"id_hex"</span> <span class="ot">=</span> <span class="st">"id"</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> fca_atencao_basica), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Profissionais</span><span class="sc">\n</span><span class="st">por habitante"</span>) <span class="sc">+</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Acessibilidade a atenção básica com competição (2SFCA, carro)"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dica
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>O <code>accessibility</code> também traz <code>method = "bfca"</code>, a versão balanceada (<em>balanced floating catchment area</em>), que corrige uma tendência do 2SFCA de inflar a demanda em catchments sobrepostos. A troca é só no argumento <code>method</code>, mantendo os demais parâmetros iguais.</p>
+</div>
+</div>
+<p>Com a acessibilidade calculada para os quatro modos, e complementada pelas medidas de proximidade e competição em saúde, o próximo passo é olhar para quem se beneficia mais ou menos dela.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-accessibility_pkg" class="csl-entry" role="listitem">
+Herszenhut, D., &amp; Pereira, R. H. M. (2024). <em>accessibility: <span>T</span>ransport <span>A</span>ccessibility <span>M</span>easures</em>. <a href="https://ipeagit.github.io/accessibility/">https://ipeagit.github.io/accessibility/</a>
+</div>
+<div id="ref-tobler1993" class="csl-entry" role="listitem">
+Tobler, W. (1993). <em>Three Presentations on Geographical Analysis and Modeling: Non-isotropic Geographic Modeling; Speculations on the Geometry of Geography; and Global Spatial Analysis</em> (Technical Report N. 93-1). National Center for Geographic Information; Analysis (NCGIA), University of California, Santa Barbara.
+</div>
+</div>
+</section>
 </section>
 
 </main> <!-- /main -->

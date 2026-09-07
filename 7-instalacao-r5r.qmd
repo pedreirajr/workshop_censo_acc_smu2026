@@ -4,35 +4,35 @@ execute:
   eval: false
 ---
 
-A Parte 2 exige um ambiente mais exigente que a Parte 1. O cálculo de matrizes de tempo de viagem é
+A Parte 2 depende de um ambiente mais robusto que a Parte 1. O cálculo de matrizes de tempo de viagem é
 feito pelo R5, um motor de roteamento escrito em Java, e o pacote `r5r` funciona como ponte entre o
-R e esse motor. Faltam então duas coisas, os **pacotes de R** e o **Java**. Este capítulo trata das
-duas, e é o ponto que mais trava oficinas de acessibilidade.
-
-::: {.callout-important}
-## Faça esta instalação antes do evento
-
-O download do Java tem cerca de 180 MB e o primeiro carregamento do R5 leva tempo. Chegar com o
-ambiente pronto é a diferença entre acompanhar a prática e assistir a ela.
-:::
+R e esse motor. Faltam então duas coisas, os **pacotes de R** e o **Java**. 
 
 ::: {.callout-note}
 ## Nesta seção você vai
 
 - instalar os pacotes de R usados na Parte 2
-- instalar o Java 21 sem precisar de permissão de administrador
+- instalar o Java 21
 - reservar memória adequada para a máquina virtual Java
 - carregar os pacotes e confirmar que o ambiente está funcional
 :::
 
 ## Pacotes de R
 
-Este curso assume que você já tem **R e RStudio** instalados.
+Este curso assume que você já tem **R e RStudio** instalados. O bloco abaixo confere
+quais dos pacotes usados nesta Parte já estão presentes e instala só os que faltam.
+
+- `r5r` e `rJavaEnv` fazem o roteamento propriamente dito, e cuidam do Java por trás dele
+- `sf` e `terra` lidam com dados espaciais, vetor e raster, respectivamente
+- `dplyr` e `data.table` organizam e transformam os dados
+- `ggplot2` e `mapview` geram os gráficos e os mapas
+- `accessibility` calcula os indicadores de acessibilidade e equidade
+- `h3jsr` e `cnefetools` dão suporte à grade H3 e aos dados do CNEFE, usados no próximo capítulo
 
 ```{r}
 pacotes <- c(
   "r5r", "accessibility", "rJavaEnv", "sf", "terra", "dplyr",
-  "data.table", "ggplot2", "mapview"
+  "data.table", "ggplot2", "mapview", "h3jsr", "cnefetools"
 )
 
 faltando <- pacotes[!pacotes %in% rownames(installed.packages())]
@@ -42,36 +42,13 @@ if (length(faltando) > 0) {
 }
 ```
 
-O pacote `accessibility` muda rápido. Esta Parte usa funções de desigualdade e pobreza
-(`palma_ratio()`, `concentration_index()`, `theil_t()`, `fgt_poverty()`, `gini_index()`) que só
-existem a partir da versão **1.5.0**. Confira e, se preciso, atualize.
-
-```{r}
-if (packageVersion("accessibility") < "1.5.0") {
-  install.packages("accessibility", repos = "https://cloud.r-project.org")
-}
-```
-
-::: {.callout-tip}
-Em algumas instalações de R mais antigas, o `install.packages("accessibility")` tenta compilar o
-pacote `Hmisc` (uma dependência) a partir do código-fonte e falha por falta de compilador Fortran
-ou C. Se isso acontecer, instale o `Hmisc` como binário antes.
-
-``` r
-install.packages("Hmisc", repos = "https://cloud.r-project.org", type = "binary")
-install.packages("accessibility", repos = "https://cloud.r-project.org")
-```
-:::
-
 ## Java
 
 O `r5r` usa o [R5](https://github.com/conveyal/r5), motor de roteamento escrito em Java. A partir da
 versão 2.x do `r5r`, é necessário **Java 21**, e versões antigas, como 8 ou 11, não funcionam mais.
 
-Em vez de instalar o JDK manualmente no sistema, o que normalmente exige permissão de administrador,
-usamos o pacote `rJavaEnv`. Ele baixa uma distribuição do Java (Amazon Corretto) para uma pasta de
-cache do seu usuário e aponta o R para ela, sem precisar de admin ou root. Isso funciona mesmo em
-computadores institucionais travados.
+Em vez de instalar o JDK diretamente no sistema, o que normalmente exige permissão de administrador,
+o pacote `rJavaEnv` cuida disso.
 
 ```{r}
 library(rJavaEnv)
@@ -90,8 +67,7 @@ java_check_version_rjava()
 ```
 
 ::: {.callout-note}
-Da primeira vez, `java_quick_install()` baixa uns 180 MB e demora um pouco. Nas próximas vezes ele
-reaproveita o cache e é instantâneo. Em qualquer sessão nova do R, rode `rJavaEnv::use_java(21)` de
+Em qualquer sessão nova do R, rode `rJavaEnv::use_java(21)` de
 novo antes de usar o `r5r`, porque é isso que aponta o R para esse Java. O `PATH` do sistema não é
 alterado, de propósito, para não interferir em outros programas.
 :::
@@ -128,11 +104,3 @@ mudança só passa a valer após reiniciar a sessão do R.
 :::
 
 Se tudo rodou sem erro, o ambiente está pronto para o próximo capítulo.
-
-::: {.callout-note}
-## Versões usadas neste material
-
-O material foi escrito e testado com `r5r` 2.4.0 e `accessibility` 1.5.0 [@pereira_r5r_2021].
-Nomes de funções e argumentos podem mudar em versões futuras. Em caso de erro, confira
-`packageVersion("r5r")` e `packageVersion("accessibility")`.
-:::

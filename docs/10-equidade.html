@@ -308,7 +308,7 @@ div.csl-indent {
 </header>
 
 
-<p>Calcular acessibilidade não basta para entender a justiça de um sistema de transportes. Dois modos podem gerar acessibilidade média parecida e distribuí-la de formas muito diferentes entre ricos e pobres. O pacote <code>accessibility</code> traz medidas de <strong>desigualdade</strong> (Palma, Gini, índice de concentração, Theil) e de <strong>pobreza de acessibilidade</strong> (família FGT) para responder a essa pergunta.</p>
+<p>Calcular acessibilidade não basta para entender a justiça de um sistema de transportes. Dois modos podem gerar acessibilidade média parecida e distribuí-la de formas muito diferentes entre ricos e pobres. O pacote <code>accessibility</code> traz medidas de <strong>desigualdade</strong> (Palma, Gini, índice de concentração, Theil) e de <strong>pobreza de acessibilidade</strong> (família FGT) para responder a essa pergunta <span class="citation" data-cites="louro_cycling_2026 karner_pereira_farber_2024">(<a href="referencias.html#ref-karner_pereira_farber_2024" role="doc-biblioref">Karner et al., 2025</a>; <a href="referencias.html#ref-louro_cycling_2026" role="doc-biblioref">Louro et al., 2026</a>)</span>.</p>
 <p>Seguimos usando <code>acess_pe</code>, <code>acess_bike</code>, <code>acess_carro</code>, <code>acess_tp</code> e <code>uso_solo</code>, calculados no capítulo anterior.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -330,7 +330,7 @@ div.csl-indent {
 </div>
 <section id="preparando-os-dados-sociodemográficos" class="level2" data-number="10.1">
 <h2 data-number="10.1" class="anchored" data-anchor-id="preparando-os-dados-sociodemográficos"><span class="header-section-number">10.1</span> Preparando os dados sociodemográficos</h2>
-<p>As medidas de desigualdade precisam de renda e população <strong>sem valores faltantes</strong>. Hexágonos sem moradores (<code>population == 0</code>) não têm renda média definida (<code>NA</code>) e não fazem sentido nessas contas, então os removemos.</p>
+<p>As medidas de desigualdade precisam de renda e população <strong>sem valores faltantes</strong>. Hexágonos sem moradores (<code>population == 0</code>) não têm renda média definida (<code>NA</code>) e não fazem sentido nessas contas, então são removidos.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>uso_solo_equidade <span class="ot">&lt;-</span> uso_solo <span class="sc">|&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(population <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="sc">!</span><span class="fu">is.na</span>(income))</span>
@@ -447,8 +447,14 @@ Dica
 <div id="ref-erreygers2009" class="csl-entry" role="listitem">
 Erreygers, G. (2009). Correcting the <span>C</span>oncentration <span>I</span>ndex. <em>Journal of Health Economics</em>, <em>28</em>(2), 504–515.
 </div>
+<div id="ref-karner_pereira_farber_2024" class="csl-entry" role="listitem">
+Karner, A., Pereira, R. H. M., &amp; Farber, S. (2025). Advances and pitfalls in measuring transportation equity. <em>Transportation</em>, <em>52</em>(4), 1399–1427. <a href="https://doi.org/10.1007/s11116-023-10460-7">https://doi.org/10.1007/s11116-023-10460-7</a>
+</div>
 <div id="ref-levinson_king_2020" class="csl-entry" role="listitem">
 Levinson, D., &amp; King, D. (2020). <em>Transport <span>A</span>ccess <span>M</span>anual: <span>A</span> <span>G</span>uide for <span>M</span>easuring <span>C</span>onnection between <span>P</span>eople and <span>P</span>laces</em>. Committee of the Transport Access Manual, University of Sydney.
+</div>
+<div id="ref-louro_cycling_2026" class="csl-entry" role="listitem">
+Louro, T., Geurs, K. T., Grigolon, A., &amp; Cunha, A. L. (2026). Cycling accessibility and equity: a systematic literature review. <em>Transport Reviews</em>, 1–24. <a href="https://doi.org/10.1080/01441647.2026.2664409">https://doi.org/10.1080/01441647.2026.2664409</a>
 </div>
 <div id="ref-pedreira2026cnefetools" class="csl-entry" role="listitem">
 Pedreira Junior, J. U., &amp; Stabile, B. H. M. (2026). <em><span>cnefetools</span>: <span>A</span>ccess and <span>A</span>nalysis of <span>B</span>razilian <span>CNEFE</span> <span>A</span>ddress <span>D</span>ata</em>. <a href="https://github.com/pedreirajr/cnefetools">https://github.com/pedreirajr/cnefetools</a>

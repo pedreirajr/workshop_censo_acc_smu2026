@@ -7,7 +7,8 @@ execute:
 Calcular acessibilidade não basta para entender a justiça de um sistema de transportes. Dois modos
 podem gerar acessibilidade média parecida e distribuí-la de formas muito diferentes entre ricos e
 pobres. O pacote `accessibility` traz medidas de **desigualdade** (Palma, Gini, índice de
-concentração, Theil) e de **pobreza de acessibilidade** (família FGT) para responder a essa pergunta.
+concentração, Theil) e de **pobreza de acessibilidade** (família FGT) para responder a essa pergunta
+[@louro_cycling_2026; @karner_pereira_farber_2024].
 
 Seguimos usando `acess_pe`, `acess_bike`, `acess_carro`, `acess_tp` e `uso_solo`, calculados no
 capítulo anterior.
@@ -25,7 +26,7 @@ capítulo anterior.
 
 As medidas de desigualdade precisam de renda e população **sem valores faltantes**. Hexágonos sem
 moradores (`population == 0`) não têm renda média definida (`NA`) e não fazem sentido nessas contas,
-então os removemos.
+então são removidos.
 
 ```{r}
 uso_solo_equidade <- uso_solo |>

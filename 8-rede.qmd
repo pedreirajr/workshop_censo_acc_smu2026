@@ -22,7 +22,7 @@ roteamento de Anápolis.
 
 ## Os dados da oficina
 
-Quatro arquivos sustentam toda a Parte 2. Nenhum deles é produzido por código, então todos são
+Para a Parte 2, são necessários nove arquivos. Todos são
 distribuídos como *assets* de um
 [*release*](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/tag/dados) do
 repositório da oficina, e cada nome na tabela abaixo é o link direto de download.
@@ -33,16 +33,22 @@ repositório da oficina, e cada nome na tabela abaixo é o link direto de downlo
 | [`Anapolis.tif`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/Anapolis.tif) | Modelo digital de elevação (MDE), usado para custo de caminhada e bicicleta em ladeiras | `dados/r5/` |
 | [`GTFS_ANL.zip`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/GTFS_ANL.zip) | Feed GTFS do transporte público de Anápolis | `dados/r5/` |
 | [`grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg) | Grade de hexágonos H3 (resolução 9) com número de empregos, população, renda média e classificação urbano/rural | `dados/geo/` |
+| [`cnes_anapolis_go_02.gpkg`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/cnes_anapolis_go_02.gpkg) | CNES tipo 02, Atenção básica. 50 estabelecimentos | `dados/geo/` |
+| [`cnes_anapolis_go_05.gpkg`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/cnes_anapolis_go_05.gpkg) | CNES tipo 05, Hospital. 9 estabelecimentos | `dados/geo/` |
+| [`cnes_anapolis_go_73.gpkg`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/cnes_anapolis_go_73.gpkg) | CNES tipo 73, Emergência (pronto atendimento). 3 estabelecimentos | `dados/geo/` |
+| [`links_visum_anapolis.gpkg`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/links_visum_anapolis.gpkg) | Rede de links do modelo de tráfego (PTV Visum), com volumes, capacidades e velocidades | `dados/geo/` |
+| [`proposta_ciclo.gpkg`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/proposta_ciclo.gpkg) | Rede cicloviária proposta para Anápolis | `dados/geo/` |
 
-Não é preciso baixar nada à mão. O bloco abaixo cria as pastas dentro do projeto do RStudio e busca
+Não é preciso baixar nada à mão. O bloco abaixo cria uma pasta fixa na sua área de usuário e busca
 cada arquivo na URL do *release*. Ele confere antes se o arquivo já existe, então rodá-lo de novo em
 outra sessão não repete o download.
 
-::: {.callout-important}
-## Rode isto dentro do projeto do RStudio
+::: {.callout-tip}
+## Por que a pasta fica em `~`
 
-Os caminhos são relativos à raiz do projeto. Abra o `workshop_censo_acc_smu2026.Rproj` antes de
-executar, ou o R vai criar a pasta `dados/` em outro lugar.
+Guardamos os dados em `~/oficina_acessibilidade_smu2026`, dentro da sua pasta pessoal (`~`), em vez
+de um caminho relativo como `"dados/r5"`. Assim os arquivos ficam sempre no mesmo lugar, não importa
+de onde você esteja rodando o R, sem precisar abrir nenhum projeto antes.
 :::
 
 ```{r}
@@ -59,8 +65,9 @@ baixa_dado <- function(arquivo, destino) {
   caminho
 }
 
-pasta_rede <- "dados/r5"
-pasta_geo  <- "dados/geo"
+pasta_dados <- path.expand("~/oficina_acessibilidade_smu2026")
+pasta_rede  <- file.path(pasta_dados, "r5")
+pasta_geo   <- file.path(pasta_dados, "geo")
 
 # insumos da rede de roteamento
 invisible(lapply(
@@ -75,17 +82,62 @@ arq_grade <- baixa_dado(
   destino = pasta_geo
 )
 
+# unidades de saude (CNES), rede do modelo de trafego (Visum) e rede cicloviaria proposta
+invisible(lapply(
+  c(
+    "cnes_anapolis_go_02.gpkg",
+    "cnes_anapolis_go_05.gpkg",
+    "cnes_anapolis_go_73.gpkg",
+    "links_visum_anapolis.gpkg",
+    "proposta_ciclo.gpkg"
+  ),
+  baixa_dado,
+  destino = pasta_geo
+))
+
 list.files(c(pasta_rede, pasta_geo), full.names = TRUE)
 ```
 
-São cerca de 30 MB no total, então o primeiro download leva alguns minutos em conexão lenta. Da
+São cerca de 40 MB no total, então o primeiro download leva alguns minutos em conexão lenta. Da
 segunda vez em diante é instantâneo.
+
+::: {.callout-tip}
+## Por que duas pastas, e não uma só
+
+As duas pastas têm papéis diferentes:
+
+```
+~/oficina_acessibilidade_smu2026/
+├── r5/                        <- o r5r::build_network() lê essa pasta inteira, de uma vez
+│   ├── anapolis.pbf
+│   ├── Anapolis.tif
+│   └── GTFS_ANL.zip
+└── geo/                       <- lida direto com st_read(), fora do r5r
+    ├── grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg
+    ├── cnes_anapolis_go_02.gpkg
+    ├── cnes_anapolis_go_05.gpkg
+    ├── cnes_anapolis_go_73.gpkg
+    ├── links_visum_anapolis.gpkg
+    └── proposta_ciclo.gpkg
+```
+
+O `build_network()`, no capítulo seguinte, varre `pasta_rede` inteira procurando um `.pbf`, um ou
+mais `.zip` de GTFS e um `.tif` de elevação, e monta a rede de roteamento com o que encontrar ali.
+Por isso os três arquivos de rede precisam estar juntos, na mesma pasta, e só eles. Os arquivos de
+`pasta_geo` (grade, saúde, Visum) não são insumos de roteamento, então não têm essa exigência: cada
+um é lido diretamente com `st_read()`, onde e quando for usado.
+:::
 
 ## Grade de uso do solo (H3, resolução 9)
 
 A grade é um conjunto de hexágonos [H3](https://h3geo.org/) cobrindo todo o município, com número de
-empregos, população, renda média e uma classificação urbano ou rural por hexágono. Ela foi elaborada
-a partir de dados do IBGE, com os produtos tratados na Parte 1.
+empregos, população, renda média e uma classificação urbano ou rural por hexágono, já pronta para
+uso. As quatro colunas têm origens diferentes. População (`pop_ph`, população em domicílios
+particulares) e renda (`avg_inc_resp`, renda média dos responsáveis pelo domicílio) vêm do
+`cnefetools::tracts_to_h3()`. Empregos (`Jobs`) vêm da RAIS (Relação
+Anual de Informações Sociais), georreferenciada por @morelli_rais_2023. A classificação urbano/rural
+(`classe_urbano`) foi feita à parte. Essas fontes já foram combinadas nesta grade, então não é
+preciso refazer esse cruzamento.
 
 ```{r}
 grade <- st_read(arq_grade, quiet = TRUE)
@@ -93,10 +145,20 @@ grade <- st_read(arq_grade, quiet = TRUE)
 glimpse(sf::st_drop_geometry(grade))
 ```
 
+```
+Rows: 8,440
+Columns: 5
+$ id_hex        <chr> "89a8c040027ffff", "89a8c040103ffff", "89a8c040107ffff",…
+$ Jobs          <dbl> 0.0000000, 0.0000000, 0.0000000, 0.0000000, 0.0000000, …
+$ pop_ph        <dbl> 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000…
+$ avg_inc_resp  <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 1900.42, NA…
+$ classe_urbano <chr> "Rural", "Rural", "Rural", "Rural", "Rural", "Rural", "…
+```
+
 - `id_hex`, identificador do hexágono H3
 - `Jobs`, número de empregos no hexágono
-- `pop_ph`, população residente no hexágono
-- `avg_inc_resp`, renda média domiciliar per capita dos residentes
+- `pop_ph`, população em domicílios particulares no hexágono
+- `avg_inc_resp`, renda média dos responsáveis pelo domicílio
 - `classe_urbano`, `"Urbano"` ou `"Rural"`
 
 ```{r}
@@ -105,8 +167,7 @@ table(grade$classe_urbano)
 
 A maior parte da área do município é rural, mas concentra pouca população e quase nenhum emprego. O
 grosso da atividade urbana está nos cerca de 1.700 hexágonos classificados como `"Urbano"`. É neles
-que o cálculo de acessibilidade vai focar, para manter o processamento leve e o resultado
-interpretável.
+que o cálculo de acessibilidade vai focar.
 
 ```{r}
 mapview(
@@ -125,58 +186,91 @@ mapview(
   layer.name = "Renda média (R$)"
 )
 ```
+## Unidades de saúde (CNES)
+
+A partir do Cadastro Nacional de Estabelecimentos de Saúde (CNES), foi preparada uma extração das
+unidades de saúde de Anápolis em três categorias, usando o GeoCNES [@assis_geocnes_2024], ferramenta
+em Python que geolocaliza estabelecimentos do CNES a partir do código IBGE do município.
+
+| Código CNES | Tipo | Estabelecimentos em Anápolis |
+|:-:|---|:-:|
+| `02` | Atenção básica | 50 |
+| `05` | Hospital | 9 |
+| `73` | Emergência (pronto-socorro, UPA) | 3 |
+
+Cada arquivo é uma camada de pontos, um por estabelecimento, com endereço, coordenadas e o número de
+profissionais lotados ali (`prof`), usado mais adiante como uma medida de capacidade de atendimento.
+Os três arquivos já foram baixados no bloco de dados no início do capítulo.
+
+```{r}
+ler_unidade <- function(arquivo, tipo) {
+  st_read(arquivo, quiet = TRUE) |>
+    mutate(tipo = tipo)
+}
+
+unidades_saude <- bind_rows(
+  ler_unidade(file.path(pasta_geo, "cnes_anapolis_go_02.gpkg"), "atencao_basica"),
+  ler_unidade(file.path(pasta_geo, "cnes_anapolis_go_05.gpkg"), "hospital"),
+  ler_unidade(file.path(pasta_geo, "cnes_anapolis_go_73.gpkg"), "emergencia")
+)
+
+mapview(unidades_saude, zcol = "tipo", layer.name = "Unidades de saúde")
+```
+
+A diferença de escala é perceptível: atenção básica está espalhada pelo município,
+enquanto hospital e emergência são mais concentrados. É exatamente esse tipo de padrão que
+as medidas do próximo capítulo vão quantificar.
+
+Do mesmo jeito que no CNEFE, conta-se quantos estabelecimentos de cada tipo caem em cada hexágono,
+usando `h3jsr::point_to_cell()` para identificar o hexágono de resolução 9 que contém cada ponto.
+
+```{r}
+library(h3jsr)
+
+unidades_h3 <- unidades_saude |>
+  mutate(id_hex = point_to_cell(unidades_saude, res = 9)) |>
+  st_drop_geometry() |>
+  summarise(n = n(), prof = sum(prof, na.rm = TRUE), .by = c(id_hex, tipo))
+
+grade <- grade |>
+  left_join(
+    unidades_h3 |>
+      filter(tipo == "atencao_basica") |>
+      transmute(id_hex, atencao_basica = n, capacidade_ab = prof),
+    by = "id_hex"
+  ) |>
+  left_join(
+    unidades_h3 |> filter(tipo == "hospital") |> transmute(id_hex, hospital = n),
+    by = "id_hex"
+  ) |>
+  left_join(
+    unidades_h3 |> filter(tipo == "emergencia") |> transmute(id_hex, emergencia = n),
+    by = "id_hex"
+  ) |>
+  mutate(across(c(atencao_basica, capacidade_ab, hospital, emergencia), \(x) coalesce(x, 0)))
+```
+
+`atencao_basica`, `hospital` e `emergencia` contam estabelecimentos por hexágono. `capacidade_ab`
+soma o número de profissionais só nas unidades de atenção básica, e vai servir de peso de oferta na
+medida de competição do próximo capítulo.
 
 ## Rede viária (OpenStreetMap)
 
-O arquivo `anapolis.pbf` é um extrato do OpenStreetMap. O GDAL, por meio do `sf`, lê `.pbf` com o
-driver OSM, que expõe a rede em várias camadas.
-
-```{r}
-st_layers(file.path(pasta_rede, "anapolis.pbf"))
-```
-
-A camada `lines` traz as vias (ruas, avenidas, ciclovias e outras), usada pelo `r5r` para caminhada,
-bicicleta e carro.
-
-```{r}
-vias <- st_read(
-  file.path(pasta_rede, "anapolis.pbf"),
-  layer = "lines",
-  quiet = TRUE
-)
-
-ggplot(vias) +
-  geom_sf(linewidth = 0.15, color = "gray30") +
-  theme_minimal() +
-  labs(title = "Rede viária de Anápolis (OSM)")
-```
+O arquivo `anapolis.pbf` é um extrato do OpenStreetMap com a rede viária do município, e precisa
+estar nesse formato (`.pbf`) para o `r5r` conseguir lê-lo. A extração de um recorte para outros
+municípios costuma ser feita pelo [BBBike](https://extract.bbbike.org/).
 
 ## Elevação (MDE)
 
 `Anapolis.tif` é um modelo digital de elevação cobrindo a mesma área do extrato OSM. O `r5r` usa esse
 *raster* para estimar o efeito de subidas e descidas no tempo de caminhada e de bicicleta.
 
-```{r}
-mde <- rast(file.path(pasta_rede, "Anapolis.tif"))
-mde <- setMinMax(mde)
-
-plot(mde, main = "Modelo digital de elevação - Anápolis (m)")
-```
-
-```{r}
-c(
-  min  = global(mde, "min", na.rm = TRUE)[1, 1],
-  max  = global(mde, "max", na.rm = TRUE)[1, 1],
-  mean = global(mde, "mean", na.rm = TRUE)[1, 1]
-)
-```
-
-O terreno varia de aproximadamente 686 a 1.158 metros, desnível relevante o suficiente para impactar
-tempos de caminhada e de bicicleta em algumas regiões do município.
+Esse tipo de dado costuma ser obtido pelo [OpenTopography](https://opentopography.org/),
+via plugin do QGIS; o MDE de 30 metros da Copernicus é uma escolha comum, assim como o SRTM.
 
 ## Transporte público (GTFS)
 
-`GTFS_ANL.zip` é o feed de transporte público. Não precisamos descompactá-lo manualmente para usar no
+`GTFS_ANL.zip` é o feed de transporte público. Não é preciso descompactá-lo manualmente para usar no
 `r5r`, que lê o `.zip` diretamente, mas vale explorar seu conteúdo antes.
 
 ```{r}
@@ -207,8 +301,20 @@ paradas <- fread(file.path(gtfs_dir, "stops.txt")) |>
 mapview(paradas, layer.name = "Paradas de ônibus")
 ```
 
-Com os quatro insumos conferidos, rede viária, elevação, GTFS e uso do solo, podemos construir a rede
-de roteamento.
+Para mais detalhes sobre a especificação GTFS, vale a leitura do
+[capítulo 4](https://ipeagit.github.io/intro_access_book/pt/4_dados_gtfs.html) do livro de
+Introdução à acessibilidade urbana [@pereira_herszenhut_2023]. Vários feeds de transporte público de cidades
+ao redor do mundo estão disponíveis publicamente no [Mobility Database](https://mobilitydatabase.org/),
+um catálogo global de feeds GTFS, GTFS-Realtime e GBFS mantido pela MobilityData.
+
+Quando a cidade não publica um feed público, também é possível construir um GTFS do zero. A
+especificação exige pelo menos cinco arquivos `.txt`: `agency.txt` (a operadora), `stops.txt` (as
+paradas), `routes.txt` (as linhas), `trips.txt` (as viagens de cada linha) e `stop_times.txt` (os
+horários de passagem em cada parada de cada viagem), além de `calendar.txt` ou `calendar_dates.txt`
+para definir em que dias cada serviço roda.
+
+Com os quatro insumos conferidos, rede viária, elevação, GTFS e uso do solo, a rede de roteamento
+pode ser construída.
 
 ## Construindo a rede de transporte
 
@@ -258,8 +364,7 @@ antes de confiar nos resultados de transporte público.
 No GTFS de Anápolis usado nesta oficina aparecem cerca de 867 avisos, todos de prioridade `LOW` ou
 `MEDIUM`, a maioria `DuplicateKeyError` em `stop_id` (paradas cadastradas mais de uma vez) e
 `RangeError` em `parent_station` (referência a uma estação-mãe que não existe no `stops.txt`). Isso é
-comum em feeds GTFS reais e não impede o roteamento, mas é um bom lembrete de que "os dados vieram de
-um pacote" não significa "os dados estão limpos".
+comum em feeds GTFS reais e não impede o roteamento.
 
 ## Visualizando a rede
 
@@ -272,4 +377,4 @@ ggplot() +
   labs(title = "Rede viária utilizada pelo R5")
 ```
 
-Com a rede construída, já podemos calcular matrizes de tempo de viagem e acessibilidade.
+Com a rede construída, já é possível calcular matrizes de tempo de viagem e acessibilidade.
