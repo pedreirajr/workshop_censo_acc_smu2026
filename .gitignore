@@ -9,6 +9,9 @@
 !docs/*_files/
 !docs/**/*_files/
 **/*.quarto_ipynb
+**/*.knit.md
+# resíduo de renderização feita fora do diretório do projeto
+/site_libs/
 
 # R
 .Rhistory

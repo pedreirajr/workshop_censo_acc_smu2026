@@ -22,6 +22,18 @@ capítulo anterior.
 - identificar quais modos favorecem quais grupos de renda
 :::
 
+::: {.callout-tip}
+## Script deste capítulo
+
+Abra o arquivo `scripts/10-equidade.R` no projeto da oficina. É nele que vai o código
+apresentado a seguir. Se ainda não tiver o projeto, volte ao
+[Capítulo 1](1-instalacao.qmd).
+
+Ele continua a sessão do capítulo anterior, então rode antes o `scripts/9-indicadores.R`, que
+deixa em memória os indicadores de acessibilidade de cada modo.
+:::
+
+
 ## Preparando os dados sociodemográficos
 
 As medidas de desigualdade precisam de renda e população **sem valores faltantes**. Hexágonos sem

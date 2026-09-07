@@ -18,6 +18,15 @@ acessibilidade isso é decisivo, porque resolve o problema recorrente de onde es
 - reconhecer as limitações do cadastro
 :::
 
+::: {.callout-tip}
+## Script deste capítulo
+
+Abra o arquivo `scripts/5-cnefe.R` no projeto da oficina. É nele que vai o código
+apresentado a seguir. Se ainda não tiver o projeto, volte ao
+[Capítulo 1](1-instalacao.qmd).
+:::
+
+
 ## O que é o CNEFE
 
 <!-- ESBOÇO: origem operacional do cadastro, o que significa cada espécie de endereço e a diferença

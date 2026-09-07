@@ -333,15 +333,29 @@ div.csl-indent {
 </ul>
 </div>
 </div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Dica</span>Script deste capítulo
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Abra o arquivo <code>scripts/8-rede.R</code> no projeto da oficina. É nele que vai o código apresentado a seguir. Se ainda não tiver o projeto, volte ao <a href="./1-instalacao.html">Capítulo 1</a>.</p>
+<p>Ele continua a sessão do capítulo anterior, então rode antes o <code>scripts/7-instalacao_acc.R</code>, que carrega os pacotes e aponta o Java.</p>
+</div>
+</div>
 <section id="os-dados-da-oficina" class="level2" data-number="8.1">
 <h2 data-number="8.1" class="anchored" data-anchor-id="os-dados-da-oficina"><span class="header-section-number">8.1</span> Os dados da oficina</h2>
-<p>Para a Parte 2, são necessários nove arquivos. Todos são distribuídos como <em>assets</em> de um <a href="https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/tag/dados"><em>release</em></a> do repositório da oficina, e cada nome na tabela abaixo é o link direto de download.</p>
+<p>Para a Parte 2, são necessários nove arquivos, e todos já vieram no pacote da oficina que você extraiu no <a href="./1-instalacao.html">Capítulo 1</a>. Eles estão em <code>dados/r5/</code> e em <code>dados/geo/</code>, dentro da pasta do projeto, e não há nada a baixar. Cada nome na tabela abaixo é, ainda assim, o link direto para o <em>asset</em> correspondente no <a href="https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/tag/dados"><em>release</em></a> do repositório, útil caso algum arquivo se perca.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
 <th>Arquivo</th>
 <th>Conteúdo</th>
-<th>Destino no projeto</th>
+<th>Pasta</th>
 </tr>
 </thead>
 <tbody>
@@ -392,67 +406,31 @@ div.csl-indent {
 </tr>
 </tbody>
 </table>
-<p>Não é preciso baixar nada à mão. O bloco abaixo cria uma pasta fixa na sua área de usuário e busca cada arquivo na URL do <em>release</em>. Ele confere antes se o arquivo já existe, então rodá-lo de novo em outra sessão não repete o download.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<p>Guardamos as duas pastas em variáveis, além do caminho da grade, porque eles reaparecem ao longo deste capítulo e do próximo. O <code>list.files()</code> no fim serve de conferência, e deve listar os nove arquivos.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pasta_rede <span class="ot">&lt;-</span> <span class="st">"dados/r5"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pasta_geo  <span class="ot">&lt;-</span> <span class="st">"dados/geo"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>arq_grade <span class="ot">&lt;-</span> <span class="fu">file.path</span>(</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  pasta_geo,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="fu">c</span>(pasta_rede, pasta_geo), <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Dica</span>Por que a pasta fica em <code>~</code>
+<span class="screen-reader-only">Aviso</span>Abra o projeto pelo <code>.Rproj</code>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Guardamos os dados em <code>~/oficina_acessibilidade_smu2026</code>, dentro da sua pasta pessoal (<code>~</code>), em vez de um caminho relativo como <code>"dados/r5"</code>. Assim os arquivos ficam sempre no mesmo lugar, não importa de onde você esteja rodando o R, sem precisar abrir nenhum projeto antes.</p>
+<p>Os caminhos acima são relativos à raiz do projeto, e só funcionam se a sessão do R tiver sido iniciada pelo <code>workshop_smu2026.Rproj</code>. Se o <code>list.files()</code> voltar vazio, é quase certo que o R está posicionado em outro lugar. Confira com <code>getwd()</code>, cuja resposta tem de terminar em <code>workshop_smu2026</code>.</p>
 </div>
 </div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>url_base <span class="ot">&lt;-</span> <span class="st">"https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados"</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>baixa_dado <span class="ot">&lt;-</span> <span class="cf">function</span>(arquivo, destino) {</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  caminho <span class="ot">&lt;-</span> <span class="fu">file.path</span>(destino, arquivo)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(caminho)) {</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dir.create</span>(destino, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">download.file</span>(<span class="fu">paste0</span>(url_base, <span class="st">"/"</span>, arquivo), caminho, <span class="at">mode =</span> <span class="st">"wb"</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  caminho</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>pasta_dados <span class="ot">&lt;-</span> <span class="fu">path.expand</span>(<span class="st">"~/oficina_acessibilidade_smu2026"</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>pasta_rede  <span class="ot">&lt;-</span> <span class="fu">file.path</span>(pasta_dados, <span class="st">"r5"</span>)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>pasta_geo   <span class="ot">&lt;-</span> <span class="fu">file.path</span>(pasta_dados, <span class="st">"geo"</span>)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># insumos da rede de roteamento</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">lapply</span>(</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"anapolis.pbf"</span>, <span class="st">"Anapolis.tif"</span>, <span class="st">"GTFS_ANL.zip"</span>),</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  baixa_dado,</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">destino =</span> pasta_rede</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co"># grade de uso do solo</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>arq_grade <span class="ot">&lt;-</span> <span class="fu">baixa_dado</span>(</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="st">"grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg"</span>,</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">destino =</span> pasta_geo</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co"># unidades de saude (CNES), rede do modelo de trafego (Visum) e rede cicloviaria proposta</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">lapply</span>(</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cnes_anapolis_go_02.gpkg"</span>,</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cnes_anapolis_go_05.gpkg"</span>,</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cnes_anapolis_go_73.gpkg"</span>,</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    <span class="st">"links_visum_anapolis.gpkg"</span>,</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="st">"proposta_ciclo.gpkg"</span></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  baixa_dado,</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">destino =</span> pasta_geo</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(<span class="fu">c</span>(pasta_rede, pasta_geo), <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>São cerca de 40 MB no total, então o primeiro download leva alguns minutos em conexão lenta. Da segunda vez em diante é instantâneo.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -464,7 +442,8 @@ div.csl-indent {
 </div>
 <div class="callout-body-container callout-body">
 <p>As duas pastas têm papéis diferentes:</p>
-<pre><code>~/oficina_acessibilidade_smu2026/
+<pre><code>workshop_smu2026/dados/
+├── censo/                     &lt;- produtos do Censo, usados na Parte 1
 ├── r5/                        &lt;- o r5r::build_network() lê essa pasta inteira, de uma vez
 │   ├── anapolis.pbf
 │   ├── Anapolis.tif

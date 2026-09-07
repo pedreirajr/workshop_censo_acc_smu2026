@@ -2,81 +2,304 @@
 title: "Recortes territoriais"
 ---
 
-Nenhuma análise territorial começa pelo dado. Ela começa pela decisão de qual unidade geográfica
-responde à pergunta que se quer fazer. O IBGE divide o território brasileiro em vários recortes
-sobrepostos, cada um criado com um propósito distinto, e escolher o errado compromete tudo o que
-vem depois. Este capítulo apresenta esses recortes, mostra como obtê-los com o pacote `geobr` e
-discute os critérios de escolha, com Anápolis como território de referência.
+O aspecto espacial é um componente essencial na pesquisa em transportes. Este capítulo faz essa primeira organização das malhas territoriais do Censo que utilizaremos no curso. O município de exemplo, a ser utilizado ao longo de toda a oficina, é *Anápolis-GO*, escolha realizada em função do seu tamanho intermediário para processarmos os dados de forma mais célere e por dispormos de informações interessantes de uma pesquisa de mobilidade realizada por lá.
 
-::: {.callout-note}
-## Nesta seção você vai
+Nesta seção, iremos:
 
-- reconhecer os principais recortes territoriais do IBGE e o propósito de cada um
-- baixar malhas oficiais com o `geobr`
-- entender sistemas de referência de coordenadas e quando reprojetar
-- mapear os recortes de Anápolis e compará-los
-- escolher o recorte adequado a cada tipo de pergunta
+- reconhecer as malhas territoriais usadas nas duas Partes da oficina.
+- baixar os setores censitários e as áreas de ponderação de Anápolis com o `geobr`.
+- entender por que as áreas de ponderação entram em duas edições, 2010 e 2022.
+- inspecionar a estrutura dos arquivos geográficos obtidos.
+- mapear os recortes sobrepostos, de forma estática e interativa.
+- entender o argumento `simplified` e o efeito dele sobre o traçado das fronteiras.
+
+::: {.callout-tip}
+## Script deste capítulo
+
+Abra o arquivo `scripts/2-geo.R` no projeto da oficina. É nele que vai o código
+apresentado a seguir. Se ainda não tiver o projeto, volte ao
+[Capítulo 1](1-instalacao.qmd).
 :::
 
-## Os recortes do IBGE
+Antes de prosseguir, chamemos os pacotes usados ao longo do capítulo:
 
-<!-- ESBOÇO: apresentar a hierarquia político-administrativa (país, UF, município, distrito,
-     subdistrito) e a hierarquia estatística (setor censitário, área de ponderação). Acrescentar
-     os recortes temáticos relevantes para transportes, como área urbanizada, concentração urbana
-     e região metropolitana. Uma figura em painéis com o mesmo território em cada recorte. -->
-
-### Recortes político-administrativos
-
-<!-- ESBOÇO: o que muda entre edições censitárias, criação e fusão de municípios, e por que a
-     comparação intertemporal exige atenção. -->
-
-### Recortes estatísticos
-
-<!-- ESBOÇO: setor censitário como menor unidade de divulgação e critério de tamanho por número de
-     domicílios. Área de ponderação como menor unidade válida para os microdados da amostra.
-     Deixar claro que o setor é instável entre censos. -->
-
-### Recortes temáticos de interesse para transportes
-
-<!-- ESBOÇO: áreas urbanizadas, arranjos populacionais e concentrações urbanas. Utilidade para
-     delimitar o universo de análise da Parte 2. -->
-
-## Download das malhas com o geobr
-
-<!-- ESBOÇO: mostrar as funções de leitura, o argumento year e o efeito do cache. Baixar município,
-     setores e áreas de ponderação de Anápolis. -->
-
-```r
+```{r}
+#| label: pacotes
+#| message: false
+#| warning: false
 library(geobr)
 library(sf)
 library(dplyr)
-
-cod_anapolis <- 5201108
-
-municipio <- read_municipality(code_muni = cod_anapolis, year = 2022)
-setores   <- read_census_tract(code_tract = cod_anapolis, year = 2022)
-ap        <- read_weighting_area(code_weighting = cod_anapolis, year = 2022)
+library(ggplot2)
 ```
 
-## Sistemas de referência de coordenadas
+## As malhas da oficina
 
-<!-- ESBOÇO: diferença entre coordenadas geográficas e projetadas, por que áreas e distâncias
-     exigem projeção métrica, e escolha do SIRGAS 2000 / UTM 22S para Anápolis. Mostrar st_crs e
-     st_transform. Alertar que o r5r, na Parte 2, exige coordenadas em graus. -->
+Vamos obter e gravar 2 recortes geográficos **institucionais** com o pacote `geobr` neste capítulo, relativos aos setores censitários e às áreas de ponderação. Deixaremos a grade estatística e os pontos do CNEFE para os capítulos em que eles serão utilizados, obtidos via `geobr` e `cnefetools`, respectivamente, pois eles já contêm tanto os dados tabulares quanto geográficos nas funções que os produzem. Diferentemente destes casos, as malhas de setores censitários e áreas de ponderação são obtidas separadamente das informações estatísticas, que vêm somente com o `censobr`^[até o presente momento (08/09/2026)].
 
-```r
-setores_utm <- st_transform(setores, crs = 31982)  # SIRGAS 2000 / UTM 22S
+Também visualizaremos o arquivo de bairros de Anápolis-GO, um recorte geográfico **legal**, instituído por norma do município. É importante mencionar que o `geobr` também traz malhas de bairros, mas a
+cobertura é parcial, porque nem todos os municípios informaram os seus limites oficiais de bairro à
+operação censitária. De fato, dos 5.570 municípios brasileiros, somente 895 passaram essa informação ao IBGE, e Anápolis não está entre eles, sendo por isso que a malha de bairros que utilizaremos vem da prefeitura.
+
+Também utilizaremos a grade regular **H3**^[sigla de *Hexagonal Hierarchical Geospatial Indexing System*], um
+sistema hierárquico de indexação geoespacial em células hexagonais desenvolvido pela Uber e
+disponibilizado em código aberto. É uma malha global de referência, subdividida em resoluções
+sucessivas. No R, essas células são geradas pelo pacote `h3jsr`, mas também podemos obtê-las já com informações interpoladas de setores censitários conforme veremos no próximo capítulo.
+
+## Download das malhas de Anápolis
+
+As funções `read_census_tract()` e `read_weighting_area()` baixam, respectivamente, os setores
+censitários e as áreas de ponderação. Ambas aceitam no argumento de código a sigla ou o código de
+duas posições de um estado, ou o código IBGE de sete posições de um município, o que evita carregar
+o país inteiro para trabalhar com um único território. O argumento `year` é obrigatório desde a
+versão 2.0.0 do `geobr`, para que a escolha do ano de referência seja sempre deliberada.
+
+Guardamos os resultados em `anp_sc_geo22`, para os setores censitários, e em `anp_ap_geo22` e
+`anp_ap_geo10`, para as áreas de ponderação de cada edição. O sufixo com o ano não é capricho, pois
+as áreas de ponderação entram na oficina em duas versões. Os agregados por setor censitário do
+`censobr` já cobrem o Censo 2022, enquanto os microdados da amostra vão apenas até o Censo 2010, de
+modo que o [Capítulo 4](4-microdados.qmd) trabalha obrigatoriamente com o recorte de 2010. São
+nomes que serão reaproveitados nos capítulos seguintes.
+
+```{r}
+#| label: download-malhas
+#| cache: true
+#| message: false
+
+# Código IBGE de Anápolis: 5201108
+anp_sc_geo22 <- read_census_tract(code_tract = 5201108, year = 2022,
+                                  showProgress = FALSE)
+
+anp_ap_geo22 <- read_weighting_area(code_weighting = 5201108, year = 2022,
+                                    showProgress = FALSE)
+
+anp_ap_geo10 <- read_weighting_area(code_weighting = 5201108, year = 2010,
+                                    showProgress = FALSE)
 ```
 
-## Os recortes de Anápolis lado a lado
+::: {.callout-tip}
+O `geobr` guarda em cache local tudo o que baixa, de modo que a segunda execução do bloco acima é
+praticamente instantânea. Nos capítulos, o mesmo papel é cumprido pela opção `#| cache: true` do
+chunk, que impede o download a cada renderização.
+:::
 
-<!-- ESBOÇO: figura com painéis comparando município, setores, áreas de ponderação e área
-     urbanizada. Tabela com contagem de unidades e área média de cada recorte. Comentar a
-     diferença de resolução e o que isso implica. -->
+## A estrutura dos arquivos
 
-## Qual recorte usar
+Vejamos o que veio dentro de cada objeto. A função `head()` mostra as seis primeiras linhas junto
+do cabeçalho que o `sf` imprime, com o tipo de geometria, a extensão da caixa delimitadora e o
+sistema de referência de coordenadas.
 
-<!-- ESBOÇO: fechar com uma tabela de decisão que cruza tipo de pergunta, fonte do dado e recorte
-     recomendado. Exemplo: estimativa com pesos amostrais exige área de ponderação, indicador do
-     universo aceita setor, comparação intertemporal pede grade estatística. Antecipar a escolha
-     usada na Parte 2. -->
+```{r}
+#| label: head-setores
+head(anp_sc_geo22)
+```
+
+O cabeçalho informa que Anápolis tem `r nrow(anp_sc_geo22)` setores censitários em polígonos, no SRC
+SIRGAS 2000 (EPSG 4674), que é o sistema geodésico oficial brasileiro, com coordenadas em graus. A
+lista completa de colunas sai com `names()`.
+
+```{r}
+#| label: names-setores
+names(anp_sc_geo22)
+```
+
+Repare que a tabela é toda de identificação. Há o código do setor em `code_tract`, a hierarquia
+territorial completa em que ele se encaixa, de distrito e subdistrito até a grande região, a
+classificação urbana ou rural em `zone` e o ano de referência. Não há uma única variável de
+população, renda ou domicílio, exatamente como anunciado.
+
+As áreas de ponderação seguem a mesma lógica, com bem menos linhas e menos colunas.
+
+```{r}
+#| label: head-ap22
+head(anp_ap_geo22)
+```
+
+```{r}
+#| label: names-ap22
+names(anp_ap_geo22)
+```
+
+São `r nrow(anp_ap_geo22)` áreas de ponderação para os `r nrow(anp_sc_geo22)` setores censitários do
+município. A diferença de contagem explica a razão de ser desse recorte, pois a área de ponderação
+é um agrupamento de setores contíguos construído para dar tamanho amostral suficiente aos
+microdados da amostra, tema do [Capítulo 4](4-microdados.qmd). O identificador aqui é
+`code_weighting`.
+
+A edição de 2010 tem a mesma natureza e uma tabela um pouco mais enxuta.
+
+```{r}
+#| label: names-ap10
+names(anp_ap_geo10)
+```
+
+Em 2010 eram `r nrow(anp_ap_geo10)` áreas de ponderação, metade das `r nrow(anp_ap_geo22)` de 2022.
+O recorte é refeito a cada censo, acompanhando o crescimento da cidade e a redistribuição dos
+domicílios, o que significa que os códigos de uma edição não correspondem aos da outra e que
+qualquer comparação direta entre os dois anos é indevida. Repare também que a tabela de 2010 não
+traz a coluna `name_weighting`, presente apenas em 2022.
+
+::: {.callout-warning}
+As colunas `code_tract` e `code_weighting` chegam do `geobr` como números, enquanto os produtos
+tabulares do Censo trazem os mesmos códigos como texto. A junção entre geometria e dados, feita nos
+próximos capítulos, exige converter um dos lados com `as.character()`, sob pena de a chave não
+casar e o resultado vir vazio.
+:::
+
+## Os dois recortes no mesmo mapa
+
+Como a área de ponderação é um agrupamento de setores, os dois recortes se encaixam perfeitamente,
+e a maneira mais direta de mostrar isso é sobrepor as duas camadas em um único mapa. Passamos cada
+uma a um `geom_sf()` com o argumento `data`, desenhando os setores preenchidos com traço fino e as
+áreas de ponderação por cima, sem preenchimento (`fill = NA`) e com traço grosso, de forma que elas
+funcionem como contorno.
+
+```{r}
+#| label: fig-recortes-anapolis
+#| fig-cap: "Setores censitários de Anápolis (GO) em 2022, contornados pelas áreas de ponderação."
+#| message: false
+
+ggplot() +
+  geom_sf(data = anp_sc_geo22, fill = "gray92", color = "gray70", linewidth = 0.2) +
+  geom_sf(data = anp_ap_geo22, fill = NA, color = "firebrick", linewidth = 0.7) +
+  theme_minimal()
+```
+
+O mapa deixa visível o principal traço do desenho dos setores censitários, que é a variação enorme
+de tamanho entre a mancha urbana e a zona rural. O critério de delimitação é o número de domicílios,
+não a área, de modo que a malha se adensa onde há gente e se alarga onde não há. As áreas de
+ponderação seguem o mesmo padrão, com muitas unidades pequenas concentradas na cidade e poucas
+unidades extensas no restante do território.
+
+## Visualização interativa com o mapview
+
+O mapa estático mostra o padrão geral, mas não permite chegar perto o suficiente para conferir se a
+malha está correta. Para isso, o pacote `mapview` gera um mapa navegável, com zoom e deslocamento,
+sobre uma camada de base como o OpenStreetMap, e exibe a tabela de atributos de cada feição ao
+clique. É a ferramenta de inspeção por excelência na fase exploratória.
+
+A sintaxe acompanha a do `ggplot2`, com camadas somadas pelo operador `+`. Os argumentos estéticos
+mais usados para polígonos são `col.regions`, para o preenchimento, `color`, para a borda, `lwd`,
+para a espessura da borda, e `alpha.regions`, para a transparência do preenchimento em uma escala
+de 0 a 1. Repetimos abaixo a mesma composição do mapa anterior, com as áreas de ponderação em
+contorno vermelho sem preenchimento, e acrescentamos as áreas de ponderação de 2010 em azul. Use o
+ícone de camadas para ligar e desligar essa terceira camada e veja como o recorte foi redesenhado
+de um censo para o outro.
+
+```{r}
+#| label: map-mapview-recortes
+#| message: false
+
+library(mapview)
+
+mapview(anp_sc_geo22,
+        layer.name    = "Setores 2022",
+        col.regions   = "gray80",
+        color         = "gray40",
+        lwd           = 0.5,
+        alpha.regions = 0.4,
+        legend        = FALSE) +
+mapview(anp_ap_geo22,
+        layer.name    = "AP 2022",
+        col.regions   = "firebrick",
+        color         = "firebrick",
+        lwd           = 2.5,
+        alpha.regions = 0,
+        legend        = FALSE) +
+mapview(anp_ap_geo10,
+        layer.name    = "AP 2010",
+        col.regions   = "steelblue",
+        color         = "steelblue",
+        lwd           = 2.5,
+        alpha.regions = 0,
+        legend        = FALSE)
+```
+
+::: {.callout-warning}
+## Mapa de fundo em branco ou com marca d'água
+
+Desde o final de agosto de 2026, a CARTO passou a exigir chave de API para os seus mapas de base em
+formato raster, que são justamente os que o `mapview` traz como padrão (`CartoDB.Positron`). Sem a
+chave, os ladrilhos vêm cobertos por uma marca d'água de "API KEY REQUIRED"
+[@carto_basemaps_faq]. Nem todos os provedores fazem essa exigência, e o OpenStreetMap continua
+aberto. A solução é imediata, pois basta clicar no ícone de camadas, no canto superior direito do
+mapa, e escolher `OpenStreetMap` entre os mapas de fundo disponíveis.
+:::
+
+## O argumento simplified
+
+Agora aproxime bastante o zoom no mapa interativo, sobre a mancha urbana, e acompanhe o contorno de
+alguns setores. Você verá vértices deslocados, cantos cortados e pequenos vãos ou sobreposições
+entre polígonos vizinhos que deveriam encostar perfeitamente.
+
+Essas imperfeições não são erro do IBGE nem do download. Todas as funções de leitura do `geobr`
+têm o argumento `simplified = TRUE` como padrão, que devolve uma versão da malha com o número de
+vértices reduzido. O arquivo fica menor e o processamento mais rápido, ao custo do traçado fiel das
+fronteiras. Para análise exploratória rápida o padrão serve bem, mas para mapas de apresentação e
+para qualquer operação geométrica sensível a borda, como interseção, recorte e interpolação, é
+preciso a geometria completa, obtida com `simplified = FALSE`.
+
+Baixamos as três malhas de novo, agora sem simplificação, sobrescrevendo os objetos anteriores. Como
+o interesse é comparar, contamos os vértices dos setores antes e depois da troca com
+`st_coordinates()`.
+
+```{r}
+#| label: download-malhas-completas
+#| cache: true
+#| message: false
+
+vertices_simplificado <- nrow(st_coordinates(anp_sc_geo22))
+
+anp_sc_geo22 <- read_census_tract(code_tract = 5201108, year = 2022,
+                                  simplified = FALSE, showProgress = FALSE)
+
+anp_ap_geo22 <- read_weighting_area(code_weighting = 5201108, year = 2022,
+                                    simplified = FALSE, showProgress = FALSE)
+
+anp_ap_geo10 <- read_weighting_area(code_weighting = 5201108, year = 2010,
+                                    simplified = FALSE, showProgress = FALSE)
+
+c(simplificado = vertices_simplificado,
+  completo     = nrow(st_coordinates(anp_sc_geo22)))
+```
+
+A malha completa tem várias vezes mais vértices que a simplificada, e é essa diferença que aparece
+no traçado. Refaça o mapa interativo com os objetos recém-baixados e volte ao mesmo ponto de zoom
+do exercício anterior.
+
+```{r}
+#| label: map-mapview-completo
+#| message: false
+
+mapview(anp_sc_geo22,
+        layer.name    = "Setores 2022",
+        col.regions   = "gray80",
+        color         = "gray40",
+        lwd           = 0.5,
+        alpha.regions = 0.4,
+        legend        = FALSE) +
+mapview(anp_ap_geo22,
+        layer.name    = "AP 2022",
+        col.regions   = "firebrick",
+        color         = "firebrick",
+        lwd           = 2.5,
+        alpha.regions = 0,
+        legend        = FALSE)
+```
+
+As fronteiras agora acompanham ruas, cursos d'água e limites de quadra com precisão, e os polígonos
+vizinhos encostam sem vãos. Vale gastar esse tempo uma única vez, no início do trabalho, porque
+todo o restante da oficina se apoia nessas geometrias.
+
+::: {.callout-tip}
+O ganho de precisão custa memória e tempo de processamento, o que é irrelevante para um município
+de porte médio como Anápolis e passa a pesar em análises de escala estadual ou nacional. Nesses
+casos, uma estratégia usual é filtrar o recorte de interesse com a malha simplificada e só então
+rebaixar a área selecionada com `simplified = FALSE`.
+:::
+
+Com `anp_sc_geo22`, `anp_ap_geo22` e `anp_ap_geo10` em mãos, temos a metade geográfica do trabalho
+pronta. Falta a
+outra metade, os valores das variáveis do Censo para cada setor e cada área de ponderação, que
+obteremos com o pacote `censobr` a partir do próximo capítulo e uniremos a essas geometrias pelos
+códigos identificadores.

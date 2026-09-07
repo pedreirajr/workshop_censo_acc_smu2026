@@ -20,6 +20,15 @@ urbanísticas do entorno dos domicílios sob a ótica de transportes.
 - explorar as características urbanísticas do entorno com recorte de transportes
 :::
 
+::: {.callout-tip}
+## Script deste capítulo
+
+Abra o arquivo `scripts/3-agregados.R` no projeto da oficina. É nele que vai o código
+apresentado a seguir. Se ainda não tiver o projeto, volte ao
+[Capítulo 1](1-instalacao.qmd).
+:::
+
+
 ## O que são os agregados
 
 <!-- ESBOÇO: dados do universo, apurados para a totalidade dos domicílios, organizados por tema.

@@ -23,6 +23,18 @@ escolhe combinar tempo e oportunidades.
 - comparar tudo em gráficos e mapas
 :::
 
+::: {.callout-tip}
+## Script deste capítulo
+
+Abra o arquivo `scripts/9-indicadores.R` no projeto da oficina. É nele que vai o código
+apresentado a seguir. Se ainda não tiver o projeto, volte ao
+[Capítulo 1](1-instalacao.qmd).
+
+Ele continua a sessão do capítulo anterior, então rode antes o `scripts/8-rede.R`, que deixa em
+memória a rede, a grade e os caminhos das pastas.
+:::
+
+
 ## Matrizes de tempo de viagem
 
 Uma matriz de tempo de viagem traz, para cada par origem-destino, quanto tempo se leva para ir de

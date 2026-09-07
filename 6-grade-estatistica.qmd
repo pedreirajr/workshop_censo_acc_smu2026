@@ -18,6 +18,15 @@ populacional e geometria uniforme.
 - preparar o conjunto de origens e destinos usado na Parte 2
 :::
 
+::: {.callout-tip}
+## Script deste capítulo
+
+Abra o arquivo `scripts/6-grade.R` no projeto da oficina. É nele que vai o código
+apresentado a seguir. Se ainda não tiver o projeto, volte ao
+[Capítulo 1](1-instalacao.qmd).
+:::
+
+
 ## O que é a grade estatística
 
 <!-- ESBOÇO: construção da grade, resolução das células em área urbana e em área rural, e o

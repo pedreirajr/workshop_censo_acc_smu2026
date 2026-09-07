@@ -259,12 +259,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Índice do Capítulo</h2>
    
   <ul>
-  <li><a href="#instalação-do-r-e-do-rstudio" id="toc-instalação-do-r-e-do-rstudio" class="nav-link active" data-scroll-target="#instalação-do-r-e-do-rstudio"><span class="header-section-number">1.1</span> Instalação do R e do RStudio</a></li>
-  <li><a href="#o-projeto-do-rstudio" id="toc-o-projeto-do-rstudio" class="nav-link" data-scroll-target="#o-projeto-do-rstudio"><span class="header-section-number">1.2</span> O projeto do RStudio</a></li>
-  <li><a href="#instalação-dos-pacotes" id="toc-instalação-dos-pacotes" class="nav-link" data-scroll-target="#instalação-dos-pacotes"><span class="header-section-number">1.3</span> Instalação dos pacotes</a></li>
-  <li><a href="#cache-dos-dados-baixados" id="toc-cache-dos-dados-baixados" class="nav-link" data-scroll-target="#cache-dos-dados-baixados"><span class="header-section-number">1.4</span> Cache dos dados baixados</a></li>
-  <li><a href="#teste-do-ambiente" id="toc-teste-do-ambiente" class="nav-link" data-scroll-target="#teste-do-ambiente"><span class="header-section-number">1.5</span> Teste do ambiente</a></li>
-  <li><a href="#problemas-mais-comuns" id="toc-problemas-mais-comuns" class="nav-link" data-scroll-target="#problemas-mais-comuns"><span class="header-section-number">1.6</span> Problemas mais comuns</a></li>
+  <li><a href="#o-pacote-da-oficina" id="toc-o-pacote-da-oficina" class="nav-link active" data-scroll-target="#o-pacote-da-oficina"><span class="header-section-number">1.1</span> O pacote da oficina</a></li>
+  <li><a href="#abra-o-projeto-não-os-arquivos-soltos" id="toc-abra-o-projeto-não-os-arquivos-soltos" class="nav-link" data-scroll-target="#abra-o-projeto-não-os-arquivos-soltos"><span class="header-section-number">1.2</span> Abra o projeto, não os arquivos soltos</a></li>
+  <li><a href="#um-script-por-capítulo" id="toc-um-script-por-capítulo" class="nav-link" data-scroll-target="#um-script-por-capítulo"><span class="header-section-number">1.3</span> Um script por capítulo</a></li>
+  <li><a href="#instalação-dos-pacotes-da-parte-1" id="toc-instalação-dos-pacotes-da-parte-1" class="nav-link" data-scroll-target="#instalação-dos-pacotes-da-parte-1"><span class="header-section-number">1.4</span> Instalação dos pacotes da Parte 1</a></li>
   </ul>
 </nav>
     </div>
@@ -290,7 +288,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Antes de tocar em qualquer dado do Censo é preciso deixar o ambiente pronto. Este capítulo cobre a instalação do R e do RStudio, a organização do projeto em pastas, a instalação dos pacotes usados na Parte 1 e a configuração do cache que evita baixar o mesmo arquivo duas vezes. É um capítulo de preparação, e a recomendação é executá-lo antes do evento, com calma e conexão estável.</p>
+<p>Toda a oficina roda dentro de um único projeto do RStudio, distribuído pronto em um arquivo compactado. Nele estão a estrutura de pastas, os arquivos de dados que não são baixados por código e um <em>script</em> de R em branco para cada capítulo. Este capítulo trata de duas tarefas apenas, obter esse pacote e instalar os pacotes de R da Parte 1. As duas devem ser feitas antes do evento, com calma e conexão estável.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -302,79 +300,175 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>instalar o R e o RStudio nas versões recomendadas</li>
-<li>criar o projeto do RStudio e a estrutura de pastas da oficina</li>
-<li>instalar os pacotes da Parte 1</li>
-<li>configurar o diretório de cache do <code>censobr</code> e do <code>geobr</code></li>
-<li>rodar um teste rápido para confirmar que o ambiente está funcional</li>
+<li>baixar e extrair o pacote da oficina</li>
+<li>abrir o projeto do RStudio e entender por que isso importa</li>
+<li>reconhecer a estrutura de pastas e o <em>script</em> de cada capítulo</li>
+<li>instalar os pacotes de R usados na Parte 1</li>
 </ul>
 </div>
 </div>
-<section id="instalação-do-r-e-do-rstudio" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="instalação-do-r-e-do-rstudio"><span class="header-section-number">1.1</span> Instalação do R e do RStudio</h2>
-<!-- ESBOÇO: links de download do CRAN e do Posit, versões mínimas recomendadas, ordem de
-     instalação (R antes do RStudio) e observação sobre usuários de Windows com Rtools. Uma
-     figura da tela inicial do RStudio com os quatro painéis identificados. -->
-</section>
-<section id="o-projeto-do-rstudio" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="o-projeto-do-rstudio"><span class="header-section-number">1.2</span> O projeto do RStudio</h2>
-<!-- ESBOÇO: por que trabalhar dentro de um projeto (caminhos relativos, diretório de trabalho
-     estável, reprodutibilidade). Como abrir o .Rproj da oficina. Estrutura de pastas esperada,
-     com dados/censo, dados/geo, dados/r5 e scripts/. -->
-<pre><code>workshop_censo_acc_smu2026/
-├── workshop_censo_acc_smu2026.Rproj
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Importante
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A oficina supõe que você já tenha o <strong>R</strong> e o <strong>RStudio</strong> instalados e funcionando. Se ainda não for o caso, instale primeiro o R, a partir do <a href="https://cran.r-project.org/">CRAN</a>, e depois o <a href="https://posit.co/download/rstudio-desktop/">RStudio Desktop</a>.</p>
+</div>
+</div>
+<section id="o-pacote-da-oficina" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="o-pacote-da-oficina"><span class="header-section-number">1.1</span> O pacote da oficina</h2>
+<p>Baixe o arquivo <a href="https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/workshop_smu2026.zip"><code>workshop_smu2026.zip</code></a>, com cerca de 30 MB, e extraia em um lugar estável do seu computador, como a pasta de documentos. Evite extrair para a área de trabalho temporária ou para dentro da pasta de downloads, porque o projeto vai ser usado nos quatro blocos da oficina e precisa continuar no mesmo lugar do começo ao fim.</p>
+<p>A extração produz uma pasta com esta estrutura.</p>
+<pre><code>workshop_smu2026/
+├── workshop_smu2026.Rproj
+├── LEIA-ME.txt
 ├── scripts/
+│   ├── 1-instalacao_censo.R
+│   ├── 2-geo.R
+│   ├── 3-agregados.R
+│   ├── 4-microdados.R
+│   ├── 5-cnefe.R
+│   ├── 6-grade.R
+│   ├── 7-instalacao_acc.R
+│   ├── 8-rede.R
+│   ├── 9-indicadores.R
+│   └── 10-equidade.R
 └── dados/
     ├── censo/
     ├── geo/
     └── r5/</code></pre>
 </section>
-<section id="instalação-dos-pacotes" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="instalação-dos-pacotes"><span class="header-section-number">1.3</span> Instalação dos pacotes</h2>
-<!-- ESBOÇO: bloco único de instalação, com uma frase sobre o papel de cada pacote. Alertar sobre
-     a instalação do sf no Windows e no Linux (dependências GDAL/GEOS/PROJ). -->
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pacotes <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<section id="abra-o-projeto-não-os-arquivos-soltos" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="abra-o-projeto-não-os-arquivos-soltos"><span class="header-section-number">1.2</span> Abra o projeto, não os arquivos soltos</h2>
+<p>Dentro da pasta extraída há o arquivo <code>workshop_smu2026.Rproj</code>, e é <strong>ele que vamos abrir inicialmente</strong>. Um duplo clique nesse arquivo abre o RStudio já com o diretório de trabalho apontado para a pasta do projeto, que é o que faz os caminhos relativos dos <em>scripts</em> funcionarem sem ajuste algum. Quando o código pede <code>dados/r5/anapolis.pbf</code>, ele encontra o arquivo porque o R está posicionado na raiz do projeto.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dica
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Para confirmar que está no lugar certo, rode <code>getwd()</code> no console. A resposta tem de terminar em <code>workshop_smu2026</code>. Se terminar em outra coisa, feche o RStudio e abra novamente pelo <code>.Rproj</code>.</p>
+</div>
+</div>
+</section>
+<section id="um-script-por-capítulo" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="um-script-por-capítulo"><span class="header-section-number">1.3</span> Um script por capítulo</h2>
+<p>Cada capítulo do site tem o seu arquivo correspondente em <code>scripts/</code>. Eles vêm todos em branco, de propósito, e serão preenchidos durante a aula, à medida que o código for apresentado. A ideia é acompanhar a explicação no site e digitar as linhas no <em>script</em> do capítulo, porque é digitando que a sintaxe se fixa.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Capítulo</th>
+<th>Script</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1. Instalação e ajustes iniciais</td>
+<td><code>1-instalacao_censo.R</code></td>
+</tr>
+<tr class="even">
+<td>2. Recortes territoriais</td>
+<td><code>2-geo.R</code></td>
+</tr>
+<tr class="odd">
+<td>3. Agregados por setor censitário</td>
+<td><code>3-agregados.R</code></td>
+</tr>
+<tr class="even">
+<td>4. Microdados da amostra</td>
+<td><code>4-microdados.R</code></td>
+</tr>
+<tr class="odd">
+<td>5. CNEFE</td>
+<td><code>5-cnefe.R</code></td>
+</tr>
+<tr class="even">
+<td>6. Grade estatística</td>
+<td><code>6-grade.R</code></td>
+</tr>
+<tr class="odd">
+<td>7. Instalação e ajustes iniciais da Parte 2</td>
+<td><code>7-instalacao_acc.R</code></td>
+</tr>
+<tr class="even">
+<td>8. Leitura dos arquivos e montagem da rede</td>
+<td><code>8-rede.R</code></td>
+</tr>
+<tr class="odd">
+<td>9. Cômputo dos indicadores</td>
+<td><code>9-indicadores.R</code></td>
+</tr>
+<tr class="even">
+<td>10. Equidade e pobreza de acessibilidade</td>
+<td><code>10-equidade.R</code></td>
+</tr>
+</tbody>
+</table>
+<p>As pastas de dados seguem a mesma divisão. Em <code>dados/geo/</code> e <code>dados/r5/</code> estão os arquivos que já vêm prontos no pacote, como a grade hexagonal de Anápolis, os estabelecimentos de saúde do CNES, a rede viária do OpenStreetMap e o GTFS do transporte público. A pasta <code>dados/censo/</code> começa vazia de propósito, porque os produtos do Censo são baixados ao vivo pelos pacotes <code>censobr</code> e <code>cnefetools</code> ao longo dos capítulos 3, 4 e 5.</p>
+</section>
+<section id="instalação-dos-pacotes-da-parte-1" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="instalação-dos-pacotes-da-parte-1"><span class="header-section-number">1.4</span> Instalação dos pacotes da Parte 1</h2>
+<p>O código a seguir vai para o <code>scripts/1-instalacao_censo.R</code>. Ele instala apenas o que estiver faltando, de modo que rodá-lo com o ambiente já pronto não custa nada.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pacotes <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tidyverse"</span>,   <span class="co"># manipulação e visualização de dados</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"sf"</span>,          <span class="co"># dados geográficos vetoriais</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"censobr"</span>,     <span class="co"># produtos do Censo Demográfico</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"geobr"</span>,       <span class="co"># malhas territoriais oficiais</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"sidrar"</span>,      <span class="co"># tabelas agregadas do SIDRA</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"arrow"</span>,       <span class="co"># leitura de arquivos grandes em formato parquet</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"mapview"</span>      <span class="co"># visualização interativa rápida</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">setdiff</span>(pacotes, <span class="fu">rownames</span>(<span class="fu">installed.packages</span>())))</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="cache-dos-dados-baixados" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="cache-dos-dados-baixados"><span class="header-section-number">1.4</span> Cache dos dados baixados</h2>
-<!-- ESBOÇO: explicar que censobr e geobr guardam os arquivos baixados em cache local, o que
-     evita repetir downloads pesados a cada execução. Mostrar como definir e inspecionar o
-     diretório de cache e como limpá-lo quando necessário. -->
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(censobr)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(geobr)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># define e inspeciona o diretório de cache</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set_censobr_cache_dir</span>(<span class="at">path =</span> <span class="st">"dados/censo/cache"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="teste-do-ambiente" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="teste-do-ambiente"><span class="header-section-number">1.5</span> Teste do ambiente</h2>
-<!-- ESBOÇO: um chunk curto que baixa a malha municipal de Goiás e plota Anápolis. Se o mapa
-     aparecer, o ambiente está pronto. Incluir mensagem sobre o tempo esperado do primeiro
-     download. -->
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(geobr)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"geobr"</span>,       <span class="co"># malhas territoriais oficiais</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"censobr"</span>,     <span class="co"># produtos do Censo Demográfico</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"arrow"</span>,       <span class="co"># leitura de arquivos grandes em formato parquet</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"srvyr"</span>,       <span class="co"># estimativas com pesos amostrais</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"h3jsr"</span>,       <span class="co"># grade hexagonal H3</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"mapview"</span>,     <span class="co"># visualização interativa rápida</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"remotes"</span>      <span class="co"># instalação de pacotes hospedados no GitHub</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>faltando <span class="ot">&lt;-</span> pacotes[<span class="sc">!</span>pacotes <span class="sc">%in%</span> <span class="fu">rownames</span>(<span class="fu">installed.packages</span>())]</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(faltando) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(faltando, <span class="at">repos =</span> <span class="st">"https://cloud.r-project.org"</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>O <code>cnefetools</code>, usado no capítulo do CNEFE, não está no CRAN e é instalado direto do GitHub.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="st">"cnefetools"</span> <span class="sc">%in%</span> <span class="fu">rownames</span>(<span class="fu">installed.packages</span>())) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"pedreirajr/cnefetools"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Aviso</span>Instalação do sf
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>O <code>sf</code> depende das bibliotecas GDAL, GEOS e PROJ. No Windows e no macOS o CRAN entrega binários prontos e a instalação é direta. No Linux é preciso instalar as bibliotecas do sistema antes, o que em distribuições baseadas em Debian se faz com <code>sudo apt install libgdal-dev libgeos-dev libproj-dev libudunits2-dev</code>.</p>
+</div>
+</div>
+<p>Por fim, carregue tudo. Se as linhas abaixo passarem sem mensagem de erro, o ambiente da Parte 1 está pronto.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>anapolis <span class="ot">&lt;-</span> <span class="fu">read_municipality</span>(<span class="at">code_muni =</span> <span class="dv">5201108</span>, <span class="at">year =</span> <span class="dv">2022</span>)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(anapolis) <span class="sc">+</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="st">"grey90"</span>, <span class="at">colour =</span> <span class="st">"grey30"</span>) <span class="sc">+</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="problemas-mais-comuns" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="problemas-mais-comuns"><span class="header-section-number">1.6</span> Problemas mais comuns</h2>
-<!-- ESBOÇO: tabela de erro observado e solução, cobrindo falha de compilação do sf, proxy
-     institucional bloqueando download, versão antiga do R e falta de espaço em disco. -->
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(geobr)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(censobr)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arrow)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(srvyr)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(h3jsr)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mapview)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cnefetools)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>A Parte 2 exige um ambiente adicional, com o Java e os pacotes de roteamento, tratado no <a href="./7-instalacao-r5r.html">Capítulo 7</a>. Vale fazer as duas instalações de uma vez, antes do evento.</p>
 
 
 </section>

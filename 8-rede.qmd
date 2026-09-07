@@ -20,14 +20,28 @@ roteamento de Anápolis.
 - visualizar a rede efetivamente usada pelo R5
 :::
 
+::: {.callout-tip}
+## Script deste capítulo
+
+Abra o arquivo `scripts/8-rede.R` no projeto da oficina. É nele que vai o código
+apresentado a seguir. Se ainda não tiver o projeto, volte ao
+[Capítulo 1](1-instalacao.qmd).
+
+Ele continua a sessão do capítulo anterior, então rode antes o `scripts/7-instalacao_acc.R`,
+que carrega os pacotes e aponta o Java.
+:::
+
+
 ## Os dados da oficina
 
-Para a Parte 2, são necessários nove arquivos. Todos são
-distribuídos como *assets* de um
+Para a Parte 2, são necessários nove arquivos, e todos já vieram no pacote da oficina que você
+extraiu no [Capítulo 1](1-instalacao.qmd). Eles estão em `dados/r5/` e em `dados/geo/`, dentro da
+pasta do projeto, e não há nada a baixar. Cada nome na tabela abaixo é, ainda assim, o link direto
+para o *asset* correspondente no
 [*release*](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/tag/dados) do
-repositório da oficina, e cada nome na tabela abaixo é o link direto de download.
+repositório, útil caso algum arquivo se perca.
 
-| Arquivo | Conteúdo | Destino no projeto |
+| Arquivo | Conteúdo | Pasta |
 |---|---|---|
 | [`anapolis.pbf`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/anapolis.pbf) | Rede viária (OpenStreetMap) do município | `dados/r5/` |
 | [`Anapolis.tif`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/Anapolis.tif) | Modelo digital de elevação (MDE), usado para custo de caminhada e bicicleta em ladeiras | `dados/r5/` |
@@ -39,67 +53,30 @@ repositório da oficina, e cada nome na tabela abaixo é o link direto de downlo
 | [`links_visum_anapolis.gpkg`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/links_visum_anapolis.gpkg) | Rede de links do modelo de tráfego (PTV Visum), com volumes, capacidades e velocidades | `dados/geo/` |
 | [`proposta_ciclo.gpkg`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/proposta_ciclo.gpkg) | Rede cicloviária proposta para Anápolis | `dados/geo/` |
 
-Não é preciso baixar nada à mão. O bloco abaixo cria uma pasta fixa na sua área de usuário e busca
-cada arquivo na URL do *release*. Ele confere antes se o arquivo já existe, então rodá-lo de novo em
-outra sessão não repete o download.
-
-::: {.callout-tip}
-## Por que a pasta fica em `~`
-
-Guardamos os dados em `~/oficina_acessibilidade_smu2026`, dentro da sua pasta pessoal (`~`), em vez
-de um caminho relativo como `"dados/r5"`. Assim os arquivos ficam sempre no mesmo lugar, não importa
-de onde você esteja rodando o R, sem precisar abrir nenhum projeto antes.
-:::
+Guardamos as duas pastas em variáveis, além do caminho da grade, porque eles reaparecem ao longo
+deste capítulo e do próximo. O `list.files()` no fim serve de conferência, e deve listar os nove
+arquivos.
 
 ```{r}
-url_base <- "https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados"
+pasta_rede <- "dados/r5"
+pasta_geo  <- "dados/geo"
 
-baixa_dado <- function(arquivo, destino) {
-  caminho <- file.path(destino, arquivo)
-
-  if (!file.exists(caminho)) {
-    dir.create(destino, recursive = TRUE, showWarnings = FALSE)
-    download.file(paste0(url_base, "/", arquivo), caminho, mode = "wb")
-  }
-
-  caminho
-}
-
-pasta_dados <- path.expand("~/oficina_acessibilidade_smu2026")
-pasta_rede  <- file.path(pasta_dados, "r5")
-pasta_geo   <- file.path(pasta_dados, "geo")
-
-# insumos da rede de roteamento
-invisible(lapply(
-  c("anapolis.pbf", "Anapolis.tif", "GTFS_ANL.zip"),
-  baixa_dado,
-  destino = pasta_rede
-))
-
-# grade de uso do solo
-arq_grade <- baixa_dado(
-  "grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg",
-  destino = pasta_geo
+arq_grade <- file.path(
+  pasta_geo,
+  "grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg"
 )
-
-# unidades de saude (CNES), rede do modelo de trafego (Visum) e rede cicloviaria proposta
-invisible(lapply(
-  c(
-    "cnes_anapolis_go_02.gpkg",
-    "cnes_anapolis_go_05.gpkg",
-    "cnes_anapolis_go_73.gpkg",
-    "links_visum_anapolis.gpkg",
-    "proposta_ciclo.gpkg"
-  ),
-  baixa_dado,
-  destino = pasta_geo
-))
 
 list.files(c(pasta_rede, pasta_geo), full.names = TRUE)
 ```
 
-São cerca de 40 MB no total, então o primeiro download leva alguns minutos em conexão lenta. Da
-segunda vez em diante é instantâneo.
+::: {.callout-warning}
+## Abra o projeto pelo `.Rproj`
+
+Os caminhos acima são relativos à raiz do projeto, e só funcionam se a sessão do R tiver sido
+iniciada pelo `workshop_smu2026.Rproj`. Se o `list.files()` voltar vazio, é quase certo que o R está
+posicionado em outro lugar. Confira com `getwd()`, cuja resposta tem de terminar em
+`workshop_smu2026`.
+:::
 
 ::: {.callout-tip}
 ## Por que duas pastas, e não uma só
@@ -107,7 +84,8 @@ segunda vez em diante é instantâneo.
 As duas pastas têm papéis diferentes:
 
 ```
-~/oficina_acessibilidade_smu2026/
+workshop_smu2026/dados/
+├── censo/                     <- produtos do Censo, usados na Parte 1
 ├── r5/                        <- o r5r::build_network() lê essa pasta inteira, de uma vez
 │   ├── anapolis.pbf
 │   ├── Anapolis.tif

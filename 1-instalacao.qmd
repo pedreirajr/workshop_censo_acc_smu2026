@@ -1,96 +1,155 @@
 ---
 title: "Instalação e ajustes iniciais"
+execute:
+  eval: false
 ---
 
-Antes de tocar em qualquer dado do Censo é preciso deixar o ambiente pronto. Este capítulo cobre a
-instalação do R e do RStudio, a organização do projeto em pastas, a instalação dos pacotes usados na
-Parte 1 e a configuração do cache que evita baixar o mesmo arquivo duas vezes. É um capítulo de
-preparação, e a recomendação é executá-lo antes do evento, com calma e conexão estável.
+Toda a oficina roda dentro de um único projeto do RStudio, distribuído pronto em um arquivo
+compactado. Nele estão a estrutura de pastas, os arquivos de dados que não são baixados por código
+e um *script* de R em branco para cada capítulo. Este capítulo trata de duas tarefas apenas, obter esse
+pacote e instalar os pacotes de R da Parte 1. As duas devem ser feitas antes do evento, com calma e
+conexão estável.
 
 ::: {.callout-note}
 ## Nesta seção você vai
 
-- instalar o R e o RStudio nas versões recomendadas
-- criar o projeto do RStudio e a estrutura de pastas da oficina
-- instalar os pacotes da Parte 1
-- configurar o diretório de cache do `censobr` e do `geobr`
-- rodar um teste rápido para confirmar que o ambiente está funcional
+- baixar e extrair o pacote da oficina
+- abrir o projeto do RStudio e entender por que isso importa
+- reconhecer a estrutura de pastas e o *script* de cada capítulo
+- instalar os pacotes de R usados na Parte 1
 :::
 
-## Instalação do R e do RStudio
+::: {.callout-important}
+A oficina supõe que você já tenha o **R** e o **RStudio** instalados e funcionando. Se ainda não
+for o caso, instale primeiro o R, a partir do [CRAN](https://cran.r-project.org/), e depois o
+[RStudio Desktop](https://posit.co/download/rstudio-desktop/).
+:::
 
-<!-- ESBOÇO: links de download do CRAN e do Posit, versões mínimas recomendadas, ordem de
-     instalação (R antes do RStudio) e observação sobre usuários de Windows com Rtools. Uma
-     figura da tela inicial do RStudio com os quatro painéis identificados. -->
+## O pacote da oficina
 
-## O projeto do RStudio
+Baixe o arquivo
+[`workshop_smu2026.zip`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/workshop_smu2026.zip),
+com cerca de 30 MB, e extraia em um lugar estável do seu computador, como a pasta de documentos.
+Evite extrair para a área de trabalho temporária ou para dentro da pasta de downloads, porque o
+projeto vai ser usado nos quatro blocos da oficina e precisa continuar no mesmo lugar do começo ao
+fim.
 
-<!-- ESBOÇO: por que trabalhar dentro de um projeto (caminhos relativos, diretório de trabalho
-     estável, reprodutibilidade). Como abrir o .Rproj da oficina. Estrutura de pastas esperada,
-     com dados/censo, dados/geo, dados/r5 e scripts/. -->
+A extração produz uma pasta com esta estrutura.
 
 ```
-workshop_censo_acc_smu2026/
-├── workshop_censo_acc_smu2026.Rproj
+workshop_smu2026/
+├── workshop_smu2026.Rproj
+├── LEIA-ME.txt
 ├── scripts/
+│   ├── 1-instalacao_censo.R
+│   ├── 2-geo.R
+│   ├── 3-agregados.R
+│   ├── 4-microdados.R
+│   ├── 5-cnefe.R
+│   ├── 6-grade.R
+│   ├── 7-instalacao_acc.R
+│   ├── 8-rede.R
+│   ├── 9-indicadores.R
+│   └── 10-equidade.R
 └── dados/
     ├── censo/
     ├── geo/
     └── r5/
 ```
 
-## Instalação dos pacotes
+## Abra o projeto, não os arquivos soltos
 
-<!-- ESBOÇO: bloco único de instalação, com uma frase sobre o papel de cada pacote. Alertar sobre
-     a instalação do sf no Windows e no Linux (dependências GDAL/GEOS/PROJ). -->
+Dentro da pasta extraída há o arquivo `workshop_smu2026.Rproj`, e é **ele que vamos abrir inicialmente**. Um duplo clique nesse arquivo abre o RStudio já com o diretório de trabalho apontado para a pasta do projeto,
+que é o que faz os caminhos relativos dos *scripts* funcionarem sem ajuste algum. Quando o código
+pede `dados/r5/anapolis.pbf`, ele encontra o arquivo porque o R está posicionado na raiz do projeto.
 
-```r
+::: {.callout-tip}
+Para confirmar que está no lugar certo, rode `getwd()` no console. A resposta tem de terminar em
+`workshop_smu2026`. Se terminar em outra coisa, feche o RStudio e abra novamente pelo `.Rproj`.
+:::
+
+## Um script por capítulo
+
+Cada capítulo do site tem o seu arquivo correspondente em `scripts/`. Eles vêm todos em branco, de
+propósito, e serão preenchidos durante a aula, à medida que o código for apresentado. A ideia é
+acompanhar a explicação no site e digitar as linhas no *script* do capítulo, porque é digitando que
+a sintaxe se fixa.
+
+| Capítulo | Script |
+|---|---|
+| 1. Instalação e ajustes iniciais | `1-instalacao_censo.R` |
+| 2. Recortes territoriais | `2-geo.R` |
+| 3. Agregados por setor censitário | `3-agregados.R` |
+| 4. Microdados da amostra | `4-microdados.R` |
+| 5. CNEFE | `5-cnefe.R` |
+| 6. Grade estatística | `6-grade.R` |
+| 7. Instalação e ajustes iniciais da Parte 2 | `7-instalacao_acc.R` |
+| 8. Leitura dos arquivos e montagem da rede | `8-rede.R` |
+| 9. Cômputo dos indicadores | `9-indicadores.R` |
+| 10. Equidade e pobreza de acessibilidade | `10-equidade.R` |
+
+As pastas de dados seguem a mesma divisão. Em `dados/geo/` e `dados/r5/` estão os arquivos que já
+vêm prontos no pacote, como a grade hexagonal de Anápolis, os estabelecimentos de saúde do CNES, a
+rede viária do OpenStreetMap e o GTFS do transporte público. A pasta `dados/censo/` começa vazia de
+propósito, porque os produtos do Censo são baixados ao vivo pelos pacotes `censobr` e `cnefetools`
+ao longo dos capítulos 3, 4 e 5.
+
+## Instalação dos pacotes da Parte 1
+
+O código a seguir vai para o `scripts/1-instalacao_censo.R`. Ele instala apenas o que estiver
+faltando, de modo que rodá-lo com o ambiente já pronto não custa nada.
+
+```{r}
 pacotes <- c(
   "tidyverse",   # manipulação e visualização de dados
   "sf",          # dados geográficos vetoriais
-  "censobr",     # produtos do Censo Demográfico
   "geobr",       # malhas territoriais oficiais
-  "sidrar",      # tabelas agregadas do SIDRA
+  "censobr",     # produtos do Censo Demográfico
   "arrow",       # leitura de arquivos grandes em formato parquet
-  "mapview"      # visualização interativa rápida
+  "srvyr",       # estimativas com pesos amostrais
+  "h3jsr",       # grade hexagonal H3
+  "mapview",     # visualização interativa rápida
+  "remotes"      # instalação de pacotes hospedados no GitHub
 )
 
-install.packages(setdiff(pacotes, rownames(installed.packages())))
+faltando <- pacotes[!pacotes %in% rownames(installed.packages())]
+
+if (length(faltando) > 0) {
+  install.packages(faltando, repos = "https://cloud.r-project.org")
+}
 ```
 
-## Cache dos dados baixados
+O `cnefetools`, usado no capítulo do CNEFE, não está no CRAN e é instalado direto do GitHub.
 
-<!-- ESBOÇO: explicar que censobr e geobr guardam os arquivos baixados em cache local, o que
-     evita repetir downloads pesados a cada execução. Mostrar como definir e inspecionar o
-     diretório de cache e como limpá-lo quando necessário. -->
-
-```r
-library(censobr)
-library(geobr)
-
-# define e inspeciona o diretório de cache
-set_censobr_cache_dir(path = "dados/censo/cache")
+```{r}
+if (!"cnefetools" %in% rownames(installed.packages())) {
+  remotes::install_github("pedreirajr/cnefetools")
+}
 ```
 
-## Teste do ambiente
+::: {.callout-warning}
+## Instalação do sf
 
-<!-- ESBOÇO: um chunk curto que baixa a malha municipal de Goiás e plota Anápolis. Se o mapa
-     aparecer, o ambiente está pronto. Incluir mensagem sobre o tempo esperado do primeiro
-     download. -->
+O `sf` depende das bibliotecas GDAL, GEOS e PROJ. No Windows e no macOS o CRAN entrega binários
+prontos e a instalação é direta. No Linux é preciso instalar as bibliotecas do sistema antes, o que
+em distribuições baseadas em Debian se faz com `sudo apt install libgdal-dev libgeos-dev
+libproj-dev libudunits2-dev`.
+:::
 
-```r
-library(geobr)
+Por fim, carregue tudo. Se as linhas abaixo passarem sem mensagem de erro, o ambiente da Parte 1
+está pronto.
+
+```{r}
+library(tidyverse)
 library(sf)
-library(ggplot2)
-
-anapolis <- read_municipality(code_muni = 5201108, year = 2022)
-
-ggplot(anapolis) +
-  geom_sf(fill = "grey90", colour = "grey30") +
-  theme_minimal()
+library(geobr)
+library(censobr)
+library(arrow)
+library(srvyr)
+library(h3jsr)
+library(mapview)
+library(cnefetools)
 ```
 
-## Problemas mais comuns
-
-<!-- ESBOÇO: tabela de erro observado e solução, cobrindo falha de compilação do sf, proxy
-     institucional bloqueando download, versão antiga do R e falta de espaço em disco. -->
+A Parte 2 exige um ambiente adicional, com o Java e os pacotes de roteamento, tratado no
+[Capítulo 7](7-instalacao-r5r.qmd). Vale fazer as duas instalações de uma vez, antes do evento.

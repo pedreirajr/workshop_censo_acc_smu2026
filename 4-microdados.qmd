@@ -18,6 +18,15 @@ simplesmente erradas. Este capítulo mostra como ler os microdados e como tratá
 - calcular indicadores de deslocamento por área de ponderação
 :::
 
+::: {.callout-tip}
+## Script deste capítulo
+
+Abra o arquivo `scripts/4-microdados.R` no projeto da oficina. É nele que vai o código
+apresentado a seguir. Se ainda não tiver o projeto, volte ao
+[Capítulo 1](1-instalacao.qmd).
+:::
+
+
 ## Universo e amostra
 
 <!-- ESBOÇO: contrastar os dois questionários, explicar por que a amostra existe e o que ela

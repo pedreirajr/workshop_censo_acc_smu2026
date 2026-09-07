@@ -17,6 +17,15 @@ R e esse motor. Faltam então duas coisas, os **pacotes de R** e o **Java**.
 - carregar os pacotes e confirmar que o ambiente está funcional
 :::
 
+::: {.callout-tip}
+## Script deste capítulo
+
+Abra o arquivo `scripts/7-instalacao_acc.R` no projeto da oficina. É nele que vai o código
+apresentado a seguir. Se ainda não tiver o projeto, volte ao
+[Capítulo 1](1-instalacao.qmd).
+:::
+
+
 ## Pacotes de R
 
 Este curso assume que você já tem **R e RStudio** instalados. O bloco abaixo confere
