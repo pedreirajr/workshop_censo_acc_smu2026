@@ -9,8 +9,8 @@ Material prático da oficina **Dados Censitários e Acessibilidade Urbana em R**
 ## Instrutores
 
 - Jorge Ubirajara Pedreira Junior
-- Thiago Louro
-- Lucas Assis
+- Thiago Vinícius Louro
+- Lucas Brandão Monteiro de Assis
 
 ## Conteúdo
 
@@ -36,6 +36,7 @@ material das partes práticas.
 
 Todas as aplicações usam **Anápolis-GO** como estudo de caso.
 
+<!--
 ## Dados
 
 Os arquivos que não são produzidos por código estão no *release*
@@ -62,3 +63,4 @@ quarto render 3-agregados.qmd   # um capítulo específico
 ```
 
 O site é publicado pelo GitHub Pages a partir da pasta `docs/` da branch `main`.
+-->

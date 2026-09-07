@@ -115,13 +115,13 @@ dados urbanos e uso de bases de dados institucionais brasileiras. Autor de
 :::
 
 ::: {.instrutor}
-### Thiago Louro {.unnumbered}
+### Thiago Vinícius Louro {.unnumbered}
 
 <!-- COMPLETAR: minibio do Thiago (vínculo institucional, áreas de atuação, link) -->
 :::
 
 ::: {.instrutor}
-### Lucas Assis {.unnumbered}
+### Lucas Brandão Monteiro de Assis {.unnumbered}
 
 <!-- COMPLETAR: minibio do Lucas (vínculo institucional, áreas de atuação, link) -->
 :::

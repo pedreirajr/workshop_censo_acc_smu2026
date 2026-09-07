@@ -64,7 +64,7 @@
     "href": "index.html#instrutores",
     "title": "Dados Censitários e Acessibilidade Urbana em R",
     "section": "Instrutores",
-    "text": "Instrutores\n\n\nJorge Ubirajara Pedreira Junior\nProfessor da Universidade Federal da Bahia (UFBA), atua em planejamento de transportes, análise de dados urbanos e uso de bases de dados institucionais brasileiras. Autor de Censo Demográfico no R. Página pessoal\n\n\nThiago Louro\n\n\n\nLucas Assis\n\n\n\n\n\n\n\nPedreira Junior, J. U. (2026). Censo Demográfico no R: conceitos e aplicações para a análise do território brasileiro. https://pedreirajr.github.io/rcensolivro/\n\n\nPereira, R. H. M., & Herszenhut, D. (2023). Introdução à acessibilidade urbana: um guia prático em R. Instituto de Pesquisa Econômica Aplicada (Ipea). https://ipeagit.github.io/intro_access_book/",
+    "text": "Instrutores\n\n\nJorge Ubirajara Pedreira Junior\nProfessor da Universidade Federal da Bahia (UFBA), atua em planejamento de transportes, análise de dados urbanos e uso de bases de dados institucionais brasileiras. Autor de Censo Demográfico no R. Página pessoal\n\n\nThiago Vinícius Louro\n\n\n\nLucas Brandão Monteiro de Assis\n\n\n\n\n\n\n\nPedreira Junior, J. U. (2026). Censo Demográfico no R: conceitos e aplicações para a análise do território brasileiro. https://pedreirajr.github.io/rcensolivro/\n\n\nPereira, R. H. M., & Herszenhut, D. (2023). Introdução à acessibilidade urbana: um guia prático em R. Instituto de Pesquisa Econômica Aplicada (Ipea). https://ipeagit.github.io/intro_access_book/",
     "crumbs": [
       "Apresentação"
     ]
@@ -444,6 +444,17 @@
     ]
   },
   {
+    "objectID": "7-instalacao-r5r.html#pacotes-de-r",
+    "href": "7-instalacao-r5r.html#pacotes-de-r",
+    "title": "7  Instalação e ajustes iniciais",
+    "section": "",
+    "text": "r5r e rJavaEnv fazem o roteamento propriamente dito, e cuidam do Java por trás dele\nsf e terra lidam com dados espaciais, vetor e raster, respectivamente\ndplyr e data.table organizam e transformam os dados\nggplot2 e mapview geram os gráficos e os mapas\naccessibility calcula os indicadores de acessibilidade e equidade\nh3jsr e cnefetools dão suporte à grade H3 e aos dados do CNEFE, usados no próximo capítulo",
+    "crumbs": [
+      "PARTE 2: ACESSIBILIDADE URBANA",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
+    ]
+  },
+  {
     "objectID": "7-instalacao-r5r.html#java",
     "href": "7-instalacao-r5r.html#java",
     "title": "7  Instalação e ajustes iniciais",
@@ -657,53 +668,9 @@
     "href": "referencias.html",
     "title": "Referências",
     "section": "",
-    "text": "Erreygers, G. (2009). Correcting the Concentration\nIndex. Journal of Health Economics,\n28(2), 504–515.\n\n\nHerszenhut, D., & Pereira, R. H. M. (2024). Accessibility:\nTransport Accessibility\nMeasures. https://ipeagit.github.io/accessibility/\n\n\nLevinson, D., & King, D. (2020). Transport Access\nManual: A Guide for\nMeasuring Connection between\nPeople and Places. Committee of the\nTransport Access Manual, University of Sydney.\n\n\nPedreira Junior, J. U. (2026). Censo demográfico no R:\nConceitos e aplicações para a análise do território brasileiro. https://pedreirajr.github.io/rcensolivro/\n\n\nPedreira Junior, J. U., & Stabile, B. H. M. (2026). cnefetools: Access and\nAnalysis of Brazilian CNEFE\nAddress Data. https://github.com/pedreirajr/cnefetools\n\n\nPereira, R. H. M., & Herszenhut, D. (2023). Introdução à\nacessibilidade urbana: Um guia prático em R. Instituto\nde Pesquisa Econômica Aplicada (Ipea). https://ipeagit.github.io/intro_access_book/\n\n\nPereira, R. H. M., Herszenhut, D., Braga, C. K. V., Bazzo, J. P.,\nOliveira, J. L. A., Parga, J. P., Saraiva, M., Silva, L. P., Tomasiello,\nD. B., & Warwar, L. (2022). Distribuição espacial de\ncaracterísticas sociodemográficas e localização de empregos e serviços\npúblicos das vinte maiores cidades do Brasil (Texto\nPara Discussão No. 2772). Instituto de Pesquisa Econômica Aplicada\n(Ipea). https://doi.org/10.38116/td2772\n\n\nPereira, R. H. M., & Karner, A. (2021). Transportation\nAccessibility. In International encyclopedia of\ntransportation. Elsevier.\n\n\nPereira, R. H. M., Saraiva, M., Herszenhut, D., Braga, C. K. V., &\nConway, M. W. (2021). r5r: Rapid Realistic\nRouting on Multimodal Transport\nNetworks with R5 in R.\nFindings. https://doi.org/10.32866/001c.21262\n\n\nTobler, W. (1993). Three presentations on geographical analysis and\nmodeling: Non-isotropic geographic modeling; speculations on the\ngeometry of geography; and global spatial analysis (Technical\nReport Nos. 93-1). National Center for Geographic Information; Analysis\n(NCGIA), University of California, Santa Barbara.",
+    "text": "Assis, L. B. M. de, Moraes, F. R., Segantine, P. C. L., Amado, M. J. N.\nP., & Silva, I. (2024). GeoCNES: Healthcare mapping in\nBrazilian cities – a computational tool for improved\ndecision-making. Ciência & Saúde Coletiva, 29(11),\ne02672024. https://doi.org/10.1590/1413-812320242911.02672024\n\n\nErreygers, G. (2009). Correcting the Concentration\nIndex. Journal of Health Economics,\n28(2), 504–515.\n\n\nHerszenhut, D., & Pereira, R. H. M. (2024). Accessibility:\nTransport Accessibility\nMeasures. https://ipeagit.github.io/accessibility/\n\n\nKarner, A., Pereira, R. H. M., & Farber, S. (2025). Advances and\npitfalls in measuring transportation equity. Transportation,\n52(4), 1399–1427. https://doi.org/10.1007/s11116-023-10460-7\n\n\nLevinson, D., & King, D. (2020). Transport Access\nManual: A Guide for\nMeasuring Connection between\nPeople and Places. Committee of the\nTransport Access Manual, University of Sydney.\n\n\nLouro, T., Geurs, K. T., Grigolon, A., & Cunha, A. L. (2026).\nCycling accessibility and equity: A systematic literature review.\nTransport Reviews, 1–24. https://doi.org/10.1080/01441647.2026.2664409\n\n\nMorelli, A. B., Fiedler, A. de C., & Cunha, A. L. (2023). Um\nbanco de dados de empregos formais georreferenciados em cidades\nbrasileiras. https://arxiv.org/abs/2303.09602\n\n\nPedreira Junior, J. U. (2026). Censo demográfico no R:\nConceitos e aplicações para a análise do território brasileiro. https://pedreirajr.github.io/rcensolivro/\n\n\nPedreira Junior, J. U., & Stabile, B. H. M. (2026). cnefetools: Access and\nAnalysis of Brazilian CNEFE\nAddress Data. https://github.com/pedreirajr/cnefetools\n\n\nPereira, R. H. M., & Herszenhut, D. (2023). Introdução à\nacessibilidade urbana: Um guia prático em R. Instituto\nde Pesquisa Econômica Aplicada (Ipea). https://ipeagit.github.io/intro_access_book/\n\n\nPereira, R. H. M., Herszenhut, D., Braga, C. K. V., Bazzo, J. P.,\nOliveira, J. L. A., Parga, J. P., Saraiva, M., Silva, L. P., Tomasiello,\nD. B., & Warwar, L. (2022). Distribuição espacial de\ncaracterísticas sociodemográficas e localização de empregos e serviços\npúblicos das vinte maiores cidades do Brasil (Texto\nPara Discussão No. 2772). Instituto de Pesquisa Econômica Aplicada\n(Ipea). https://doi.org/10.38116/td2772\n\n\nPereira, R. H. M., & Karner, A. (2021). Transportation\nAccessibility. In International encyclopedia of\ntransportation. Elsevier.\n\n\nTobler, W. (1993). Three presentations on geographical analysis and\nmodeling: Non-isotropic geographic modeling; speculations on the\ngeometry of geography; and global spatial analysis (Technical\nReport Nos. 93-1). National Center for Geographic Information; Analysis\n(NCGIA), University of California, Santa Barbara.",
     "crumbs": [
       "Referências"
-    ]
-  },
-  {
-    "objectID": "7-instalacao-r5r.html#pacotes-de-r",
-    "href": "7-instalacao-r5r.html#pacotes-de-r",
-    "title": "7  Instalação e ajustes iniciais",
-    "section": "",
-    "text": "r5r e rJavaEnv fazem o roteamento propriamente dito, e cuidam do Java por trás dele\nsf e terra lidam com dados espaciais, vetor e raster, respectivamente\ndplyr e data.table organizam e transformam os dados\nggplot2 e mapview geram os gráficos e os mapas\naccessibility calcula os indicadores de acessibilidade e equidade\nh3jsr e cnefetools dão suporte à grade H3 e aos dados do CNEFE, usados no próximo capítulo",
-    "crumbs": [
-      "PARTE 2: ACESSIBILIDADE URBANA",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Instalação e ajustes iniciais</span>"
-    ]
-  },
-  {
-    "objectID": "10-equidade.html#quatro-formas-de-pensar-equidade",
-    "href": "10-equidade.html#quatro-formas-de-pensar-equidade",
-    "title": "10  Equidade e pobreza de acessibilidade",
-    "section": "",
-    "text": "Igualitarismo: acessibilidade deveria ser distribuída de forma igual entre todos, independente de quem são. Medidas de dispersão geral, como o Gini e o Theil T, respondem a essa pergunta.\nEquidade horizontal: pessoas com necessidades parecidas deveriam ter acessibilidade parecida.\nEquidade vertical: pessoas com necessidades diferentes (renda, mobilidade reduzida etc.) deveriam receber tratamento diferente, geralmente priorizando quem tem menos. A razão de Palma e o índice de concentração são desenhados justamente para comparar grupos de renda entre si, não a população como um todo.\nSuficientarismo: o que importa não é a distribuição em si, mas se todo mundo tem acessibilidade acima de um patamar mínimo aceitável. A família FGT segue essa lógica: define uma linha de pobreza de acessibilidade e mede quem fica abaixo dela, e o quanto.\n\n\n\n\n\n\n\n\nNotaNesta seção você vai\n\n\n\n\npreparar os dados sociodemográficos para as medidas de desigualdade\ncalcular Palma, Gini, índice de concentração, Theil T e FGT para cada modo\ninterpretar cada indicador\nidentificar quais modos favorecem quais grupos de renda",
-    "crumbs": [
-      "PARTE 2: ACESSIBILIDADE URBANA",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Equidade e pobreza de acessibilidade</span>"
-    ]
-  },
-  {
-    "objectID": "10-equidade.html#preparando-os-dados-sociodemográficos",
-    "href": "10-equidade.html#preparando-os-dados-sociodemográficos",
-    "title": "10  Equidade e pobreza de acessibilidade",
-    "section": "10.2 Preparando os dados sociodemográficos",
-    "text": "10.2 Preparando os dados sociodemográficos\nAs medidas de desigualdade precisam de renda e população sem valores faltantes. Hexágonos sem moradores (population == 0) não têm renda média definida (NA) e não fazem sentido nessas contas, então são removidos.\n\nuso_solo_equidade &lt;- uso_solo |&gt;\n  filter(population &gt; 0, !is.na(income))\n\nnrow(uso_solo)\nnrow(uso_solo_equidade)",
-    "crumbs": [
-      "PARTE 2: ACESSIBILIDADE URBANA",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Equidade e pobreza de acessibilidade</span>"
-    ]
-  },
-  {
-    "objectID": "10-equidade.html#duas-formas-de-pensar-equidade",
-    "href": "10-equidade.html#duas-formas-de-pensar-equidade",
-    "title": "10  Equidade e pobreza de acessibilidade",
-    "section": "",
-    "text": "Igualitarismo: acessibilidade deveria ser distribuída de forma igual entre todos, independente de quem são. Medidas de dispersão geral, como o Gini e o Theil T, respondem a essa pergunta.\nSuficientarismo: o que importa não é a distribuição em si, mas se todo mundo tem acessibilidade acima de um patamar mínimo aceitável. A família FGT segue essa lógica: define uma linha de pobreza de acessibilidade e mede quem fica abaixo dela, e o quanto.\n\n\n\n\n\n\n\n\n\nNotaNesta seção você vai\n\n\n\n\npreparar os dados sociodemográficos para as medidas de desigualdade\ncalcular Palma, Gini, índice de concentração, Theil T e FGT para cada modo\ninterpretar cada indicador\nidentificar quais modos favorecem quais grupos de renda",
-    "crumbs": [
-      "PARTE 2: ACESSIBILIDADE URBANA",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Equidade e pobreza de acessibilidade</span>"
     ]
   }
 ]
