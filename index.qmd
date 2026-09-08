@@ -69,12 +69,16 @@ Doutor em Engenharia de Transportes e docente da Universidade Federal da Bahia (
 ### Thiago Vinícius Louro {.unnumbered}
 
 Doutor em Engenharia de Transportes pela Universidade de São Paulo e University of Twente, em regime de cotutela. Engenheiro Civil e Mestre em Engenharia de Transportes pela Universidade Estadual de Londrina. Atualmente, consultor de mobilidade na empresa URBTEC, em Curitiba-PR.
+
+[lattes](http://lattes.cnpq.br/2619402198229137)
 :::
 
 ::: {.instrutor}
 ### Lucas Brandão Monteiro de Assis {.unnumbered}
 
-<!-- COMPLETAR: minibio do Lucas (vínculo institucional, áreas de atuação, link) -->
+Doutor em Engenharia de Transportes pela Universidade de São Paulo e engenheiro da mobilidade, atua nas áreas de acessibilidade a equipamentos urbanos e de avaliação de projetos cicloviários. Atualmente, é Professor Temporário e Pós-doutorando no Departamento de Engenharia de Transportes da EESC-USP.
+
+[lattes](http://lattes.cnpq.br/3026929259853023)
 :::
 
 :::
