@@ -2,14 +2,7 @@
 title: "Agregados por setor censitário"
 ---
 
-Quem procura variável de transporte nos Agregados por Setor Censitário não encontra. O questionário
-básico do Censo, aplicado a todos os domicílios do país, não pergunta sobre viagem, modo de
-deslocamento ou posse de veículo. Ainda assim, os agregados são um dos insumos mais usados no
-planejamento de transportes, porque respondem à pergunta que antecede todas as outras, que é onde
-estão as pessoas e os domicílios e como eles são. Distribuição da população no território, estrutura
-etária, renda e tipo de moradia são exatamente o que alimenta um modelo de demanda, uma análise de
-cobertura de rede ou um cálculo de acessibilidade. E vêm na resolução espacial mais fina que o IBGE
-divulga para o universo, o setor censitário.
+Quem procura variável de transporte nos Agregados por Setor Censitário não encontra. O questionário básico do Censo, aplicado a todos os domicílios do país, não pergunta sobre viagem, modo de deslocamento ou posse de veículo. Ainda assim, os agregados são um dos insumos mais usados no planejamento de transportes, porque respondem à pergunta que antecede todas as outras, que é onde estão as pessoas e os domicílios e como eles são. Distribuição da população no território, estrutura etária, renda e tipo de moradia são exatamente o que alimenta um modelo de demanda, uma análise de cobertura de rede ou um cálculo de acessibilidade. E vêm em uma das resoluções espaciais mais finas que o IBGE divulga para o universo, o setor censitário.
 
 ::: {.callout-note}
 ## Nesta seção você vai

@@ -323,6 +323,7 @@ div.csl-indent {
   <li><a href="#os-dois-recortes-no-mesmo-mapa" id="toc-os-dois-recortes-no-mesmo-mapa" class="nav-link" data-scroll-target="#os-dois-recortes-no-mesmo-mapa"><span class="header-section-number">2.4</span> Os dois recortes no mesmo mapa</a></li>
   <li><a href="#visualização-interativa-com-o-mapview" id="toc-visualização-interativa-com-o-mapview" class="nav-link" data-scroll-target="#visualização-interativa-com-o-mapview"><span class="header-section-number">2.5</span> Visualização interativa com o <code>mapview</code></a></li>
   <li><a href="#o-argumento-simplified" id="toc-o-argumento-simplified" class="nav-link" data-scroll-target="#o-argumento-simplified"><span class="header-section-number">2.6</span> O argumento <code>simplified</code></a></li>
+  <li><a href="#anápolis-urbana-vs.-rural" id="toc-anápolis-urbana-vs.-rural" class="nav-link" data-scroll-target="#anápolis-urbana-vs.-rural"><span class="header-section-number">2.7</span> Anápolis urbana vs.&nbsp;rural</a></li>
   </ul>
 </nav>
     </div>
@@ -348,7 +349,7 @@ div.csl-indent {
 </header>
 
 
-<p>O componente <strong>espacial</strong> é um aspecto essencial na pesquisa em transportes. Nesse sentido, este capítulo faz essa primeira organização das malhas territoriais do Censo que utilizaremos no curso. O município de exemplo, a ser utilizado ao longo de toda a oficina, é <strong>Anápolis-GO</strong>, escolha realizada em função do seu tamanho intermediário para processarmos os dados de forma mais célere e por dispormos de informações interessantes de uma pesquisa de mobilidade realizada por lá.</p>
+<p>Sabemos que o componente <strong>espacial</strong> é um aspecto essencial na pesquisa em transportes. Nesse sentido, este capítulo faz essa primeira organização das malhas territoriais do Censo que utilizaremos no curso. Lembramos que o município a ser explorado é <strong>Anápolis-GO</strong>, cujo tamanho é o ideal para processarmos dados ao longo das práticas sem tempo elevado de processamento.</p>
 <p>Nesta seção, iremos:</p>
 <ul>
 <li>reconhecer as malhas territoriais usadas nas duas Partes da oficina.</li>
@@ -356,6 +357,7 @@ div.csl-indent {
 <li>entender por que as áreas de ponderação entram em duas edições, 2010 e 2022.</li>
 <li>inspecionar a estrutura dos arquivos geográficos obtidos.</li>
 <li>mapear os recortes sobrepostos, de forma estática e interativa.</li>
+<li>separar os setores urbanos dos rurais pela coluna <code>zone</code>.</li>
 <li>entender o argumento <code>simplified</code> e o efeito dele sobre o traçado das fronteiras.</li>
 </ul>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -382,11 +384,11 @@ div.csl-indent {
 <h2 data-number="2.1" class="anchored" data-anchor-id="as-malhas-do-workshop"><span class="header-section-number">2.1</span> As malhas do workshop</h2>
 <p>Vamos obter e gravar 2 recortes geográficos <strong>institucionais</strong> com o pacote <code>geobr</code> neste capítulo, relativos aos setores censitários e às áreas de ponderação. Deixaremos a grade estatística e os pontos do CNEFE para os capítulos em que eles serão utilizados, obtidos via <code>geobr</code> e <code>cnefetools</code>, respectivamente, pois eles já contêm tanto os dados tabulares quanto geográficos nas funções que os produzem. Diferentemente destes casos, as malhas de setores censitários e áreas de ponderação são obtidas separadamente das informações estatísticas, que vêm somente com o <code>censobr</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <p>Também visualizaremos o arquivo de bairros de Anápolis-GO, um recorte geográfico <strong>legal</strong>, instituído por norma do município. É importante mencionar que o <code>geobr</code> também traz malhas de bairros, mas a cobertura é parcial, porque nem todos os municípios informaram os seus limites oficiais de bairro à operação censitária. De fato, dos 5.570 municípios brasileiros, somente 895 passaram essa informação ao IBGE, e Anápolis não está entre eles. Sendo assim, utilizaremos a malha de bairros fornecida pela prefeitura, que já veio no pacote da oficina, em <code>dados/geo/bairros_anapolis.gpkg</code>, com 292 polígonos cobrindo a área urbana, e entra em uso no <a href="./3-agregados.html">Capítulo 3</a>.</p>
-<p>Também trabalharemos com a grade regular <strong>H3</strong>, um sistema hierárquico de indexação geoespacial em células hexagonais desenvolvido pela Uber e disponibilizado em código aberto. É uma malha global de referência, subdividida em resoluções sucessivas. No R, essas células são geradas pelo pacote <code>h3jsr</code>, mas também podemos obtê-las já com informações interpoladas de setores censitários conforme veremos no próximo capítulo.</p>
+<p>Também trabalharemos com a grade regular <strong>H3</strong>, um sistema hierárquico de indexação geoespacial em células hexagonais desenvolvido pela Uber e disponibilizado em código aberto. É uma malha global de referência, subdividida em resoluções sucessivas. No R, essas células são geradas pelo pacote <code>h3jsr</code>, mas também podemos obtê-las com já informações interpoladas de setores censitários conforme veremos no próximo capítulo.</p>
 </section>
 <section id="download-das-malhas-de-anápolis" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="download-das-malhas-de-anápolis"><span class="header-section-number">2.2</span> Download das malhas de Anápolis</h2>
-<p>As funções <code>read_census_tract()</code> e <code>read_weighting_area()</code> baixam, respectivamente, os setores censitários e as áreas de ponderação. Ambas aceitam no argumento de código a sigla ou o código de duas posições de um estado, ou o código IBGE de sete posições de um município, o que evita carregar o país inteiro para trabalhar com um único território. O argumento <code>year</code> é obrigatório desde a versão 2.0.0 do <code>geobr</code>, para que a escolha do ano de referência seja sempre deliberada.</p>
+<p>As funções <code>read_census_tract()</code> e <code>read_weighting_area()</code> do pacote <code>geobr</code> baixam, respectivamente, os setores censitários e as áreas de ponderação. Ambas aceitam no argumento de código a sigla ou o código de duas posições de um estado, ou o código IBGE de sete posições de um município, o que evita carregar o país inteiro para trabalhar com um único território. O argumento <code>year</code> é obrigatório desde a versão 2.0.0 do <code>geobr</code>, para que a escolha do ano de referência seja sempre deliberada.</p>
 <p>Guardamos os resultados em <code>anp_sc_geo22</code>, para os setores censitários de 2022, e em <code>anp_ap_geo22</code> e <code>anp_ap_geo10</code>, para as áreas de ponderação das edições de 2022 e 2010, respectivamente. Antes de começar, precisamos obter o código IBGE de Anápolis para ser utilizado como <em>input</em> nas funções de leitura das malhas. A função <code>lookup_muni()</code> é a que precisaremos para tanto.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>anp_code <span class="ot">&lt;-</span> <span class="fu">lookup_muni</span>(<span class="at">year =</span> <span class="dv">2022</span>, <span class="at">name_muni =</span> <span class="st">"Anápolis"</span>)<span class="sc">$</span>code_muni</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
@@ -618,6 +620,67 @@ Dica
 <p>O ganho de precisão custa memória e tempo de processamento, o que é irrelevante para um município de porte médio como Anápolis e passa a pesar em análises de escala estadual ou nacional. Nesses casos, uma estratégia usual é filtrar o recorte de interesse com a malha simplificada e só então rebaixar a área selecionada com <code>simplified = FALSE</code>.</p>
 </div>
 </div>
+</section>
+<section id="anápolis-urbana-vs.-rural" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="anápolis-urbana-vs.-rural"><span class="header-section-number">2.7</span> Anápolis urbana vs.&nbsp;rural</h2>
+<p>Voltemos à coluna <code>zone</code>, que apareceu na inspeção da tabela de setores. Ela guarda a classificação do setor como urbano ou rural, atribuída pelo IBGE a partir dos limites legais definidos pelo município. É uma coluna simples, mas resolve um problema prático que aparecerá várias vezes daqui em diante.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>anp_sc_geo22 <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(zone)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  zone       n
+  &lt;chr&gt;  &lt;int&gt;
+1 Rural     26
+2 Urbana   567</code></pre>
+</div>
+</div>
+<p>Dos 593 setores do município, a grande maioria é urbana, e os poucos setores rurais respondem boa parte da extensão territorial de Anápolis. Basta mapear os dois grupos em cores distintas para ver o efeito. Passamos <code>zone</code> ao argumento <code>fill</code> do <code>aes()</code> e definimos as cores manualmente com <code>scale_fill_manual()</code>, verde para os rurais e laranja para os urbanos.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> anp_sc_geo22, <span class="fu">aes</span>(<span class="at">fill =</span> zone), <span class="at">color =</span> <span class="st">"gray40"</span>, <span class="at">linewidth =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Rural"</span> <span class="ot">=</span> <span class="st">"forestgreen"</span>, <span class="st">"Urbana"</span> <span class="ot">=</span> <span class="st">"darkorange"</span>),</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">name =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="fig-urbano-rural" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-urbano-rural-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.2: Setores censitários de Anápolis (GO) em 2022, por classificação urbana ou rural.
+</figcaption>
+<div aria-describedby="fig-urbano-rural-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="2-recortes-territoriais_files/figure-html/fig-urbano-rural-1.png" class="img-fluid figure-img" width="672">
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p>Para não repetir esse filtro toda vez que formos precisar, guardamos desde já os códigos dos setores urbanos em um vetor, <code>anp_urb</code>. Ele é só a coluna <code>code_tract</code> das linhas em que <code>zone</code> vale <code>"Urbana"</code>, e a função <code>pull()</code> extrai essa coluna como vetor, em vez de devolver uma tabela de uma coluna só.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>anp_urb <span class="ot">&lt;-</span> anp_sc_geo22 <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(zone <span class="sc">==</span> <span class="st">"Urbana"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(code_tract)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(anp_urb)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 567</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(anp_urb)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5.201108e+14 5.201108e+14 5.201108e+14 5.201108e+14 5.201108e+14
+[6] 5.201108e+14</code></pre>
+</div>
+</div>
+<p>Repare que o código do setor vem como número, e não como texto, o que faz o R imprimir os quinze dígitos em notação científica. É só uma questão de exibição, e o valor guardado está inteiro, como se vê pedindo o formato fixo.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span>(<span class="fu">head</span>(anp_urb), <span class="at">scientific =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "520110805000001" "520110805000002" "520110805000003" "520110805000004"
+[5] "520110805000005" "520110805000006"</code></pre>
+</div>
+</div>
+<p>Com <code>anp_urb</code> em mãos, qualquer tabela do Censo indexada por setor pode ser restrita à área urbana com um <code>filter(code_tract %in% anp_urb)</code>, sem precisar carregar de novo a malha geográfica. Como cada capítulo tem o seu próprio script, lembre-se de refazer este bloco ao abrir uma sessão nova do R.</p>
 <p>Com <code>anp_sc_geo22</code>, <code>anp_ap_geo22</code> e <code>anp_ap_geo10</code> em mãos, temos a metade geográfica do trabalho pronta. Falta a outra metade, os valores das variáveis do Censo para cada setor e cada área de ponderação, que obteremos com o pacote <code>censobr</code> a partir do próximo capítulo e uniremos a essas geometrias pelos códigos identificadores.</p>
 
 

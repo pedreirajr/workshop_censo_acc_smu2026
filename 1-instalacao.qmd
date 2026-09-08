@@ -28,11 +28,8 @@ for o caso, instale primeiro o R, a partir do [CRAN](https://cran.r-project.org/
 ## O pacote da oficina
 
 Baixe o arquivo
-[`workshop_smu2026.zip`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/workshop_smu2026.zip),
-com cerca de 30 MB, e extraia em um lugar estável do seu computador, como a pasta de documentos.
-Evite extrair para a área de trabalho temporária ou para dentro da pasta de downloads, porque o
-projeto vai ser usado nos quatro blocos da oficina e precisa continuar no mesmo lugar do começo ao
-fim.
+[`workshop_smu2026.zip`](https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/download/dados/workshop_smu2026.zip), com cerca de 30 MB, e extraia em um lugar estável do seu computador, como a pasta de documentos. Evite extrair para a área de trabalho temporária ou para dentro da pasta de downloads, porque o
+projeto vai ser usado nos quatro blocos da oficina e precisa continuar no mesmo lugar do começo ao fim.
 
 A extração produz uma pasta com esta estrutura.
 
@@ -59,21 +56,16 @@ workshop_smu2026/
 
 ## Abra o projeto, não os arquivos soltos
 
-Dentro da pasta extraída há o arquivo `workshop_smu2026.Rproj`, e é **ele que vamos abrir inicialmente**. Um duplo clique nesse arquivo abre o RStudio já com o diretório de trabalho apontado para a pasta do projeto,
-que é o que faz os caminhos relativos dos *scripts* funcionarem sem ajuste algum. Quando o código
+Dentro da pasta extraída há o arquivo `workshop_smu2026.Rproj`, e é **ele que vamos abrir inicialmente**. Um duplo clique nesse arquivo abre o RStudio já com o diretório de trabalho apontado para a pasta do projeto, que é o que faz os caminhos relativos dos *scripts* funcionarem sem ajuste algum. Quando o código
 pede `dados/r5/anapolis.pbf`, ele encontra o arquivo porque o R está posicionado na raiz do projeto.
 
 ::: {.callout-tip}
-Para confirmar que está no lugar certo, rode `getwd()` no console. A resposta tem de terminar em
-`workshop_smu2026`. Se terminar em outra coisa, feche o RStudio e abra novamente pelo `.Rproj`.
+Para confirmar que está no lugar certo, rode `getwd()` no console. A resposta tem de terminar em `workshop_smu2026`. Se terminar em outra coisa, feche o RStudio e abra novamente pelo `.Rproj`.
 :::
 
 ## Um script por capítulo
 
-Cada capítulo do site tem o seu arquivo correspondente em `scripts/`. Eles vêm todos em branco, de
-propósito, e serão preenchidos durante a aula, à medida que o código for apresentado. A ideia é
-acompanhar a explicação no site e digitar as linhas no *script* do capítulo, porque é digitando que
-a sintaxe se fixa.
+Cada capítulo do site tem o seu arquivo correspondente em `scripts/`. Eles vêm todos em branco, de propósito, e serão preenchidos durante a aula, à medida que o código for apresentado. A ideia é acompanhar a explicação no site e digitar as linhas no *script* do capítulo, porque é digitando que a sintaxe se fixa.
 
 | Capítulo | Script |
 |---|---|
@@ -88,16 +80,11 @@ a sintaxe se fixa.
 | 9. Cômputo dos indicadores | `9-indicadores.R` |
 | 10. Equidade e pobreza de acessibilidade | `10-equidade.R` |
 
-As pastas de dados seguem a mesma divisão. Em `dados/geo/` e `dados/r5/` estão os arquivos que já
-vêm prontos no pacote, como a grade hexagonal de Anápolis, a malha de bairros da prefeitura, os
-estabelecimentos de saúde do CNES, a rede viária do OpenStreetMap e o GTFS do transporte público. A pasta `dados/censo/` começa vazia de
-propósito, porque os produtos do Censo são baixados ao vivo pelos pacotes `censobr` e `cnefetools`
-ao longo dos capítulos 3, 4 e 5.
+As pastas de dados seguem a mesma divisão. Em `dados/geo/` e `dados/r5/` estão os arquivos que já vêm prontos no pacote, como a grade hexagonal de Anápolis, a malha de bairros da prefeitura, os estabelecimentos de saúde do CNES, a rede viária do OpenStreetMap e o GTFS do transporte público. A pasta `dados/censo/` começa vazia de propósito, porque os produtos do Censo são baixados ao vivo pelos pacotes `censobr` e `cnefetools` ao longo dos capítulos 3, 4 e 5.
 
 ## Instalação dos pacotes da Parte 1
 
-O código a seguir vai para o `scripts/1-instalacao_censo.R`. Ele instala apenas o que estiver
-faltando, de modo que rodá-lo com o ambiente já pronto não custa nada.
+O código a seguir vai para o `scripts/1-instalacao_censo.R`. Ele instala apenas o que estiver faltando, de modo que rodá-lo com o ambiente já pronto não custa nada.
 
 ```{r}
 pacotes <- c(

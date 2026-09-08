@@ -2,7 +2,7 @@
 title: "Recortes territoriais"
 ---
 
-O componente **espacial** é um aspecto essencial na pesquisa em transportes. Nesse sentido, este capítulo faz essa primeira organização das malhas territoriais do Censo que utilizaremos no curso. O município de exemplo, a ser utilizado ao longo de toda a oficina, é **Anápolis-GO**, escolha realizada em função do seu tamanho intermediário para processarmos os dados de forma mais célere e por dispormos de informações interessantes de uma pesquisa de mobilidade realizada por lá.
+Sabemos que o componente **espacial** é um aspecto essencial na pesquisa em transportes. Nesse sentido, este capítulo faz essa primeira organização das malhas territoriais do Censo que utilizaremos no curso. Lembramos que o município a ser explorado é **Anápolis-GO**, cujo tamanho é o ideal para processarmos dados ao longo das práticas sem tempo elevado de processamento.
 
 Nesta seção, iremos:
 
@@ -11,6 +11,7 @@ Nesta seção, iremos:
 - entender por que as áreas de ponderação entram em duas edições, 2010 e 2022.
 - inspecionar a estrutura dos arquivos geográficos obtidos.
 - mapear os recortes sobrepostos, de forma estática e interativa.
+- separar os setores urbanos dos rurais pela coluna `zone`.
 - entender o argumento `simplified` e o efeito dele sobre o traçado das fronteiras.
 
 ::: {.callout-tip}
@@ -39,15 +40,11 @@ Vamos obter e gravar 2 recortes geográficos **institucionais** com o pacote `ge
 
 Também visualizaremos o arquivo de bairros de Anápolis-GO, um recorte geográfico **legal**, instituído por norma do município. É importante mencionar que o `geobr` também traz malhas de bairros, mas a cobertura é parcial, porque nem todos os municípios informaram os seus limites oficiais de bairro à operação censitária. De fato, dos 5.570 municípios brasileiros, somente 895 passaram essa informação ao IBGE, e Anápolis não está entre eles. Sendo assim, utilizaremos a malha de bairros fornecida pela prefeitura, que já veio no pacote da oficina, em `dados/geo/bairros_anapolis.gpkg`, com 292 polígonos cobrindo a área urbana, e entra em uso no [Capítulo 3](3-agregados.qmd).
 
-Também trabalharemos com a grade regular **H3**, um sistema hierárquico de indexação geoespacial em células hexagonais desenvolvido pela Uber e disponibilizado em código aberto. É uma malha global de referência, subdividida em resoluções sucessivas. No R, essas células são geradas pelo pacote `h3jsr`, mas também podemos obtê-las já com informações interpoladas de setores censitários conforme veremos no próximo capítulo.
+Também trabalharemos com a grade regular **H3**, um sistema hierárquico de indexação geoespacial em células hexagonais desenvolvido pela Uber e disponibilizado em código aberto. É uma malha global de referência, subdividida em resoluções sucessivas. No R, essas células são geradas pelo pacote `h3jsr`, mas também podemos obtê-las com já informações interpoladas de setores censitários conforme veremos no próximo capítulo.
 
 ## Download das malhas de Anápolis
 
-As funções `read_census_tract()` e `read_weighting_area()` baixam, respectivamente, os setores
-censitários e as áreas de ponderação. Ambas aceitam no argumento de código a sigla ou o código de
-duas posições de um estado, ou o código IBGE de sete posições de um município, o que evita carregar
-o país inteiro para trabalhar com um único território. O argumento `year` é obrigatório desde a
-versão 2.0.0 do `geobr`, para que a escolha do ano de referência seja sempre deliberada.
+As funções `read_census_tract()` e `read_weighting_area()` do pacote `geobr` baixam, respectivamente, os setores censitários e as áreas de ponderação. Ambas aceitam no argumento de código a sigla ou o código de duas posições de um estado, ou o código IBGE de sete posições de um município, o que evita carregar o país inteiro para trabalhar com um único território. O argumento `year` é obrigatório desde a versão 2.0.0 do `geobr`, para que a escolha do ano de referência seja sempre deliberada.
 
 Guardamos os resultados em `anp_sc_geo22`, para os setores censitários de 2022, e em `anp_ap_geo22` e
 `anp_ap_geo10`, para as áreas de ponderação das edições de 2022 e 2010, respectivamente. Antes de começar, precisamos obter o código IBGE de Anápolis para ser utilizado como *input* nas funções de leitura das malhas. A função `lookup_muni()` é a que precisaremos para tanto.
@@ -266,6 +263,57 @@ casos, uma estratégia usual é filtrar o recorte de interesse com a malha simpl
 rebaixar a área selecionada com `simplified = FALSE`.
 :::
 
-Com `anp_sc_geo22`, `anp_ap_geo22` e `anp_ap_geo10` em mãos, temos a metade geográfica do trabalho
-pronta. Falta a outra metade, os valores das variáveis do Censo para cada setor e cada área de ponderação, que
-obteremos com o pacote `censobr` a partir do próximo capítulo e uniremos a essas geometrias pelos códigos identificadores.
+## Anápolis urbana vs. rural
+
+Voltemos à coluna `zone`, que apareceu na inspeção da tabela de setores. Ela guarda a classificação
+do setor como urbano ou rural, atribuída pelo IBGE a partir dos limites legais definidos pelo
+município. É uma coluna simples, mas resolve um problema prático que aparecerá várias vezes
+daqui em diante.
+
+```{r}
+#| label: conta-zone
+
+anp_sc_geo22 |>
+  st_drop_geometry() |>
+  count(zone)
+```
+
+Dos `r nrow(anp_sc_geo22)` setores do município, a grande maioria é urbana, e os poucos setores rurais respondem boa parte da extensão territorial de Anápolis. Basta mapear os dois grupos em cores distintas para ver o efeito. Passamos `zone` ao argumento `fill` do `aes()` e definimos as cores manualmente com `scale_fill_manual()`, verde para os rurais e laranja para os urbanos.
+
+```{r}
+#| label: fig-urbano-rural
+#| fig-cap: "Setores censitários de Anápolis (GO) em 2022, por classificação urbana ou rural."
+#| message: false
+
+ggplot() +
+  geom_sf(data = anp_sc_geo22, aes(fill = zone), color = "gray40", linewidth = 0.1) +
+  scale_fill_manual(values = c("Rural" = "forestgreen", "Urbana" = "darkorange"),
+                    name = NULL) +
+  theme_minimal()
+```
+
+Para não repetir esse filtro toda vez que formos precisar, guardamos desde já os códigos dos setores urbanos em um vetor, `anp_urb`. Ele é só a coluna `code_tract` das linhas em que `zone` vale `"Urbana"`, e a função `pull()` extrai essa coluna como vetor, em vez de devolver uma tabela de uma coluna só.
+
+```{r}
+#| label: vetor-urbano
+
+anp_urb <- anp_sc_geo22 |>
+  filter(zone == "Urbana") |>
+  pull(code_tract)
+
+length(anp_urb)
+
+head(anp_urb)
+```
+
+Repare que o código do setor vem como número, e não como texto, o que faz o R imprimir os quinze dígitos em notação científica. É só uma questão de exibição, e o valor guardado está inteiro, como se vê pedindo o formato fixo.
+
+```{r}
+#| label: vetor-urbano-formato
+
+format(head(anp_urb), scientific = FALSE)
+```
+
+Com `anp_urb` em mãos, qualquer tabela do Censo indexada por setor pode ser restrita à área urbana com um `filter(code_tract %in% anp_urb)`, sem precisar carregar de novo a malha geográfica. Como cada capítulo tem o seu próprio script, lembre-se de refazer este bloco ao abrir uma sessão nova do R.
+
+Com `anp_sc_geo22`, `anp_ap_geo22` e `anp_ap_geo10` em mãos, temos a metade geográfica do trabalho pronta. Falta a outra metade, os valores das variáveis do Censo para cada setor e cada área de ponderação, que obteremos com o pacote `censobr` a partir do próximo capítulo e uniremos a essas geometrias pelos códigos identificadores.
