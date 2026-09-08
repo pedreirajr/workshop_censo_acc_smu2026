@@ -293,8 +293,8 @@ div.csl-indent {
 <section id="apresentação" class="level1 unnumbered">
 <h1 class="unnumbered">Apresentação</h1>
 <p><img src="img/logo_smu.png" class="banner-evento img-fluid" alt="Simpósio de Mobilidade Urbana, EESC-USP, São Carlos-SP, 8 a 11 de setembro de 2026. Curso: Dados censitários e acessibilidade urbana em R"></p>
-<p>Este site reúne o material prático da oficina <strong>Dados Censitários e Acessibilidade Urbana em R</strong>, oferecida no <strong>Simpósio de Mobilidade Urbana</strong>, evento de encerramento do projeto Redes de Transportes e Cidades Conectadas, realizado na EESC-USP, em São Carlos-SP, entre 8 e 11 de setembro de 2026.</p>
-<p>A oficina parte de uma constatação simples. Boa parte das perguntas sobre mobilidade urbana só ganha resposta quando duas coisas se encontram, a descrição de quem mora onde e a medida de quanto custa chegar aos lugares. A primeira vem do Censo Demográfico, a maior operação estatística do país, cujos produtos descrevem população e domicílios em recortes territoriais finos. A segunda vem das medidas de acessibilidade urbana, que combinam a distribuição das oportunidades no território com o desempenho da rede de transportes. Trabalhar as duas no mesmo ambiente computacional, sem exportações intermediárias e com registro reprodutível de cada etapa, é o que o R permite fazer, e é o que se pretende demonstrar aqui.</p>
+<p>Este site reúne o material prático do workshop <strong>Dados Censitários e Acessibilidade Urbana em R</strong>, oferecida no <strong>Simpósio de Mobilidade Urbana</strong>, evento de encerramento do projeto Redes de Transportes e Cidades Conectadas, realizado na EESC-USP, em São Carlos-SP, entre 8 e 11 de setembro de 2026.</p>
+<p>O objetivo do workshop é mostrar como obter e explorar os principais produtos do Censo Demográfico e produzir análises de acessibilidade urbana utilizando o R. Na primeira parte, trabalharemos com os principais produtos do Censo, incluindo agregados por setor censitário, microdados da amostra, grade estatística e CNEFE, sobretudo os resultados com implicações importantes para a pesquisa em transportes. Posteriormente, computaremos medidas de acessibilidade urbana, que combinam a distribuição das oportunidades no território com o desempenho da rede de transportes.</p>
 <section id="como-a-oficina-está-organizada" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="como-a-oficina-está-organizada">Como a oficina está organizada</h2>
 <p>São 8 horas de atividade, divididas em dois blocos de 4 horas. Cada bloco tem 2 horas expositivas e 2 horas de aplicação prática ao computador.</p>
@@ -324,7 +324,7 @@ div.csl-indent {
 </tr>
 </tbody>
 </table>
-<p><strong>Este site cobre apenas as partes práticas.</strong> O conteúdo expositivo é apresentado em sala, com material próprio. O que está aqui é o roteiro de código, pensado para ser acompanhado ao vivo e, depois, reexecutado por conta própria.</p>
+<p><strong>Este material cobre apenas as partes práticas</strong>, e o conteúdo teórico é apresentado em sala, com material próprio. O que está aqui é o roteiro de código, pensado para ser acompanhado ao vivo e, depois, reexecutado por conta própria.</p>
 <p>A <strong>Parte 1</strong> percorre os principais produtos do Censo Demográfico, começando pela preparação do ambiente e pelos recortes territoriais do IBGE e avançando pelos agregados por setor censitário, pelos microdados da amostra, pelo CNEFE e pela grade estatística. Os agregados incluem uma seção dedicada às características urbanísticas do entorno dos domicílios, com recorte voltado a transportes.</p>
 <p>A <strong>Parte 2</strong> monta uma análise de acessibilidade do zero, com a preparação do ambiente de roteamento, a leitura dos insumos e a construção da rede multimodal, o cálculo dos indicadores a pé, de bicicleta, de carro e por transporte público e, por fim, a avaliação da distribuição social dessa acessibilidade, com medidas de desigualdade e de pobreza de acesso.</p>
 </section>
@@ -335,7 +335,7 @@ div.csl-indent {
 </section>
 <section id="pré-requisitos" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="pré-requisitos">Pré-requisitos</h2>
-<p>A oficina supõe familiaridade básica com R, o suficiente para ler um <em>script</em>, entender o que faz uma função e reconhecer a estrutura de um <em>data frame</em>. Não se exige experiência prévia com dados do Censo, com geoprocessamento ou com roteamento de redes de transporte.</p>
+<p>A oficina supõe familiaridade básica com R, incluindo o básico da linguagem e análise exploratória de dados (sobretudo com os pacotes <code>dplyr</code> e <code>ggplot2</code>), além de noções de geoprocessamento.</p>
 <p>Quem quiser chegar mais preparado pode consultar estes materiais.</p>
 <ul>
 <li><span class="citation" data-cites="pedreira_censo_2026">Pedreira Junior (<a href="referencias.html#ref-pedreira_censo_2026" role="doc-biblioref">2026</a>)</span>, para os fundamentos de R aplicados a dados tabulares e geográficos e para o detalhamento dos produtos do Censo tratados na Parte 1.</li>
@@ -361,21 +361,14 @@ div.csl-indent {
 </section>
 <section id="onde-ficam-os-dados" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="onde-ficam-os-dados">Onde ficam os dados</h2>
-<p>Parte dos dados é obtida ao vivo pelos pacotes <code>censobr</code> e <code>geobr</code>, sem necessidade de arquivos locais. Os arquivos que <strong>não</strong> são produzidos por código, como a rede viária do OpenStreetMap, o GTFS e o modelo de elevação, são distribuídos como <em>assets</em> de um <a href="https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/tag/dados"><em>release</em></a> do repositório da oficina e baixados pelo próprio código dos capítulos, para dentro do projeto do RStudio.</p>
-<pre><code>workshop_censo_acc_smu2026/
-├── workshop_censo_acc_smu2026.Rproj
-└── dados/
-    ├── censo/   agregados, microdados e CNEFE de Anápolis
-    ├── geo/     grade hexagonal H3 e rede de links do modelo de tráfego
-    └── r5/      rede viária (.pbf), GTFS (.zip) e relevo (.tif)</code></pre>
-<p>Sempre que um capítulo depender de um arquivo específico, o <em>download</em> e o caminho esperado aparecem no próprio código, e nada é baixado duas vezes.</p>
+<p>Parte dos dados é obtida em tempo real pelos pacotes <code>censobr</code> e <code>geobr</code>, sem necessidade de arquivos locais. Os arquivos que <strong>não</strong> são produzidos por código, como a rede viária do OpenStreetMap, o GTFS e o modelo de elevação, são distribuídos como <em>assets</em> de um <a href="https://github.com/pedreirajr/workshop_censo_acc_smu2026/releases/tag/dados"><em>release</em></a> do repositório da oficina e baixados pelo próprio código dos capítulos, para dentro do projeto do RStudio.</p>
 </section>
 <section id="instrutores" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="instrutores">Instrutores</h2>
 <div class="instrutores">
 <section id="jorge-ubirajara-pedreira-junior" class="level3 unnumbered instrutor">
 <h3 class="unnumbered anchored" data-anchor-id="jorge-ubirajara-pedreira-junior">Jorge Ubirajara Pedreira Junior</h3>
-<p>Professor da Universidade Federal da Bahia (UFBA), atua em planejamento de transportes, análise de dados urbanos e uso de bases de dados institucionais brasileiras. Autor de <em>Censo Demográfico no R</em>. <a href="https://pedreirajr.github.io/website/">Página pessoal</a></p>
+<p>Professor da Universidade Federal da Bahia (UFBA), atua no ensino e pesquisa em planejamento de transportes e desenvolve pacotes para R, a exemplo de {cnefetools}, {tripdistmodels} e {geohazards}. Autor de <em>Censo Demográfico no R</em>. <a href="https://pedreirajr.github.io/website/">Página pessoal</a></p>
 </section>
 <section id="thiago-vinícius-louro" class="level3 unnumbered instrutor">
 <h3 class="unnumbered anchored" data-anchor-id="thiago-vinícius-louro">Thiago Vinícius Louro</h3>
