@@ -2,12 +2,7 @@
 title: "Microdados da amostra"
 ---
 
-Os agregados respondem quantos, e os microdados respondem quem. É aqui que as perguntas de
-transporte finalmente aparecem no Censo, porque o questionário da amostra investiga posse de veículo
-no domicílio, local de trabalho e tempo habitual de deslocamento até o trabalho, temas que o
-questionário básico não cobre. O preço dessa riqueza é metodológico, uma vez que cada registro
-representa um número variável de pessoas do universo, e ignorar essa ponderação produz estimativas
-simplesmente erradas.
+Ao contrário dos agregados, nos microdads poderemos trabalhar com variáveis bastante relevantes para a pesquisa em transportes. No Censo de 2010, por exemplo, temos o **tempo habitual de deslocamento** até o local de trabalho, **posse de veículos** e, em 2022, temos adicionalmente, e de forma inédita, a **escolha modal** desta viagem. Há, entretanto, um preço metodológico para essa maior riqueza de detalhe. Uma vez que cada registro representa uma amostra de pessoas e domicílios do universo, ignorar o desenho amostral pode produzir estimativas simplesmente equivocadas do que queremos medir. Vamos entender, nesse capítulo, como lidar com esse aspecto.
 
 ::: {.callout-note}
 ## Nesta seção você vai
@@ -23,8 +18,7 @@ simplesmente erradas.
 ::: {.callout-tip}
 ## Script deste capítulo
 
-Abra o arquivo `scripts/4-microdados.R` no projeto da oficina. É nele que vai o código
-apresentado a seguir. Se ainda não tiver o projeto, volte ao
+Abra o arquivo `scripts/4-microdados.R` no projeto da oficina. É nele que vai o código apresentado a seguir. Se ainda não tiver o projeto, volte ao
 [Capítulo 1](1-instalacao.qmd).
 :::
 
@@ -43,89 +37,61 @@ library(ggplot2)
 
 ## Por que 2010, e não 2022
 
-Os microdados da amostra do Censo 2022 foram divulgados em 31 de agosto de 2026, em um modelo de
-acesso inteiramente novo, organizado em três níveis e motivado pelo risco de reidentificação dos
-respondentes, agravado pelo avanço das ferramentas de inteligência artificial, e pela intenção de
-coibir o uso comercial e publicitário dos registros. Nomes, CPF e endereços não integram base
-alguma disponibilizada ao público [@ibge_microdados2022].
+Os microdados da amostra do Censo 2022 foram divulgados em 31 de agosto de 2026, em um modelo de acesso inteiramente novo, organizado em três níveis e motivado pelo risco de reidentificação dos respondentes, agravado pelo avanço das ferramentas de inteligência artificial, e pela intenção de coibir o uso comercial e publicitário dos registros [@ibge_microdados2022].
 
-O primeiro nível é o de **acesso público**, aberto a qualquer pessoa e sem cadastro, cujo detalhe
-geográfico vai somente até a Unidade da Federação. O segundo é o de **acesso controlado**, que exige
-autenticação por conta gov.br e assinatura de termo de compromisso, e entrega a cada pesquisador um
-arquivo individualmente rastreável. O terceiro é a **Sala de Acesso Restrito**, presencial na sede
-do IBGE, no Rio de Janeiro, para a qual é preciso submeter projeto de pesquisa e da qual os dados
-não saem.
+O primeiro nível é o de **acesso público**, aberto a qualquer pessoa e sem cadastro, cujo detalhe geográfico vai somente até a Unidade da Federação (município). O segundo é o de **acesso controlado**, que exige autenticação por conta gov.br e assinatura de termo de compromisso, e entrega a cada pesquisador um arquivo individualmente rastreável. O terceiro é a **Sala de Acesso Restrito**, para a qual é preciso submeter projeto de pesquisa e da qual os dados não saem.
 
-O detalhe geográfico é o que decide a questão para nós. Análise intramunicipal de transportes exige
-descer abaixo do município, e é isso que o nível público não permite. Some-se a isso que o IBGE não
-autoriza a redistribuição dos arquivos do nível controlado, de modo que nenhum pacote de R pode
-baixá-los por você.
+O detalhe geográfico é o que decide a questão para nós. Análise intramunicipal de transportes exige descer abaixo do município, e é isso que o nível público não permite. Some-se a isso que o IBGE não autoriza a redistribuição dos arquivos do nível controlado, de modo que nenhum pacote de R pode baixá-los por você.
 
 ::: {.callout-note}
 ## A solução do censobr para 2022
+<!-- Checar se é ipeaGit mesmo abaixo-->
 
-O `censobr` acompanhou a mudança. A versão em desenvolvimento traz a função
-`import_microdata22_controlado()`, que recebe o caminho do `.zip` que **você** obteve junto ao IBGE,
-processa os arquivos e os guarda no cache local em formato *parquet*. Feita a importação uma única
-vez, as funções de leitura de sempre, como `read_population(year = 2022)` e
-`read_households(year = 2022)`, passam a funcionar para 2022. O procedimento está documentado em
-<https://ipea.github.io/censobr/dev/articles/microdata_2022.html>.
+O `censobr` acompanhou a mudança. A versão em desenvolvimento^[instale-a com `remotes::install_github("ipeaGit/censobr")` ou `pak::pak("ipeaGit/censobr")`] traz a função `import_microdata22_controlado()`, que recebe o caminho do `.zip` que **você** obteve junto ao IBGE, processa os arquivos e os guarda no cache local em formato *parquet*. Feita a importação uma única vez, as funções de leitura de sempre, como `read_population(year = 2022)` e `read_households(year = 2022)`, passam a funcionar para 2022. O procedimento está documentado em <https://ipea.github.io/censobr/dev/articles/microdata_2022.html>.
 :::
 
-Nesta oficina ficamos com **2010**, por três razões. Os arquivos são de acesso livre, o `censobr`
-os baixa sozinho, e o detalhe geográfico desce até a área de ponderação, que é o recorte de que
-precisamos. Vale registrar que os dados têm quinze anos e não descrevem a Anápolis de hoje. O que
-eles ensinam é o método, e o método é o mesmo que você aplicará aos arquivos de 2022 quando os
-obtiver.
+Nesta oficina ficamos com **2010**, por três razões. Os arquivos são de acesso livre, o `censobr` os baixa sozinho, e o detalhe geográfico desce até a área de ponderação, que é o recorte de que precisamos. Vale registrar que os dados têm quinze anos e não descrevem a Anápolis de hoje. O que eles ensinam é o método, e o método é o mesmo que você aplicará aos arquivos de 2022 quando os obtiver.
 
 ## O desenho amostral
 
-Cerca de um em cada dez domicílios respondeu ao questionário da amostra, e a seleção não foi um
-sorteio simples. Cada registro carrega um **peso**, em `V0010`, que informa quantas unidades do
-universo ele representa, e a amostra é **estratificada** por área de ponderação. No arquivo de
-pessoas há ainda o **conglomerado**, porque as pessoas foram observadas em grupos, os domicílios,
-e moradores do mesmo domicílio se parecem mais entre si do que duas pessoas quaisquer.
+Cerca de um em cada dez domicílios respondeu ao questionário da amostra, e a seleção não foi um sorteio simples. Cada registro carrega um **peso**, em `V0010`, que informa quantas unidades do universo ele representa, e a amostra é **estratificada** por área de ponderação. No arquivo de pessoas há ainda o **conglomerado**, porque as pessoas foram observadas em grupos, os domicílios, e moradores do mesmo domicílio se parecem mais entre si do que duas pessoas quaisquer.
 
 Ignorar essa estrutura tem duas consequências distintas. Ignorar o peso enviesa a estimativa
-pontual. Ignorar o estrato e o conglomerado mantém a estimativa e estraga o erro-padrão, que é o que
-diz se uma diferença observada é real. O pacote `srvyr` resolve os dois problemas de uma vez, ao
-declarar o desenho com `as_survey_design()` e substituir `mean()` por `survey_mean()`.
+pontual. Ignorar o estrato e o conglomerado mantém a estimativa e estraga o erro-padrão, que é o que diz se uma diferença observada é real. O pacote `srvyr` resolve os dois problemas de uma vez, ao declarar o desenho com `as_survey_design()` e substituir `mean()` por `survey_mean()`.
 
 ## Preparação dos dados
 
-Precisamos do código do município e da malha de áreas de ponderação de 2010, que é a base de todos
-os mapas deste capítulo e também a fonte do vetor de códigos que filtra os microdados.
+Precisamos do código do município e da malha de áreas de ponderação de 2010, que é a base de todos os mapas deste capítulo e também a fonte do vetor de códigos que filtra os microdados.
 
 ```{r}
 #| label: ap-2010
 #| cache: true
 #| message: false
 
+## Rode para obter o código do município (caso ainda não tenha gerado)
 anp_code <- lookup_muni(year = 2022, name_muni = "Anápolis")$code_muni
 
+## Lendo as áreas de ponderação de 2010 (caso ainda não tenha gerado)
 anp_ap_geo10 <- read_weighting_area(code_weighting = anp_code, year = 2010,
                                     simplified = FALSE, showProgress = FALSE)
 
+## Obtendo os códigos das áreas de ponderação.
 ap_cods <- anp_ap_geo10 |>
   pull(code_weighting)
 
 length(ap_cods)
 ```
 
-São doze áreas para um município que tinha cerca de 335 mil habitantes em 2010. É uma resolução bem
-mais grossa que a dos setores censitários do capítulo anterior, e adiante veremos que isso cobra o
-seu preço na precisão das estimativas.
+Note que são doze áreas para um município que tinha cerca de 335 mil habitantes em 2010. É uma resolução bem menos detalhada que a dos setores censitários do capítulo anterior.
 
-Usaremos os dois arquivos de microdados. A posse de veículo é característica do **domicílio**,
-enquanto o local de trabalho e o tempo de deslocamento são características da **pessoa**. Começamos
-pelos domicílios, pedindo também `V4001`, que identifica o tipo de domicílio, por uma razão que fica
-clara logo abaixo.
+Usaremos os dois arquivos de microdados. A posse de veículo é característica do **domicílio**, enquanto o local de trabalho e o tempo de deslocamento são características da **pessoa**. Começamos pelos domicílios, pedindo também `V4001`, que identifica o tipo de domicílio, por uma razão que fica clara logo abaixo.
 
 ```{r}
 #| label: leitura-domicilios
 #| cache: true
 #| message: false
 
+## Registrando os nomes das variáveis no vetor cols_dom
 cols_dom <- c(
   "V0300",          # identificador do domicílio
   "V0010",          # peso amostral calibrado
@@ -135,40 +101,38 @@ cols_dom <- c(
   "V0222"           # automóvel para uso particular
 )
 
+## Lendo os microdados de domicílios a partir do censobr
 anp_dom <- read_households(year = 2010, columns = cols_dom, showProgress = FALSE) |>
   filter(code_weighting %in% ap_cods) |>
   collect()
 
+## Checando a variável de automóvel para uso particular
 anp_dom |>
   count(V0222)
 ```
 
-Há registros sem resposta, e antes de aplicar um `na.rm = TRUE` distraído convém entender de onde
-vêm. O cruzamento com o tipo de domicílio resolve a dúvida.
+Há registros sem resposta, e antes de aplicar um `na.rm = TRUE`, convém entender sua origem. O cruzamento com o tipo de domicílio resolve a dúvida.
 
 ```{r}
 #| label: ausentes-veiculo
 #| message: false
 
+## Agregando contagens de automóveis para cada tipo de domicilio
 anp_dom |>
   group_by(V4001) |>
   summarize(registros = n(), sem_resposta = sum(is.na(V0222)))
 ```
 
-Todos os ausentes estão nos tipos 05 e 06, que são o domicílio particular improvisado e o domicílio
-coletivo. O quesito de bens duráveis só é aplicado a **domicílios particulares permanentes**, de
-código 01, e por isso os demais chegam em branco. É um caso de "não se aplica", e não de recusa.
+Observe que todos os ausentes estão nos tipos 05 e 06, que são o domicílio particular improvisado e o domicílio coletivo. O quesito de bens duráveis só é aplicado a **domicílios particulares permanentes**, de código 01, e por isso os demais chegam em branco. É um caso de "não se aplica", e não de recusa.
 
-A conduta correta não é descartar os ausentes, e sim restringir a análise ao universo em que a
-pergunta foi feita. Esse recorte, porém, não é aplicado à tabela. Declaramos o desenho sobre todos
-os domicílios lidos e só então filtramos o **próprio desenho**. O objeto resultante mantém a
-estratificação e a correção de população finita originais e passa a tratar os domicílios
-particulares permanentes como um domínio dentro da amostra, que é o que eles de fato são.
+A conduta correta não é descartar os ausentes, e sim restringir a análise ao universo em que a pergunta foi feita. Esse recorte, porém, não é aplicado à tabela. Devemos, de antemão, declar o desenho sobre todos os domicílios lidos e só então filtramos o **próprio desenho**. O objeto resultante mantém a estratificação e a correção de população finita originais e passa a tratar os domicílios particulares permanentes como um domínio dentro da amostra, que é o que eles de fato são.
 
 ```{r}
 #| label: plano-domicilios
 #| message: false
 
+## Obtendo o total de domicílios por área de ponderação (n_dom) a ser utilizado 
+## como argumento no desenho amostral no fator de correação para população finita
 anp_dom <- anp_dom |>
   left_join(
     anp_dom |>
@@ -177,13 +141,15 @@ anp_dom <- anp_dom |>
     by = join_by(code_weighting)
   )
 
+## Produzindo o desenho amostral
 pa_dom <- anp_dom |>
   as_survey_design(
-    strata  = code_weighting,
-    weights = V0010,
-    fpc     = n_dom
+    strata  = code_weighting, # coluna com o nível em que a ponderação é realizada
+    weights = V0010, # coluna com os pesos amostrais (fatores de expansão)
+    fpc     = n_dom # fator de correção para população finita 
   )
 
+## Filtrando o desenho para os domicílios de interesse
 pa_dpp <- pa_dom |>
   filter(V4001 == "01")
 ```
@@ -196,6 +162,7 @@ unidade de conglomeração, em `ids`.
 #| cache: true
 #| message: false
 
+## Registrando os nomes das variáveis no vetor cols_pes
 cols_pes <- c(
   "V0300",          # identificador do domicílio (conglomerado)
   "V0010",          # peso amostral calibrado
@@ -205,6 +172,7 @@ cols_pes <- c(
   "V0662"           # tempo habitual de deslocamento até o trabalho
 )
 
+## Lendo os microdados de indivíduos a partir do censobr
 anp_pes <- read_population(year = 2010, columns = cols_pes, showProgress = FALSE) |>
   filter(code_weighting %in% ap_cods) |>
   collect()
@@ -212,10 +180,14 @@ anp_pes <- read_population(year = 2010, columns = cols_pes, showProgress = FALSE
 nrow(anp_pes)
 ```
 
+Produzindo o desenho amostral para o arquivo dos indivíduos:
+
 ```{r}
 #| label: plano-pessoas
 #| message: false
 
+## Obtendo o total de indivíduos por área de ponderação (n_dom) a ser utilizado 
+## como argumento no desenho amostral no fator de correação para população finita
 anp_pes <- anp_pes |>
   left_join(
     anp_pes |>
@@ -224,24 +196,21 @@ anp_pes <- anp_pes |>
     by = join_by(code_weighting)
   )
 
+## Produzindo o desenho amostral para o arquivo de indivíuos
 pa_pes <- anp_pes |>
   as_survey_design(
-    ids     = V0300,
-    strata  = code_weighting,
-    weights = V0010,
-    fpc     = n_ind
+    ids     = V0300, # os domicílios são sorteados (V0300) e não os indivíduos!
+    strata  = code_weighting, # nível em que a ponderação é realizada 
+    weights = V0010, # pesos amostrais
+    fpc     = n_ind # total de indivíduos para correção de população finita
   )
 ```
 
-Com os dois desenhos declarados, podemos estimar.
+Com os dois desenhos declarados, podemos estimar as variáveis de interesse por área de ponderação.
 
 ## Posse de automóvel e motocicleta
 
-A posse de veículo não mede mobilidade, mas *possibilidade*. Um domicílio com automóvel dispõe de
-uma alternativa de deslocamento que outro não tem, e essa diferença influencia todo o restante, do
-tempo de viagem à sensibilidade quanto à qualidade do transporte público. Comecemos pelo retrato
-municipal, com os intervalos de confiança que o desenho amostral exige. Os dois veículos vêm de
-variáveis diferentes, e por isso cada um exige uma chamada própria a `survey_mean()`, empilhadas com
+A posse de veículo mede uma **dimensão da acessibilidade física** dos indivíduos às oportunidades urbanas. Um domicílio com automóvel dispõe de uma alternativa de deslocamento que outro não tem, e essa diferença influencia todo o restante, do tempo de viagem à sensibilidade quanto à qualidade do transporte público. Comecemos pelo retrato municipal, com os intervalos de confiança que o desenho amostral exige. Os dois veículos vêm de variáveis diferentes, e por isso cada um exige uma chamada própria a `survey_mean()`, empilhadas com
 `bind_rows()` para chegar ao formato longo que o `ggplot2` espera.
 
 ```{r}
@@ -250,6 +219,8 @@ variáveis diferentes, e por isso cada um exige uma chamada própria a `survey_m
 #| fig-height: 2.6
 #| message: false
 
+## Obtendo as posses de automóveis (V0222) e motocicleta (V02221) a partir do
+## arquivo de desenho amostral.
 posse_mun <- bind_rows(
   pa_dpp |>
     summarize(proporcao = survey_mean(V0222 == "1", vartype = "ci")) |>
@@ -259,8 +230,10 @@ posse_mun <- bind_rows(
     mutate(veiculo = "Motocicleta")
 )
 
+## Imprimindo resultado com intervalos de confiança
 posse_mun
 
+## Plotando em mapa
 ggplot(posse_mun, aes(x = veiculo, y = proporcao,
                       ymin = proporcao_low, ymax = proporcao_upp)) +
   geom_col(fill = "steelblue", alpha = 0.85, width = 0.5) +
@@ -271,11 +244,8 @@ ggplot(posse_mun, aes(x = veiculo, y = proporcao,
   theme_minimal()
 ```
 
-Metade dos domicílios particulares permanentes de Anápolis tinha automóvel em 2010, e mais de um
-quarto tinha motocicleta. O segundo número é o que chama atenção, porque a motocicleta em Anápolis
-não é fenômeno marginal, e sim um modo de transporte de massa. As barras de erro quase desaparecem
-sobre as colunas, e é o esperado, uma vez que a amostra é grande e o cálculo foi feito para o
-município inteiro. Ao descer à área de ponderação elas voltarão a ter tamanho.
+Metade dos domicílios particulares permanentes de Anápolis tinha automóvel em 2010, e mais de um quarto tinha motocicleta. Observe que as barras de erro quase desaparecem sobre as colunas, e é o esperado, uma vez que a amostra é grande e o cálculo foi feito para o
+município inteiro. Ao descer à área de ponderação elas passarão a ter maior tamanho.
 
 ```{r}
 #| label: fig-veiculos-ap
@@ -288,6 +258,7 @@ município inteiro. Ao descer à área de ponderação elas voltarão a ter tama
 #| fig-height: 5
 #| message: false
 
+## Produzindo posse por área de ponderação
 veic_ap <- pa_dpp |>
   group_by(code_weighting) |>
   summarize(
@@ -295,13 +266,16 @@ veic_ap <- pa_dpp |>
     motocicleta = survey_mean(V0221 == "1")
   )
 
+## Juntando os resultados à malha de áreas de ponderação
 veic_geo <- anp_ap_geo10 |>
   left_join(veic_ap, by = join_by(code_weighting))
 
+## Produzindo tema padrão dos mapas a ser reutilizado
 tema_mapa <- theme_minimal() +
   theme(axis.text = element_blank(), axis.ticks = element_blank(),
         panel.grid = element_blank())
 
+## Mapas:
 ggplot(veic_geo) +
   geom_sf(aes(fill = 100 * automovel), color = "white", linewidth = 0.2) +
   scale_fill_distiller(palette = "Blues", direction = 1,
@@ -331,16 +305,12 @@ veic_ap |>
   )
 ```
 
-O automóvel varia cerca de trinta pontos percentuais entre as áreas de ponderação, desenhando a
-segregação de renda do município. A motocicleta varia pouco mais de seis pontos e está presente em
-toda parte, o que reforça a leitura de que ela cumpre em Anápolis o papel de transporte cotidiano
-acessível, e não o de alternativa restrita a algumas áreas.
+<!--Ver resultados para discutir resultados apropriadamente-->
+Observe como o automóvel varia cerca de trinta pontos percentuais entre as áreas de ponderação, desenhando a segregação de renda do município. Já a motocicleta varia pouco mais de seis pontos e está presente em toda parte.
 
 ## Local de trabalho
 
-A variável `V0660` informa onde a pessoa ocupada exercia o trabalho principal, e precisa vir antes
-do tempo de deslocamento por uma razão prática. É ela que define quem se desloca, e portanto quem
-entra no denominador do indicador de tempo.
+A variável `V0660` informa onde a pessoa ocupada exercia o trabalho principal, e precisa vir antes do tempo de deslocamento por uma razão prática. É ela que define quem se desloca, e portanto quem entra no denominador do indicador de tempo.
 
 ```{r}
 #| label: tbl-local-trabalho
@@ -369,23 +339,14 @@ pa_pes |>
   )
 ```
 
-Três em cada quatro pessoas ocupadas trabalhavam no próprio município e fora de casa, e menos de
-quatro por cento saíam de Anápolis para trabalhar. O deslocamento intermunicipal é pequeno, o que
-importa para a Parte 2, porque significa que uma análise de acessibilidade restrita aos limites do
-município captura quase toda a viagem casa-trabalho da população residente.
+Três em cada quatro pessoas ocupadas trabalhavam no próprio município e fora de casa, e menos de quatro por cento saíam de Anápolis para trabalhar. O deslocamento intermunicipal é pequeno, o que importa para a Parte 2, porque significa que uma análise de acessibilidade restrita aos limites do município captura quase toda a viagem casa-trabalho da população residente.
 
 ::: {.callout-warning}
-O Censo descreve quem **mora** no município, e não quem trabalha nele. Para dimensionar quem chega
-de fora todos os dias seria preciso ler os microdados dos municípios de origem e usar `V6604`, que
-informa o código do município de trabalho. O recorte de leitura muda por completo.
+O Censo descreve quem **mora** no município, e não quem trabalha nele. Para dimensionar quem chega de fora todos os dias seria preciso ler os microdados dos municípios de origem e usar `V6604`, que informa o código do município de trabalho. O recorte de leitura muda por completo.
 :::
 
 Cerca de um quinto das pessoas ocupadas trabalhava no próprio domicílio. Esse contingente não
-realiza deslocamento casa-trabalho e, por construção do questionário, não responde ao quesito de
-tempo. Antes de calcular qualquer média, portanto, é preciso saber exatamente quem responde. Cruzamos
-o retorno diário para casa, em `V0661`, com o fato de a pessoa ter respondido ou não ao tempo, em
-`V0662`. O argumento `.drop = FALSE` do `count()` é essencial, porque sem ele as combinações que não
-ocorrem simplesmente não apareceriam, e são justamente elas que precisamos ver.
+realiza deslocamento casa-trabalho e, por construção do questionário, não responde ao quesito de tempo. Antes de calcular qualquer média, portanto, é preciso saber exatamente quem responde. Cruzamos o retorno diário para casa, em `V0661`, com o fato de a pessoa ter respondido ou não ao tempo, em `V0662`. O argumento `.drop = FALSE` do `count()` é essencial, porque sem ele as combinações que não ocorrem simplesmente não apareceriam, e são justamente elas que precisamos ver.
 
 ```{r}
 #| label: tbl-universo-tempo
@@ -410,16 +371,11 @@ anp_pes |>
 
 As duas casas fora da diagonal valem exatamente zero, e é isso que o `.drop = FALSE` permite
 enxergar. Ninguém que retorna diariamente deixou o tempo em branco, e ninguém que não retorna
-respondeu ao quesito. As duas perguntas delimitam o mesmo conjunto de pessoas, o que confirma que o
-universo do indicador é o de quem trabalha fora do domicílio **e** retorna para casa todos os dias.
+respondeu ao quesito. As duas perguntas delimitam o mesmo conjunto de pessoas, o que confirma que o universo do indicador é o de quem trabalha fora do domicílio **e** retorna para casa todos os dias.
 
 ## Tempo de deslocamento
 
-Fixado o universo, chegamos ao indicador de mobilidade mais próximo da experiência cotidiana. Em
-2010 ele foi coletado em cinco faixas, de natureza categórica ordinal, o que impede calcular média
-ou mediana. Repare que aqui também filtramos o desenho, e não a tabela, para que o `srvyr` trate o
-subconjunto como domínio e calcule os erros-padrão levando em conta que ele é parte de uma amostra
-maior.
+Fixado o universo, chegamos ao indicador de mobilidade mais próximo da experiência cotidiana. Em 2010 ele foi coletado em cinco faixas, de natureza categórica ordinal, o que impede calcular média ou mediana. Repare que aqui também filtramos o desenho, e não a tabela, para que o `srvyr` trate o subconjunto como domínio e calcule os erros-padrão levando em conta que ele é parte de uma amostra maior.
 
 ```{r}
 #| label: tbl-tempo
@@ -448,17 +404,10 @@ pa_pes |>
   )
 ```
 
-Três em cada quatro deslocamentos cabiam em meia hora e pouco mais de cinco por cento passavam de
-uma hora. É o retrato de uma cidade compacta, em que a distância não é o obstáculo principal, e
-contrasta fortemente com as grandes capitais, onde essa última proporção chega a ultrapassar um
-quinto dos trabalhadores.
+Três em cada quatro deslocamentos cabiam em meia hora e pouco mais de cinco por cento passavam de uma hora. É o retrato de uma cidade compacta, em que a distância não é o obstáculo principal, e contrasta fortemente com as grandes capitais, onde essa última proporção chega a ultrapassar um quinto dos trabalhadores.
 
 ::: {.callout-tip}
-Tempo curto de deslocamento não é sinônimo de boa mobilidade. Ele pode significar que a pessoa mora
-perto de um bom emprego, e pode significar o contrário, que o seu **espaço de atividades** é
-restrito e que ela trabalha perto de casa por não conseguir custear um deslocamento maior. A
-literatura de transportes trata o tamanho do espaço de atividades como indicador de risco de
-exclusão social justamente por isso.
+Tempo curto de deslocamento não é sinônimo de boa mobilidade. Ele pode significar que a pessoa mora perto de um bom emprego, e pode significar o contrário, que o seu **espaço de atividades** é restrito e que ela trabalha perto de casa por não conseguir custear um deslocamento maior. A literatura de transportes trata o tamanho do espaço de atividades como indicador de risco de exclusão social justamente por isso.
 :::
 
 Levando o indicador ao território, somamos as duas faixas acima de uma hora.
@@ -498,19 +447,8 @@ tempo_ap |>
   )
 ```
 
-Aqui está a lição mais importante do capítulo, e ela é desconfortável. A amplitude entre a área com
-menor e a com maior proporção é de pouco menos de sete pontos percentuais, enquanto o intervalo de
-confiança médio das estimativas tem mais de três pontos de largura. Os dois extremos ainda se
-distinguem, mas qualquer comparação entre áreas próximas no mapa é indistinguível de ruído amostral.
+Note que a amplitude entre a área com menor e a com maior proporção é de pouco menos de sete pontos percentuais, enquanto o intervalo de confiança médio das estimativas tem mais de três pontos de largura. Os dois extremos ainda se distinguem, mas qualquer comparação entre áreas próximas no mapa é indistinguível de ruído amostral.
 
-A causa é o tamanho do recorte. Anápolis tem apenas doze áreas de ponderação, e o subconjunto que
-responde ao quesito de tempo dentro de cada uma é pequeno. O mesmo cálculo em Salvador, com sessenta
-e duas áreas e uma amostra muito maior, produz contrastes que superam com folga a incerteza
-[@pedreira_censo_2026]. A conclusão prática é que microdado da amostra em município de porte médio
-serve muito bem ao retrato municipal e pede cautela redobrada na leitura intramunicipal, e que
-publicar o mapa sem publicar a largura do intervalo é uma forma silenciosa de enganar quem lê.
+A causa é o tamanho do recorte. Anápolis tem apenas doze áreas de ponderação, e o subconjunto que responde ao quesito de tempo dentro de cada uma é pequeno. O mesmo cálculo em Salvador, com sessenta e duas áreas e uma amostra muito maior, produz contrastes que superam com folga a incerteza [@pedreira_censo_2026]. A conclusão prática é que microdado da amostra em município de porte médio serve muito bem ao retrato municipal e pede cautela redobrada na leitura intramunicipal, e que publicar o mapa sem publicar a largura do intervalo é uma forma silenciosa de enganar quem lê.
 
-Os microdados encerram o que o Censo diz sobre deslocamento declarado. O que eles não dizem é quanto
-tempo *seria* preciso para chegar a cada destino da cidade, com a rede de transportes que existe
-hoje. Essa pergunta é a da Parte 2, e o próximo capítulo prepara o insumo que falta para respondê-la,
-que é a localização das oportunidades no território.
+Os microdados encerram o que o Censo diz sobre deslocamento declarado. O que eles não dizem é quanto tempo *seria* preciso para chegar a cada destino da cidade, com a rede de transportes que existe hoje. Essa pergunta é a da Parte 2, e o próximo capítulo prepara o insumo que falta para respondê-la, que é a localização das oportunidades no território.
