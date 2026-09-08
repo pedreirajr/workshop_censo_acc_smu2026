@@ -5,17 +5,16 @@ title: "CNEFE"
 O Cadastro Nacional de Endereços para Fins Estatísticos é o produto que mais mudou o que se pode
 fazer com o Censo em escala fina. Ele lista os endereços visitados na operação censitária, com
 coordenadas e com a indicação da espécie de cada um, o que permite localizar domicílios,
-estabelecimentos de ensino, de saúde e outras edificações no território. Para análises de
-acessibilidade isso é decisivo, porque resolve o problema recorrente de onde estão as oportunidades.
+estabelecimentos de ensino, de saúde e outras edificações no território. Para acessibilidade isso é
+decisivo, porque resolve o problema recorrente de onde estão as oportunidades.
 
 ::: {.callout-note}
 ## Nesta seção você vai
 
-- entender o que o CNEFE registra e o que ele não é
-- ler o arquivo de Anápolis com estratégia adequada de memória
-- classificar endereços por espécie e construir categorias de uso
-- agregar destinos por setor censitário e por grade
-- reconhecer as limitações do cadastro
+- ler o CNEFE de Anápolis com o `cnefetools`
+- contar os registros por espécie de endereço
+- filtrar e mapear estabelecimentos específicos pelo campo de texto livre
+- agregar contagens em grade hexagonal H3 e em polígonos próprios
 :::
 
 ::: {.callout-tip}
@@ -26,71 +25,229 @@ apresentado a seguir. Se ainda não tiver o projeto, volte ao
 [Capítulo 1](1-instalacao.qmd).
 :::
 
-
-## O que é o CNEFE
-
-<!-- ESBOÇO: origem operacional do cadastro, o que significa cada espécie de endereço e a diferença
-     entre endereço e estabelecimento. Deixar claro que não é um cadastro de atividades econômicas
-     e que a coordenada tem precisão variável conforme a forma de coleta. -->
-
-## Leitura com estratégia de memória
-
-<!-- ESBOÇO: o arquivo nacional é grande demais para caber na memória de um notebook comum. Mostrar
-     a leitura preguiçosa com Arrow, o filtro por município antes do collect e a alternativa de
-     leitura do arquivo municipal já recortado. -->
-
-```r
-library(censobr)
-library(arrow)
-library(dplyr)
-
-cnefe <- read_cnefe(year = 2022, as_data_frame = FALSE)
-
-cnefe_ana <- cnefe |>
-  filter(code_muni == "5201108") |>
-  collect()
-```
-
-<!-- DADOS: alternativa offline, arquivo municipal já recortado em
-     dados/censo/cnefe_anapolis.parquet -->
-
-## Espécies de endereço e categorias de uso
-
-<!-- ESBOÇO: tabela de frequência por espécie em Anápolis. Agrupar as espécies em categorias úteis
-     à análise de acessibilidade, como domicílios, ensino, saúde, comércio e serviços. Explicitar
-     as decisões de agrupamento, porque elas mudam o resultado do indicador. -->
-
-## Agregação de destinos
-
-<!-- ESBOÇO: contar endereços por categoria dentro de cada setor censitário e dentro de cada célula
-     da grade estatística, antecipando o capítulo 6. Converter para objeto sf com st_as_sf e
-     verificar coordenadas inválidas ou fora do município. -->
-
-```r
+```{r}
+#| label: pacotes-cap5
+#| message: false
+#| warning: false
+library(cnefetools)
+library(geobr)
 library(sf)
-
-cnefe_sf <- cnefe_ana |>
-  filter(!is.na(longitude), !is.na(latitude)) |>
-  st_as_sf(coords = c("longitude", "latitude"), crs = 4674)
+library(dplyr)
+library(ggplot2)
+library(mapview)
 ```
 
-## Mapas de pontos e de densidade
+## Leitura dos dados
 
-<!-- ESBOÇO: mapa de pontos por categoria e mapa de densidade de endereços, mostrando a
-     concentração de oportunidades na área central. Discutir sobreposição de pontos e alternativas
-     de visualização em áreas densas. -->
+Duas funções do `cnefetools` [@pedreira2026cnefetools] dão conta de quase tudo. A `read_cnefe()`
+baixa e lê os dados de um município, e a `cnefe_counts()` baixa, lê e já agrega as contagens por
+espécie em qualquer malha de polígonos. Acompanham ainda a `cnefe_dictionary()`, que abre o
+dicionário, e a `cnefe_doc()`, que abre a nota metodológica.
 
-## Limitações
+A `read_cnefe()` recebe o código IBGE e devolve dois formatos, conforme o argumento `output`. O
+padrão `"arrow"` entrega uma tabela preguiçosa, útil porque o arquivo é grande nos municípios
+maiores. O `"sf"` entrega os registros como pontos em SIRGAS 2000, prontos para análise espacial. O
+`cache = TRUE` baixa uma única vez e relê nas execuções seguintes.
 
-<!-- ESBOÇO: data de referência do cadastro, endereços sem coordenada, imprecisão em áreas rurais e
-     ausência de informação sobre porte do estabelecimento. Consequência prática, uma escola conta
-     como uma unidade independentemente do número de vagas, o que a Parte 2 precisa considerar. -->
+```{r}
+#| label: leitura-cnefe
+#| cache: true
+#| message: false
 
-::: {.callout-tip}
-## Conexão com a Parte 2
+anp_code <- lookup_muni(year = 2022, name_muni = "Anápolis")$code_muni
 
-A grade de hexágonos usada na Parte 2 traz o número de empregos por célula, e é do CNEFE que essa
-contagem vem. As oportunidades localizadas aqui são o insumo de destinos do cálculo dos indicadores
-de acessibilidade do capítulo [9](9-indicadores.qmd). O pacote `cnefetools`
-[@pedreira2026cnefetools] automatiza boa parte desse processamento.
+anp_cnefe <- read_cnefe(
+  code_muni = anp_code,
+  cache     = TRUE,
+  output    = "sf"
+)
+
+nrow(anp_cnefe)
+```
+
+A contagem por espécie mostra a composição do cadastro.
+
+```{r}
+#| label: tbl-especies-anapolis
+#| tbl-cap: "Registros do CNEFE 2022 em Anápolis (GO) por espécie de endereço."
+#| message: false
+
+anp_cnefe |>
+  st_drop_geometry() |>
+  count(COD_ESPECIE) |>
+  mutate(
+    especie = case_when(
+      COD_ESPECIE == 1 ~ "Domicílio particular",
+      COD_ESPECIE == 2 ~ "Domicílio coletivo",
+      COD_ESPECIE == 3 ~ "Est. agropecuário",
+      COD_ESPECIE == 4 ~ "Est. de ensino",
+      COD_ESPECIE == 5 ~ "Est. de saúde",
+      COD_ESPECIE == 6 ~ "Est. de outras finalidades",
+      COD_ESPECIE == 7 ~ "Edificação em construção",
+      COD_ESPECIE == 8 ~ "Est. religioso"
+    ),
+    perc_especie = round(100 * (n / sum(n)), 3)
+  ) |>
+  select(COD_ESPECIE, especie, n, perc_especie) |>
+  knitr::kable(
+    col.names   = c("Código", "Espécie", "Nº registros", "Perc. registros (%)"),
+    align       = c("c", "c", "c", "c"),
+    format.args = list(big.mark = ".", decimal.mark = ",")
+  )
+```
+
+## Mapeando estabelecimentos específicos
+
+O campo `DSC_ESTABELECIMENTO` é texto aberto, preenchido pelo recenseador, e permite descer ao nome
+do equipamento. Abaixo filtramos os estabelecimentos de saúde, de código 5, e dentro deles os que
+têm "hospital" no nome, com `grepl()` e `ignore.case = TRUE`.
+
+```{r}
+#| label: filtra-saude
+#| message: false
+
+anp_saude <- anp_cnefe |>
+  filter(COD_ESPECIE == 5)
+
+anp_hospitais <- anp_saude |>
+  filter(grepl("hospital", DSC_ESTABELECIMENTO, ignore.case = TRUE))
+
+c(saude = nrow(anp_saude), hospitais = nrow(anp_hospitais))
+```
+
+```{r}
+#| label: fig-saude-anapolis
+#| cache: true
+#| message: false
+#| fig-cap: "Estabelecimentos de saúde em Anápolis (GO) segundo o CNEFE 2022. Os pontos vermelhos indicam os que têm 'hospital' no nome do estabelecimento."
+
+anp_muni <- read_municipality(code_muni = anp_code, year = 2022,
+                              simplified = FALSE, showProgress = FALSE)
+
+ggplot() +
+  geom_sf(data = anp_muni, fill = "grey95", color = "grey60", linewidth = 0.4) +
+  geom_sf(data = anp_saude, color = "steelblue", size = 0.6, alpha = 0.5) +
+  geom_sf(data = anp_hospitais, color = "firebrick", size = 1.5) +
+  theme_minimal() +
+  labs(x = NULL, y = NULL,
+       caption = "Fonte: CNEFE 2022 (IBGE), pacote cnefetools")
+```
+
+::: {.callout-note}
+## Buscas por texto no DSC_ESTABELECIMENTO
+
+O campo é texto livre coletado em campo, então a mesma instituição pode aparecer grafada de formas
+diferentes, com abreviação, sem acento ou com erro de digitação. Ao filtrar por palavra-chave, vale
+testar variações da busca para não perder registros relevantes.
 :::
+
+## Agregando contagens por recorte espacial
+
+Em análise territorial quase sempre se quer o recorte, e não o ponto. A `cnefe_counts()` faz a
+agregação e devolve um `sf` com oito colunas de contagem, uma por espécie, de `addr_type1` a
+`addr_type8`. Os argumentos principais são `code_muni`, `polygon_type`, que aceita `"hex"` para
+grade H3 ou `"user"` para polígonos próprios, `h3_resolution` e `polygon`.
+
+Começamos pela grade hexagonal na resolução 8, com células de cerca de 0,7 km².
+
+```{r}
+#| label: cnefe-counts-hex
+#| cache: true
+#| message: false
+
+anp_hex <- cnefe_counts(
+  code_muni     = anp_code,
+  polygon_type  = "hex",
+  h3_resolution = 8,
+  cache         = TRUE,
+  verbose       = FALSE
+)
+
+nrow(anp_hex)
+```
+
+```{r}
+#| label: fig-cnefe-hex
+#| fig-cap: "Contagem de estabelecimentos por hexágono H3, resolução 8, Anápolis (GO), CNEFE 2022."
+#| fig-subcap:
+#|   - "Estabelecimentos de ensino"
+#|   - "Estabelecimentos religiosos"
+#| layout-ncol: 2
+#| fig-width: 5
+#| fig-height: 5
+#| message: false
+
+ggplot(anp_hex) +
+  geom_sf(aes(fill = addr_type4), color = NA) +
+  scale_fill_distiller(palette = "Blues", direction = 1) +
+  labs(fill = "# Est. de\nensino") +
+  theme_minimal()
+
+ggplot(anp_hex) +
+  geom_sf(aes(fill = addr_type8), color = NA) +
+  scale_fill_distiller(palette = "Oranges", direction = 1) +
+  labs(fill = "# Est.\nreligiosos") +
+  theme_minimal()
+```
+
+A partir dessas contagens dá para construir índices comparativos entre usos. Abaixo, a proporção de
+estabelecimentos de ensino sobre o total de ensino mais religiosos em cada célula. Valores próximos
+de 1 indicam predomínio de ensino, e próximos de 0, predomínio religioso.
+
+```{r}
+#| label: map-prop-ensino
+#| message: false
+
+anp_hex_ratio <- anp_hex |>
+  filter((addr_type4 + addr_type8) > 0) |>
+  mutate(prop_ensino = addr_type4 / (addr_type4 + addr_type8))
+
+mapview(
+  anp_hex_ratio,
+  zcol       = "prop_ensino",
+  layer.name = "Predominancia de ensino",
+  legend     = TRUE
+)
+```
+
+A mesma função agrega em qualquer malha, bastando `polygon_type = "user"` e o `sf` no argumento
+`polygon`. Usamos a malha de bairros da prefeitura, a mesma do [Capítulo 3](3-agregados.qmd).
+
+```{r}
+#| label: cnefe-counts-bairros
+#| cache: true
+#| message: false
+
+anp_bairros <- st_read("dados/geo/bairros_anapolis.gpkg", quiet = TRUE)
+
+anp_bairros_counts <- cnefe_counts(
+  code_muni    = anp_code,
+  polygon_type = "user",
+  polygon      = anp_bairros,
+  cache        = TRUE,
+  verbose      = FALSE
+)
+
+nrow(anp_bairros_counts)
+```
+
+```{r}
+#| label: map-cnefe-bairros
+#| message: false
+
+mapview(
+  anp_bairros_counts,
+  zcol       = "addr_type1",
+  layer.name = "# Domicilios particulares"
+)
+```
+
+::: {.callout-warning}
+A `cnefe_counts()` informa, ao rodar, a fração dos pontos do CNEFE capturada pelos polígonos. Com a
+malha de bairros, que cobre só a área urbana, ela fica em torno de 95%. Confira sempre esse número,
+porque o que cai fora dos polígonos some da contagem sem aviso.
+:::
+
+Os pontos do CNEFE são a matéria-prima dos destinos que a Parte 2 vai usar. Escolas, unidades de
+saúde e estabelecimentos de outras finalidades deixam de ser um total municipal e passam a ter
+coordenada, que é o que uma matriz de tempo de viagem exige.
