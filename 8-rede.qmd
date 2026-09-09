@@ -1,7 +1,5 @@
 ---
 title: "Leitura dos arquivos e montagem da rede"
-execute:
-  eval: false
 ---
 
 Medir acessibilidade exige saber quanto tempo se leva para ir de cada origem a cada destino, por
@@ -30,6 +28,21 @@ apresentado a seguir. Se ainda não tiver o projeto, volte ao
 Ele continua a sessão do capítulo anterior, então rode antes o `scripts/7-instalacao_acc.R`,
 que carrega os pacotes e aponta o Java.
 :::
+
+```{r}
+#| label: setup-8
+#| include: false
+options(java.parameters = "-Xmx6G")
+
+library(r5r)
+library(accessibility)
+library(sf)
+library(terra)
+library(dplyr)
+library(data.table)
+library(ggplot2)
+library(mapview)
+```
 
 
 ## Os dados da oficina
@@ -123,16 +136,6 @@ grade <- st_read(arq_grade, quiet = TRUE)
 glimpse(sf::st_drop_geometry(grade))
 ```
 
-```
-Rows: 8,440
-Columns: 5
-$ id_hex        <chr> "89a8c040027ffff", "89a8c040103ffff", "89a8c040107ffff",…
-$ Jobs          <dbl> 0.0000000, 0.0000000, 0.0000000, 0.0000000, 0.0000000, …
-$ pop_ph        <dbl> 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000…
-$ avg_inc_resp  <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 1900.42, NA…
-$ classe_urbano <chr> "Rural", "Rural", "Rural", "Rural", "Rural", "Rural", "…
-```
-
 - `id_hex`, identificador do hexágono H3
 - `Jobs`, número de empregos no hexágono
 - `pop_ph`, população em domicílios particulares no hexágono
@@ -152,7 +155,7 @@ mapview(
   grade |>
     filter(classe_urbano == "Urbano"),
   zcol = "Jobs",
-  layer.name = "Empregos por hexágono"
+  layer.name = "Empregos"
 )
 ```
 
@@ -161,7 +164,7 @@ mapview(
   grade |>
     filter(classe_urbano == "Urbano"),
   zcol = "avg_inc_resp",
-  layer.name = "Renda média (R$)"
+  layer.name = "Renda"
 )
 ```
 ## Unidades de saúde (CNES)
@@ -192,7 +195,7 @@ unidades_saude <- bind_rows(
   ler_unidade(file.path(pasta_geo, "cnes_anapolis_go_73.gpkg"), "emergencia")
 )
 
-mapview(unidades_saude, zcol = "tipo", layer.name = "Unidades de saúde")
+mapview(unidades_saude, zcol = "tipo", layer.name = "Unidades CNES")
 ```
 
 A diferença de escala é perceptível: atenção básica está espalhada pelo município,
@@ -276,7 +279,7 @@ Essa é a data usada no capítulo seguinte.
 paradas <- fread(file.path(gtfs_dir, "stops.txt")) |>
   st_as_sf(coords = c("stop_lon", "stop_lat"), crs = 4326)
 
-mapview(paradas, layer.name = "Paradas de ônibus")
+mapview(paradas, layer.name = "Paradas GTFS")
 ```
 
 Para mais detalhes sobre a especificação GTFS, vale a leitura do
@@ -347,11 +350,17 @@ comum em feeds GTFS reais e não impede o roteamento.
 ## Visualizando a rede
 
 ```{r}
+#| label: mapa-rede-viaria
 rede_viaria <- street_network_to_sf(r5r_network)
 
 ggplot() +
   geom_sf(data = rede_viaria$edges, linewidth = 0.15, color = "gray40") +
   theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  ) +
   labs(title = "Rede viária utilizada pelo R5")
 ```
 

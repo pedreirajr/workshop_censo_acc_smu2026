@@ -1,7 +1,5 @@
 ---
 title: "Cômputo dos indicadores"
-execute:
-  eval: false
 ---
 
 Com a rede construída, o caminho até um indicador de acessibilidade tem duas etapas. Primeiro se
@@ -33,6 +31,71 @@ apresentado a seguir. Se ainda não tiver o projeto, volte ao
 Ele continua a sessão do capítulo anterior, então rode antes o `scripts/8-rede.R`, que deixa em
 memória a rede, a grade e os caminhos das pastas.
 :::
+
+```{r}
+#| label: setup-9
+#| include: false
+options(java.parameters = "-Xmx6G")
+
+library(r5r)
+library(accessibility)
+library(sf)
+library(terra)
+library(dplyr)
+library(data.table)
+library(ggplot2)
+library(mapview)
+library(h3jsr)
+
+pasta_rede <- "dados/r5"
+pasta_geo  <- "dados/geo"
+
+arq_grade <- file.path(
+  pasta_geo,
+  "grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg"
+)
+
+grade <- st_read(arq_grade, quiet = TRUE)
+
+ler_unidade <- function(arquivo, tipo) {
+  st_read(arquivo, quiet = TRUE) |>
+    mutate(tipo = tipo)
+}
+
+unidades_saude <- bind_rows(
+  ler_unidade(file.path(pasta_geo, "cnes_anapolis_go_02.gpkg"), "atencao_basica"),
+  ler_unidade(file.path(pasta_geo, "cnes_anapolis_go_05.gpkg"), "hospital"),
+  ler_unidade(file.path(pasta_geo, "cnes_anapolis_go_73.gpkg"), "emergencia")
+)
+
+unidades_h3 <- unidades_saude |>
+  mutate(id_hex = point_to_cell(unidades_saude, res = 9)) |>
+  st_drop_geometry() |>
+  summarise(n = n(), prof = sum(prof, na.rm = TRUE), .by = c(id_hex, tipo))
+
+grade <- grade |>
+  left_join(
+    unidades_h3 |>
+      filter(tipo == "atencao_basica") |>
+      transmute(id_hex, atencao_basica = n, capacidade_ab = prof),
+    by = "id_hex"
+  ) |>
+  left_join(
+    unidades_h3 |> filter(tipo == "hospital") |> transmute(id_hex, hospital = n),
+    by = "id_hex"
+  ) |>
+  left_join(
+    unidades_h3 |> filter(tipo == "emergencia") |> transmute(id_hex, emergencia = n),
+    by = "id_hex"
+  ) |>
+  mutate(across(c(atencao_basica, capacidade_ab, hospital, emergencia), \(x) coalesce(x, 0)))
+
+r5r_network <- build_network(
+  data_path = pasta_rede,
+  elevation = "TOBLER",
+  overwrite = FALSE
+)
+```
 
 
 ## Matrizes de tempo de viagem
@@ -439,6 +502,7 @@ empregos alcançáveis depende do tamanho da cidade, o resultado também é expr
 do total de empregos de Anápolis**, o que facilita a leitura e a comparação com outros municípios.
 
 ```{r}
+#| label: graf-acess-modos
 total_empregos <- sum(uso_solo$jobs)
 
 acess_modos <- bind_rows(
@@ -465,12 +529,18 @@ ggplot(acess_modos, aes(x = modo, y = jobs_pct, fill = modo)) +
 E em mapa, para o transporte público.
 
 ```{r}
+#| label: mapa-acess-tp
 grade_urbana |>
   left_join(acess_tp, by = c("id_hex" = "id")) |>
   ggplot() +
   geom_sf(aes(fill = jobs), color = NA) +
   scale_fill_viridis_c(name = "Empregos\nem até 30 min") +
   theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  ) +
   labs(title = "Acessibilidade a empregos por transporte público")
 ```
 
@@ -558,6 +628,9 @@ Mapeando lado a lado, a diferença de escala entre atenção básica e as outras
 sugerida pelo mapa de pontos do capítulo anterior, fica explícita em minutos:
 
 ```{r}
+#| label: mapa-tempo-saude
+#| fig-width: 9
+#| fig-height: 3.6
 grade_urbana |>
   left_join(tempo_min_saude, by = c("id_hex" = "from_id")) |>
   ggplot() +
@@ -565,6 +638,11 @@ grade_urbana |>
   scale_fill_viridis_c(name = "Minutos", option = "inferno", direction = -1) +
   facet_wrap(~tipo) +
   theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  ) +
   labs(title = "Tempo mínimo de carro até a unidade de saúde mais próxima")
 ```
 
@@ -610,6 +688,7 @@ argumento `opportunity`), igual à coluna de oferta bruta já presente em `grade
 essa colisão de nomes no `left_join()`, ela é renomeada antes de entrar no mapa:
 
 ```{r}
+#| label: mapa-fca-atencao-basica
 grade_urbana |>
   left_join(
     competicao_ab |> rename(fca_atencao_basica = capacidade_ab),
@@ -619,6 +698,11 @@ grade_urbana |>
   geom_sf(aes(fill = fca_atencao_basica), color = NA) +
   scale_fill_viridis_c(name = "Profissionais\npor habitante") +
   theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  ) +
   labs(title = "Acessibilidade a atenção básica com competição (2SFCA, carro)")
 ```
 

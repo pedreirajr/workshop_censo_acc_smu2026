@@ -1,7 +1,5 @@
 ---
 title: "Equidade e pobreza de acessibilidade"
-execute:
-  eval: false
 ---
 
 Calcular acessibilidade não basta para entender a justiça de um sistema de transportes. Dois modos
@@ -33,6 +31,167 @@ Ele continua a sessão do capítulo anterior, então rode antes o `scripts/9-ind
 deixa em memória os indicadores de acessibilidade de cada modo.
 :::
 
+```{r}
+#| label: setup-10
+#| include: false
+options(java.parameters = "-Xmx6G")
+
+library(r5r)
+library(accessibility)
+library(sf)
+library(terra)
+library(dplyr)
+library(data.table)
+library(ggplot2)
+library(mapview)
+library(h3jsr)
+
+pasta_rede <- "dados/r5"
+pasta_geo  <- "dados/geo"
+
+arq_grade <- file.path(
+  pasta_geo,
+  "grade_h3r9_anapolis_empregos_renda_pop_urbano_rural.gpkg"
+)
+
+grade <- st_read(arq_grade, quiet = TRUE)
+
+ler_unidade <- function(arquivo, tipo) {
+  st_read(arquivo, quiet = TRUE) |>
+    mutate(tipo = tipo)
+}
+
+unidades_saude <- bind_rows(
+  ler_unidade(file.path(pasta_geo, "cnes_anapolis_go_02.gpkg"), "atencao_basica"),
+  ler_unidade(file.path(pasta_geo, "cnes_anapolis_go_05.gpkg"), "hospital"),
+  ler_unidade(file.path(pasta_geo, "cnes_anapolis_go_73.gpkg"), "emergencia")
+)
+
+unidades_h3 <- unidades_saude |>
+  mutate(id_hex = point_to_cell(unidades_saude, res = 9)) |>
+  st_drop_geometry() |>
+  summarise(n = n(), prof = sum(prof, na.rm = TRUE), .by = c(id_hex, tipo))
+
+grade <- grade |>
+  left_join(
+    unidades_h3 |>
+      filter(tipo == "atencao_basica") |>
+      transmute(id_hex, atencao_basica = n, capacidade_ab = prof),
+    by = "id_hex"
+  ) |>
+  left_join(
+    unidades_h3 |> filter(tipo == "hospital") |> transmute(id_hex, hospital = n),
+    by = "id_hex"
+  ) |>
+  left_join(
+    unidades_h3 |> filter(tipo == "emergencia") |> transmute(id_hex, emergencia = n),
+    by = "id_hex"
+  ) |>
+  mutate(across(c(atencao_basica, capacidade_ab, hospital, emergencia), \(x) coalesce(x, 0)))
+
+r5r_network <- build_network(
+  data_path = pasta_rede,
+  elevation = "TOBLER",
+  overwrite = FALSE
+)
+
+grade_urbana <- grade |>
+  filter(classe_urbano == "Urbano") |>
+  st_transform(4326)
+
+pontos <- grade_urbana |>
+  st_centroid() |>
+  mutate(
+    lon = st_coordinates(geom)[, 1],
+    lat = st_coordinates(geom)[, 2]
+  ) |>
+  st_drop_geometry() |>
+  transmute(id = id_hex, lon, lat)
+
+uso_solo <- grade_urbana |>
+  st_drop_geometry() |>
+  transmute(
+    id = id_hex,
+    jobs = Jobs,
+    population = pop_ph,
+    income = avg_inc_resp,
+    atencao_basica, capacidade_ab, hospital, emergencia
+  )
+
+data_viagem <- as.POSIXct("22-07-2026 07:00:00", format = "%d-%m-%Y %H:%M:%S")
+
+ttm_pe <- travel_time_matrix(
+  r5r_network = r5r_network,
+  origins = pontos,
+  destinations = pontos,
+  mode = "WALK",
+  departure_datetime = data_viagem,
+  max_trip_duration = 60
+)
+
+ttm_bike <- travel_time_matrix(
+  r5r_network = r5r_network,
+  origins = pontos,
+  destinations = pontos,
+  mode = "BICYCLE",
+  departure_datetime = data_viagem,
+  max_lts = 2,
+  max_trip_duration = 60
+)
+
+ttm_carro <- travel_time_matrix(
+  r5r_network = r5r_network,
+  origins = pontos,
+  destinations = pontos,
+  mode = "CAR",
+  departure_datetime = data_viagem,
+  max_trip_duration = 60
+)
+
+ttm_transporte_publico <- travel_time_matrix(
+  r5r_network = r5r_network,
+  origins = pontos,
+  destinations = pontos,
+  mode = c("WALK", "TRANSIT"),
+  departure_datetime = data_viagem,
+  time_window = 30,
+  max_walk_time = 30,
+  max_trip_duration = 90
+)
+
+acess_pe <- cumulative_cutoff(
+  travel_matrix = ttm_pe,
+  land_use_data = uso_solo,
+  opportunity = "jobs",
+  travel_cost = "travel_time_p50",
+  cutoff = 30
+)
+
+acess_bike <- cumulative_cutoff(
+  travel_matrix = ttm_bike,
+  land_use_data = uso_solo,
+  opportunity = "jobs",
+  travel_cost = "travel_time_p50",
+  cutoff = 30
+)
+
+acess_carro <- cumulative_cutoff(
+  travel_matrix = ttm_carro,
+  land_use_data = uso_solo,
+  opportunity = "jobs",
+  travel_cost = "travel_time_p50",
+  cutoff = 30
+)
+
+acess_tp <- cumulative_cutoff(
+  travel_matrix = ttm_transporte_publico,
+  land_use_data = uso_solo,
+  opportunity = "jobs",
+  travel_cost = "travel_time_p50",
+  cutoff = 30
+)
+```
+
 
 ## Preparando os dados sociodemográficos
 
@@ -50,10 +209,18 @@ nrow(uso_solo_equidade)
 
 ## Calculando as medidas para cada modo
 
-Criamos uma função pequena para não repetir a mesma sequência de chamadas quatro vezes.
+Criamos uma função pequena para não repetir a mesma sequência de chamadas quatro vezes. A primeira
+linha dela resolve um detalhe fácil de passar batido. Os hexágonos sem moradores saíram da tabela
+sociodemográfica no bloco anterior, mas continuam na tabela de acessibilidade, então as duas deixam
+de cobrir o mesmo conjunto de ids. Todas as medidas ponderadas por população voltam `NA` nessa
+situação, acompanhadas de um aviso, porque não há peso definido para os ids que sobram. Filtrar a
+tabela de acessibilidade pelos ids que restaram alinha as duas.
 
 ```{r}
 medidas_equidade <- function(acess_df, land_use) {
+  acess_df <- acess_df |>
+    filter(id %in% land_use$id)
+
   linha_pobreza <- quantile(acess_df$jobs, 0.25, na.rm = TRUE)
 
   palma <- palma_ratio(
@@ -129,6 +296,7 @@ equidade_modos
   pobreza e o FGT2 dá peso extra a quem está mais distante da linha de pobreza.
 
 ```{r}
+#| label: graf-concentracao
 ggplot(equidade_modos, aes(x = modo, y = concentration_index, fill = modo)) +
   geom_col(show.legend = FALSE) +
   geom_hline(yintercept = 0, linetype = "dashed") +
