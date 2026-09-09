@@ -186,8 +186,6 @@ anp_sc_geo22 <- read_census_tract(code_tract = anp_code, year = 2022,
 anp_sc <- anp_sc_geo22 |>
   select(code_tract, zone) |>
   left_join(anp_sc, by = "code_tract")
-
-sum(is.na(anp_sc$pop))
 ```
 
 Repare que levamos a coluna `zone` junto no `select()`. É a classificação urbana ou rural apresentada no [Capítulo 2](2-recortes-territoriais.qmd), e ela serve agora. Os setores rurais de Anápolis são grandes e quase vazios, de modo que o mapa do município inteiro fica dominado por eles e espreme a cidade em um borrão no centro, justamente onde está quase toda a variação que queremos

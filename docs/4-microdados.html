@@ -310,7 +310,7 @@ div.csl-indent {
 </header>
 
 
-<p>Ao contrário dos agregados, nos microdads poderemos trabalhar com variáveis bastante relevantes para a pesquisa em transportes. No Censo de 2010, por exemplo, temos o <strong>tempo habitual de deslocamento</strong> até o local de trabalho, <strong>posse de veículos</strong> e, em 2022, temos adicionalmente, e de forma inédita, a <strong>escolha modal</strong> desta viagem. Há, entretanto, um preço metodológico para essa maior riqueza de detalhe. Uma vez que cada registro representa uma amostra de pessoas e domicílios do universo, ignorar o desenho amostral pode produzir estimativas simplesmente equivocadas do que queremos medir. Vamos entender, nesse capítulo, como lidar com esse aspecto.</p>
+<p>Ao contrário dos agregados, nos microdads poderemos trabalhar com variáveis bastante relevantes para a pesquisa em transportes. No Censo de 2010, por exemplo, temos o <strong>tempo habitual de deslocamento</strong> até o local de trabalho, <strong>posse de veículos</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> e, em 2022, temos adicionalmente (e de forma inédita) a <strong>escolha modal</strong> desta viagem. Há, entretanto, um preço metodológico para essa maior riqueza de detalhe. Uma vez que cada registro representa uma amostra de pessoas e domicílios do universo, ignorar o desenho amostral pode produzir estimativas simplesmente equivocadas do que queremos medir. Vamos entender, nesse capítulo, como lidar com esse aspecto.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -357,7 +357,7 @@ div.csl-indent {
 <h2 data-number="4.1" class="anchored" data-anchor-id="por-que-2010-e-não-2022"><span class="header-section-number">4.1</span> Por que 2010, e não 2022</h2>
 <p>Os microdados da amostra do Censo 2022 foram divulgados em 31 de agosto de 2026, em um modelo de acesso inteiramente novo, organizado em três níveis e motivado pelo risco de reidentificação dos respondentes, agravado pelo avanço das ferramentas de inteligência artificial, e pela intenção de coibir o uso comercial e publicitário dos registros <span class="citation" data-cites="ibge_microdados2022">(<a href="referencias.html#ref-ibge_microdados2022" role="doc-biblioref">IBGE, 2026</a>)</span>.</p>
 <p>O primeiro nível é o de <strong>acesso público</strong>, aberto a qualquer pessoa e sem cadastro, cujo detalhe geográfico vai somente até a Unidade da Federação (município). O segundo é o de <strong>acesso controlado</strong>, que exige autenticação por conta gov.br e assinatura de termo de compromisso, e entrega a cada pesquisador um arquivo individualmente rastreável. O terceiro é a <strong>Sala de Acesso Restrito</strong>, para a qual é preciso submeter projeto de pesquisa e da qual os dados não saem.</p>
-<p>O detalhe geográfico é o que decide a questão para nós. Análise intramunicipal de transportes exige descer abaixo do município, e é isso que o nível público não permite. Some-se a isso que o IBGE não autoriza a redistribuição dos arquivos do nível controlado, de modo que nenhum pacote de R pode baixá-los por você.</p>
+<p>Em função da análise intramunicipal de transportes exige descer abaixo do município, o nível público não nos atende. Some-se a isso que o IBGE não autoriza a redistribuição dos arquivos do nível controlado, de modo que nenhum pacote de R pode baixá-los por você.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -369,7 +369,7 @@ div.csl-indent {
 </div>
 <div class="callout-body-container callout-body">
 <!-- Checar se é ipeaGit mesmo abaixo-->
-<p>O <code>censobr</code> acompanhou a mudança. A versão em desenvolvimento<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> traz a função <code>import_microdata22_controlado()</code>, que recebe o caminho do <code>.zip</code> que <strong>você</strong> obteve junto ao IBGE, processa os arquivos e os guarda no cache local em formato <em>parquet</em>. Feita a importação uma única vez, as funções de leitura de sempre, como <code>read_population(year = 2022)</code> e <code>read_households(year = 2022)</code>, passam a funcionar para 2022. O procedimento está documentado em <a href="https://ipea.github.io/censobr/dev/articles/microdata_2022.html" class="uri">https://ipea.github.io/censobr/dev/articles/microdata_2022.html</a>.</p>
+<p>O <code>censobr</code> acompanhou a mudança. A versão em desenvolvimento<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> traz a função <code>import_microdata22_controlado()</code>, que recebe o caminho do <code>.zip</code> que <strong>você</strong> obteve junto ao IBGE, processa os arquivos e os guarda no cache local em formato <em>parquet</em>. Feita a importação uma única vez, as funções de leitura de sempre, como <code>read_population(year = 2022)</code> e <code>read_households(year = 2022)</code>, passam a funcionar para 2022. O procedimento está documentado em <a href="https://ipea.github.io/censobr/dev/articles/microdata_2022.html" class="uri">https://ipea.github.io/censobr/dev/articles/microdata_2022.html</a>.</p>
 </div>
 </div>
 <p>Nesta oficina ficamos com <strong>2010</strong>, por três razões. Os arquivos são de acesso livre, o <code>censobr</code> os baixa sozinho, e o detalhe geográfico desce até a área de ponderação, que é o recorte de que precisamos. Vale registrar que os dados têm quinze anos e não descrevem a Anápolis de hoje. O que eles ensinam é o método, e o método é o mesmo que você aplicará aos arquivos de 2022 quando os obtiver.</p>
@@ -469,7 +469,7 @@ div.csl-indent {
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>pa_dpp <span class="ot">&lt;-</span> pa_dom <span class="sc">|&gt;</span></span>
 <span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(V4001 <span class="sc">==</span> <span class="st">"01"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>O arquivo de pessoas segue a mesma lógica, com o acréscimo do identificador do domicílio como unidade de conglomeração, em <code>ids</code>.</p>
+<p>O arquivo de pessoas segue a mesma lógica, com o acréscimo do identificador do domicílio como unidade de conglomeração.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Registrando os nomes das variáveis no vetor cols_pes</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>cols_pes <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
@@ -491,7 +491,7 @@ div.csl-indent {
 <pre><code>[1] 30960</code></pre>
 </div>
 </div>
-<p>Produzindo o desenho amostral para o arquivo dos indivíduos:</p>
+<p>Deste modo, podemos produzir o desenho amostral para tabela dos indivíduos conforme o código abaixo.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Obtendo o total de indivíduos por área de ponderação (n_dom) a ser utilizado </span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="do">## como argumento no desenho amostral no fator de correação para população finita</span></span>
@@ -625,49 +625,32 @@ Figura&nbsp;4.2: Domicílios particulares permanentes com veículo, por área de
 </div>
 </figure>
 </div>
-<p>Cada veículo tem escala própria, porque as amplitudes são muito diferentes e uma escala comum apagaria o padrão da motocicleta. Vale medir essas amplitudes.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>veic_ap <span class="sc">|&gt;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">auto_minimo =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">min</span>(automovel),</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">auto_maximo =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">max</span>(automovel),</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">moto_minimo =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">min</span>(motocicleta),</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">moto_maximo =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">max</span>(motocicleta)</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 4
-  auto_minimo auto_maximo moto_minimo moto_maximo
-        &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
-1        38.8        69.6        23.6        30.0</code></pre>
-</div>
-</div>
-<!--Ver resultados para discutir resultados apropriadamente-->
-<p>Observe como o automóvel varia cerca de trinta pontos percentuais entre as áreas de ponderação, desenhando a segregação de renda do município. Já a motocicleta varia pouco mais de seis pontos e está presente em toda parte.</p>
+<p>Uma característica muito marcante destes mapas é que eles parecem produzir padrões inversos, com a posse de automóveis maior nas regiões mais centrais e a de motocicleta nas regiões mais periféricas da mancha urbana. Cabe frisar que cada veículo tem escala própria, porque as amplitudes são muito diferentes e uma escala comum apagaria o padrão da motocicleta. Vale medir essas amplitudes.</p>
 </section>
 <section id="local-de-trabalho" class="level2" data-number="4.5">
 <h2 data-number="4.5" class="anchored" data-anchor-id="local-de-trabalho"><span class="header-section-number">4.5</span> Local de trabalho</h2>
 <p>A variável <code>V0660</code> informa onde a pessoa ocupada exercia o trabalho principal, e precisa vir antes do tempo de deslocamento por uma razão prática. É ela que define quem se desloca, e portanto quem entra no denominador do indicador de tempo.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pa_pes <span class="sc">|&gt;</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(V0660)) <span class="sc">|&gt;</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">local =</span> <span class="fu">factor</span>(</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>      V0660,</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"5"</span>),</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"No próprio domicílio"</span>,</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Apenas neste município, fora do domicílio"</span>,</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Em outro município"</span>, <span class="st">"Em país estrangeiro"</span>,</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Em mais de um município ou país"</span>)</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(local) <span class="sc">|&gt;</span></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">proporcao =</span> <span class="fu">survey_prop</span>(<span class="at">vartype =</span> <span class="st">"ci"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Local de trabalho"</span>, <span class="st">"Proporção"</span>,</span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"IC 95%, limite inferior"</span>, <span class="st">"IC 95%, limite superior"</span>),</span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">digits =</span> <span class="dv">4</span>,</span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">format.args =</span> <span class="fu">list</span>(<span class="at">decimal.mark =</span> <span class="st">","</span>)</span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pa_pes <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(V0660)) <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">local =</span> <span class="fu">factor</span>(</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>      V0660,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"5"</span>),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"No próprio domicílio"</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Apenas neste município, fora do domicílio"</span>,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Em outro município"</span>, <span class="st">"Em país estrangeiro"</span>,</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Em mais de um município ou país"</span>)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(local) <span class="sc">|&gt;</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">proporcao =</span> <span class="fu">survey_prop</span>(<span class="at">vartype =</span> <span class="st">"ci"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Local de trabalho"</span>, <span class="st">"Proporção"</span>,</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"IC 95%, limite inferior"</span>, <span class="st">"IC 95%, limite superior"</span>),</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">digits =</span> <span class="dv">4</span>,</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">format.args =</span> <span class="fu">list</span>(<span class="at">decimal.mark =</span> <span class="st">","</span>)</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div id="tbl-local-trabalho" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-local-trabalho-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -728,7 +711,7 @@ Tabela&nbsp;4.1: Distribuição das pessoas ocupadas de Anápolis (GO) segundo o
 </figure>
 </div>
 </div>
-<p>Três em cada quatro pessoas ocupadas trabalhavam no próprio município e fora de casa, e menos de quatro por cento saíam de Anápolis para trabalhar. O deslocamento intermunicipal é pequeno, o que importa para a Parte 2, porque significa que uma análise de acessibilidade restrita aos limites do município captura quase toda a viagem casa-trabalho da população residente.</p>
+<p>Três em cada quatro pessoas ocupadas trabalhavam no próprio município e fora de casa, e menos de 4% saíam de Anápolis para trabalhar. O deslocamento intermunicipal é pequeno, o que importa para a Parte 2, porque significa que uma análise de acessibilidade restrita aos limites do município captura quase toda a viagem casa-trabalho da população residente.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -742,22 +725,22 @@ Aviso
 <p>O Censo descreve quem <strong>mora</strong> no município, e não quem trabalha nele. Para dimensionar quem chega de fora todos os dias seria preciso ler os microdados dos municípios de origem e usar <code>V6604</code>, que informa o código do município de trabalho. O recorte de leitura muda por completo.</p>
 </div>
 </div>
-<p>Cerca de um quinto das pessoas ocupadas trabalhava no próprio domicílio. Esse contingente não realiza deslocamento casa-trabalho e, por construção do questionário, não responde ao quesito de tempo. Antes de calcular qualquer média, portanto, é preciso saber exatamente quem responde. Cruzamos o retorno diário para casa, em <code>V0661</code>, com o fato de a pessoa ter respondido ou não ao tempo, em <code>V0662</code>. O argumento <code>.drop = FALSE</code> do <code>count()</code> é essencial, porque sem ele as combinações que não ocorrem simplesmente não apareceriam, e são justamente elas que precisamos ver.</p>
+<p>Note também que cerca de 1/5 das pessoas ocupadas trabalhava no próprio domicílio. Esse contingente não realiza deslocamento casa-trabalho e, por construção do questionário, não responde ao quesito de tempo. Antes de calcular qualquer média, portanto, é preciso saber exatamente quem responde. Cruzamos o retorno diário para casa, em <code>V0661</code>, com o fato de a pessoa ter respondido ou não ao tempo, em <code>V0662</code>. O argumento <code>.drop = FALSE</code> do <code>count()</code> é essencial, porque sem ele as combinações que não ocorrem simplesmente não apareceriam, e são justamente elas que precisamos ver.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>anp_pes <span class="sc">|&gt;</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(V0660 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">retorna =</span> <span class="fu">factor</span>(V0661, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"1"</span>, <span class="st">"2"</span>),</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Retorna diariamente"</span>, <span class="st">"Não retorna diariamente"</span>)),</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">tempo   =</span> <span class="fu">factor</span>(<span class="sc">!</span><span class="fu">is.na</span>(V0662), <span class="at">levels =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>),</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Respondeu V0662"</span>, <span class="st">"V0662 em branco"</span>))</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(retorna, tempo, <span class="at">.drop =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> tempo, <span class="at">values_from =</span> n) <span class="sc">|&gt;</span></span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Retorno para casa"</span>, <span class="st">"Respondeu `V0662`"</span>, <span class="st">"`V0662` em branco"</span>),</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">format.args =</span> <span class="fu">list</span>(<span class="at">big.mark =</span> <span class="st">"."</span>, <span class="at">decimal.mark =</span> <span class="st">","</span>)</span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>anp_pes <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(V0660 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">retorna =</span> <span class="fu">factor</span>(V0661, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"1"</span>, <span class="st">"2"</span>),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Retorna diariamente"</span>, <span class="st">"Não retorna diariamente"</span>)),</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">tempo   =</span> <span class="fu">factor</span>(<span class="sc">!</span><span class="fu">is.na</span>(V0662), <span class="at">levels =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>),</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Respondeu V0662"</span>, <span class="st">"V0662 em branco"</span>))</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(retorna, tempo, <span class="at">.drop =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> tempo, <span class="at">values_from =</span> n) <span class="sc">|&gt;</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Retorno para casa"</span>, <span class="st">"Respondeu `V0662`"</span>, <span class="st">"`V0662` em branco"</span>),</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">format.args =</span> <span class="fu">list</span>(<span class="at">big.mark =</span> <span class="st">"."</span>, <span class="at">decimal.mark =</span> <span class="st">","</span>)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div id="tbl-universo-tempo" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-universo-tempo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -797,26 +780,26 @@ Tabela&nbsp;4.2: Registros da amostra de Anápolis (GO) que trabalhavam fora do 
 <h2 data-number="4.6" class="anchored" data-anchor-id="tempo-de-deslocamento"><span class="header-section-number">4.6</span> Tempo de deslocamento</h2>
 <p>Fixado o universo, chegamos ao indicador de mobilidade mais próximo da experiência cotidiana. Em 2010 ele foi coletado em cinco faixas, de natureza categórica ordinal, o que impede calcular média ou mediana. Repare que aqui também filtramos o desenho, e não a tabela, para que o <code>srvyr</code> trate o subconjunto como domínio e calcule os erros-padrão levando em conta que ele é parte de uma amostra maior.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pa_pes <span class="sc">|&gt;</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(V0662)) <span class="sc">|&gt;</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">faixa =</span> <span class="fu">factor</span>(</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>      V0662,</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"5"</span>),</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Até 5 minutos"</span>, <span class="st">"De 6 minutos até meia hora"</span>,</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Mais de meia hora até uma hora"</span>,</span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Mais de uma hora até duas horas"</span>,</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Mais de duas horas"</span>)</span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(faixa) <span class="sc">|&gt;</span></span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">proporcao =</span> <span class="fu">survey_prop</span>(<span class="at">vartype =</span> <span class="st">"ci"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Tempo habitual de deslocamento"</span>, <span class="st">"Proporção"</span>,</span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"IC 95%, limite inferior"</span>, <span class="st">"IC 95%, limite superior"</span>),</span>
-<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">digits =</span> <span class="dv">3</span>,</span>
-<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">format.args =</span> <span class="fu">list</span>(<span class="at">decimal.mark =</span> <span class="st">","</span>)</span>
-<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pa_pes <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(V0662)) <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">faixa =</span> <span class="fu">factor</span>(</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>      V0662,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"5"</span>),</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Até 5 minutos"</span>, <span class="st">"De 6 minutos até meia hora"</span>,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Mais de meia hora até uma hora"</span>,</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Mais de uma hora até duas horas"</span>,</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Mais de duas horas"</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(faixa) <span class="sc">|&gt;</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">proporcao =</span> <span class="fu">survey_prop</span>(<span class="at">vartype =</span> <span class="st">"ci"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Tempo habitual de deslocamento"</span>, <span class="st">"Proporção"</span>,</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"IC 95%, limite inferior"</span>, <span class="st">"IC 95%, limite superior"</span>),</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">format.args =</span> <span class="fu">list</span>(<span class="at">decimal.mark =</span> <span class="st">","</span>)</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div id="tbl-tempo" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-tempo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -891,25 +874,25 @@ Dica
 <p>Tempo curto de deslocamento não é sinônimo de boa mobilidade. Ele pode significar que a pessoa mora perto de um bom emprego, e pode significar o contrário, que o seu <strong>espaço de atividades</strong> é restrito e que ela trabalha perto de casa por não conseguir custear um deslocamento maior. A literatura de transportes trata o tamanho do espaço de atividades como indicador de risco de exclusão social justamente por isso.</p>
 </div>
 </div>
-<p>Levando o indicador ao território, somamos as duas faixas acima de uma hora.</p>
+<p>Levando o indicador ao território, somamos as duas faixas acima de meia hora, um valor já expressivo para um município do porte de Anápolis.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>tempo_ap <span class="ot">&lt;-</span> pa_pes <span class="sc">|&gt;</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(V0662)) <span class="sc">|&gt;</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(code_weighting) <span class="sc">|&gt;</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mais_de_uma_hora =</span> <span class="fu">survey_mean</span>(V0662 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"4"</span>, <span class="st">"5"</span>)))</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>anp_ap_geo10 <span class="sc">|&gt;</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(tempo_ap, <span class="at">by =</span> <span class="fu">join_by</span>(code_weighting)) <span class="sc">|&gt;</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> <span class="dv">100</span> <span class="sc">*</span> mais_de_uma_hora), <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">linewidth =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"RdPu"</span>, <span class="at">direction =</span> <span class="dv">1</span>,</span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>                       <span class="at">name =</span> <span class="st">"% acima de</span><span class="sc">\n</span><span class="st">uma hora"</span>, <span class="at">na.value =</span> <span class="st">"gray90"</span>) <span class="sc">+</span></span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  tema_mapa</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>tempo_ap <span class="ot">&lt;-</span> pa_pes <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(V0662)) <span class="sc">|&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(code_weighting) <span class="sc">|&gt;</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mais_de_uma_hora =</span> <span class="fu">survey_mean</span>(V0662 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"3"</span>,<span class="st">"4"</span>, <span class="st">"5"</span>)))</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>anp_ap_geo10 <span class="sc">|&gt;</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(tempo_ap, <span class="at">by =</span> <span class="fu">join_by</span>(code_weighting)) <span class="sc">|&gt;</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> <span class="dv">100</span> <span class="sc">*</span> mais_de_uma_hora), <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">linewidth =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"RdPu"</span>, <span class="at">direction =</span> <span class="dv">1</span>,</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>                       <span class="at">name =</span> <span class="st">"% acima de</span><span class="sc">\n</span><span class="st"> meia hora"</span>, <span class="at">na.value =</span> <span class="st">"gray90"</span>) <span class="sc">+</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  tema_mapa</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div id="fig-tempo-ap" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-tempo-ap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;4.3: Proporção de trabalhadores com mais de uma hora de deslocamento até o trabalho, por área de ponderação, Anápolis (GO), microdados da amostra do Censo 2010.
+Figura&nbsp;4.3: Proporção de trabalhadores com mais de meia hora de deslocamento até o trabalho, por área de ponderação, Anápolis (GO), microdados da amostra do Censo 2010.
 </figcaption>
 <div aria-describedby="fig-tempo-ap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="4-microdados_files/figure-html/fig-tempo-ap-1.png" class="img-fluid figure-img" width="672">
@@ -918,39 +901,20 @@ Figura&nbsp;4.3: Proporção de trabalhadores com mais de uma hora de deslocamen
 </div>
 </div>
 </div>
-<p>Antes de qualquer leitura fina do mapa, é obrigatório medir a variação e confrontá-la com a incerteza das estimativas.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>tempo_ap <span class="sc">|&gt;</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">minimo              =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">min</span>(mais_de_uma_hora),</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">maximo              =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">max</span>(mais_de_uma_hora),</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">largura_media_do_ic =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">mean</span>(<span class="dv">2</span> <span class="sc">*</span> <span class="fl">1.96</span> <span class="sc">*</span> mais_de_uma_hora_se)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 3
-  minimo maximo largura_media_do_ic
-   &lt;dbl&gt;  &lt;dbl&gt;               &lt;dbl&gt;
-1   2.63   9.33                3.39</code></pre>
-</div>
-</div>
-<p>Note que a amplitude entre a área com menor e a com maior proporção é de pouco menos de sete pontos percentuais, enquanto o intervalo de confiança médio das estimativas tem mais de três pontos de largura. Os dois extremos ainda se distinguem, mas qualquer comparação entre áreas próximas no mapa é indistinguível de ruído amostral.</p>
-<p>A causa é o tamanho do recorte. Anápolis tem apenas doze áreas de ponderação, e o subconjunto que responde ao quesito de tempo dentro de cada uma é pequeno. O mesmo cálculo em Salvador, com sessenta e duas áreas e uma amostra muito maior, produz contrastes que superam com folga a incerteza <span class="citation" data-cites="pedreira_censo_2026">(<a href="referencias.html#ref-pedreira_censo_2026" role="doc-biblioref">Pedreira Junior, 2026</a>)</span>. A conclusão prática é que microdado da amostra em município de porte médio serve muito bem ao retrato municipal e pede cautela redobrada na leitura intramunicipal, e que publicar o mapa sem publicar a largura do intervalo é uma forma silenciosa de enganar quem lê.</p>
-<p>Os microdados encerram o que o Censo diz sobre deslocamento declarado. O que eles não dizem é quanto tempo <em>seria</em> preciso para chegar a cada destino da cidade, com a rede de transportes que existe hoje. Essa pergunta é a da Parte 2, e o próximo capítulo prepara o insumo que falta para respondê-la, que é a localização das oportunidades no território.</p>
+<p>Fechada a parte dos microdados, podemos partir para o dado com melhor resolução espacial do Censo Demográfico, que possui propridades geográficas muito úteis para comparações entre censos, conforme veremos na sequência.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
 <div id="ref-ibge_microdados2022" class="csl-entry" role="listitem">
 IBGE. (2026). <em><span>IBGE</span> disponibiliza microdados da amostra do <span>C</span>enso <span>D</span>emográfico 2022 com novo modelo de acesso e reforço à confidencialidade</em>. <a href="https://agenciadenoticias.ibge.gov.br/agencia-noticias/2012-agencia-de-noticias/noticias/47888-ibge-disponibiliza-microdados-da-amostra-do-censo-demografico-2022-com-novo-modelo-de-acesso-e-reforco-a-confidencialidade">https://agenciadenoticias.ibge.gov.br/agencia-noticias/2012-agencia-de-noticias/noticias/47888-ibge-disponibiliza-microdados-da-amostra-do-censo-demografico-2022-com-novo-modelo-de-acesso-e-reforco-a-confidencialidade</a>
 </div>
-<div id="ref-pedreira_censo_2026" class="csl-entry" role="listitem">
-Pedreira Junior, J. U. (2026). <em>Censo Demográfico no <span>R</span>: conceitos e aplicações para a análise do território brasileiro</em>. <a href="https://pedreirajr.github.io/rcensolivro/">https://pedreirajr.github.io/rcensolivro/</a>
-</div>
 </div>
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>instale-a com <code>remotes::install_github("ipeaGit/censobr")</code> ou <code>pak::pak("ipeaGit/censobr")</code><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>que infelizmente não veio em 2022<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>instale-a com <code>remotes::install_github("ipeaGit/censobr")</code> ou <code>pak::pak("ipeaGit/censobr")</code><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
