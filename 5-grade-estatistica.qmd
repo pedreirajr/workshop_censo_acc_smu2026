@@ -2,10 +2,7 @@
 title: "Grade estatística"
 ---
 
-O setor censitário muda de tamanho, de forma e de código entre as edições do Censo, o que dificulta
-qualquer comparação ao longo do tempo. A grade estatística resolve isso ao distribuir a informação
-em células regulares de dimensão fixa, com identificador estável entre censos. É o único produto do
-Censo que permite perguntar, com resolução de 200 metros, onde a cidade cresceu e onde ela esvaziou.
+Os setores censitários e as áreas de ponderação mudam de tamanho, de forma e de código entre as edições do Censo, o que dificulta qualquer comparação ao longo do tempo. A grade estatística resolve isso ao distribuir a informação em células regulares de dimensão fixa, com identificador estável entre censos. É o único produto do Censo que permite perguntar, com resolução bastante alta, em quadrículas de 200 metros, onde a cidade cresceu e onde ela esvaziou.
 
 ::: {.callout-note}
 ## Nesta seção você vai
@@ -20,8 +17,7 @@ Censo que permite perguntar, com resolução de 200 metros, onde a cidade cresce
 ::: {.callout-tip}
 ## Script deste capítulo
 
-Abra o arquivo `scripts/5-grade.R` no projeto da oficina. É nele que vai o código
-apresentado a seguir. Se ainda não tiver o projeto, volte ao
+Abra o arquivo `scripts/5-grade.R` no projeto da oficina. É nele que vai o código apresentado a seguir. Se ainda não tiver o projeto, volte ao
 [Capítulo 1](1-instalacao.qmd).
 :::
 
@@ -38,10 +34,7 @@ library(ggplot2)
 
 ## Obtenção da grade
 
-A partir da versão 2.0.0 do `geobr`, a função `read_statistical_grid()` entrega a grade já recortada
-por município. Bastam o ano da edição em `year` e o código IBGE em `code_muni`. Duas linhas
-substituem todo o trabalho de identificar quadrantes, baixar arquivos compactados, empilhá-los e
-recortá-los.
+A partir da versão 2.0.0 do `geobr`, a função `read_statistical_grid()` entrega a grade já recortada por município. Bastam o ano da edição em `year` e o código IBGE em `code_muni`. Duas linhas substituem todo o trabalho de identificar quadrantes, baixar arquivos compactados, empilhá-los e recortá-los.
 
 ```{r}
 #| label: download-grade
@@ -56,17 +49,9 @@ anp_ge22 <- read_statistical_grid(year = 2022, code_muni = anp_code, showProgres
 c(celulas_2010 = nrow(anp_ge10), celulas_2022 = nrow(anp_ge22))
 ```
 
-::: {.callout-tip}
-O argumento `code_muni` aceita mais do que um município. Com a sigla ou o código de dois dígitos de
-uma UF, baixa o estado inteiro, e com `"all"`, o país. Para o estado ou o país, porém, o volume não
-cabe na memória, e aí o argumento `output` aceita `"duckdb"` ou `"arrow"`, que devolvem uma tabela
-espacial preguiçosa para filtrar e agregar antes de trazer para a sessão.
-:::
-
 ## Resolução das células e quadrante
 
-Cada polígono é uma célula de 200 m, em área urbana, ou de 1 km, em área rural. O próprio
-identificador diz qual é, pelo prefixo do campo `id_unico`.
+Cada polígono é uma célula de 200 m, em área urbana, ou de 1 km, em área rural. O próprio identificador diz qual é, pelo prefixo do campo `id_unico`.
 
 ```{r}
 #| label: grade-estrutura
@@ -92,16 +77,11 @@ bind_rows(
   anp_ge22 |> st_drop_geometry() |> count(resolucao = str_sub(id_unico, 1, 4)) |> mutate(ano = 2022)
 ) |>
   tidyr::pivot_wider(names_from = ano, values_from = n, names_prefix = "ano_")
-
-unique(anp_ge22$quadrante)
 ```
 
-Anápolis cabe inteira em um único quadrante de 500 por 500 km, o `ID_45`. Entre 2010 e 2022, as
-células de 1 km caíram e as de 200 m aumentaram, o que é o registro cartográfico da urbanização do
-município e terá consequência direta na comparação entre as edições.
+Entre 2010 e 2022, as células de 1 km caíram e as de 200 m aumentaram, o que é o registro cartográfico da urbanização do município e terá consequência direta na comparação entre as edições.
 
-Os dois mapas abaixo mostram apenas o desenho das células, sem dado algum, para tornar essa mudança
-visível.
+Os dois mapas abaixo mostram apenas o desenho das células, sem dado algum, para tornar essa mudança visível.
 
 ```{r}
 #| label: fig-grade-resolucao
@@ -118,11 +98,13 @@ ggplot(anp_ge10) + geom_sf(linewidth = 0.05) + theme_minimal()
 ggplot(anp_ge22) + geom_sf(linewidth = 0.05) + theme_minimal()
 ```
 
+::: {.callout-warning}
+Note que algumas quadrículas no contorno do município aparecem em uma edição, mas em outra não (observe atentamente no canto Noroeste a diferença). Isso ocorre porque o `geobr` obtém todas aquelas quadrículas cujos centroides caem no interior das fronteiras do município e essa própria fronteira pode mudar de uma edição para outra do Censo.
+:::
+
 ## População por célula
 
-O `geobr` padroniza o nome da população total como `pop_total` nas duas edições, o que poupa lidar
-com os nomes originais do IBGE e permite reaproveitar o mesmo código trocando apenas o objeto de
-entrada.
+Apesar de os arquivos originais apresentarem nomenclaturas diferentes entre os censos, o `geobr` padroniza o nome da população total como `pop_total` nas duas edições. Isso poupa lidar com os nomes originais do IBGE e permite reaproveitar o mesmo código trocando apenas o objeto de entrada.
 
 ```{r}
 #| label: fig-grade-pop
@@ -135,8 +117,8 @@ entrada.
 #| fig-height: 5
 #| message: false
 
-mapa_pop <- function(dados) {
-  ggplot(dados) +
+## Grade 2010:
+ggplot(anp_ge10) +
     geom_sf(aes(fill = pop_total), color = NA) +
     scale_fill_distiller(
       palette = "Reds", direction = 1, name = "Pop. total", na.value = "gray90",
@@ -146,21 +128,23 @@ mapa_pop <- function(dados) {
     theme_minimal() +
     theme(axis.text = element_blank(), axis.ticks = element_blank(),
           panel.grid = element_blank())
-}
 
-mapa_pop(anp_ge10)
-mapa_pop(anp_ge22)
+## Grade 2022:
+ggplot(anp_ge22) +
+    geom_sf(aes(fill = pop_total), color = NA) +
+    scale_fill_distiller(
+      palette = "Reds", direction = 1, name = "Pop. total", na.value = "gray90",
+      labels = scales::label_number(big.mark = ".", decimal.mark = ",")
+    ) +
+    coord_sf(expand = FALSE) +
+    theme_minimal() +
+    theme(axis.text = element_blank(), axis.ticks = element_blank(),
+          panel.grid = element_blank())
 ```
 
 ## Comparando as duas edições
 
-A estabilidade do `id_unico` é a vantagem mais distintiva da grade, e é tentador partir direto para
-um *join* por esse campo. Antes disso é obrigatório verificar se a correspondência é completa, e ela
-raramente é. Há dois motivos. O primeiro é a **subdivisão**, quando uma célula de 1 km de 2010 vira
-um conjunto de células de 200 m em 2022 por ter sido reclassificada como urbana. A correspondência
-existe, mas em hierarquia diferente, e a chave que a revela é o campo `nome_1km`, que registra a
-célula de 1 km à qual cada célula de 200 m pertence. O segundo é a ausência pura e simples de
-correspondente.
+A estabilidade do `id_unico` é a vantagem mais distintiva da grade, e é tentador partir direto para um *join* por esse campo. Antes disso é obrigatório verificar se a correspondência é completa. Há duas razões principais. A primeira é a **subdivisão**, quando uma célula de 1 km de 2010 vira um conjunto de células de 200 m em 2022 por ter sido reclassificada como urbana. A correspondência existe, mas em hierarquia diferente, e a chave que a revela é o campo `nome_1km`, que registra a célula de 1 km à qual cada célula de 200 m pertence. O segundo é a ausência pura e simples de correspondente, resultado de quadrículas que existem em um ano, mas não no outro devido a mudanças no contorno das fronteiras do município entre as edições do Censo^[conforme explicação da caixa de aviso anterior].
 
 Classificamos então cada célula de 2022 em três situações.
 
@@ -184,7 +168,7 @@ anp_ge22 |>
     situacao = factor(situacao, levels = niveis)
   ) |>
   group_by(situacao, .drop = FALSE) |>
-  summarize(celulas = n(), pop = sum(pop_total), .groups = "drop")
+  summarize(n_celulas = n(), pop = sum(pop_total), .groups = "drop")
 ```
 
 E repetimos no sentido inverso, partindo de 2010.
@@ -209,17 +193,12 @@ anp_ge10 |>
     situacao = factor(situacao, levels = niveis)
   ) |>
   group_by(situacao, .drop = FALSE) |>
-  summarize(celulas = n(), pop = sum(pop_total), .groups = "drop")
+  summarize(n_celulas = n(), pop = sum(pop_total), .groups = "drop")
 ```
 
-O teste mostra que Anápolis **tem subdivisão**, e não é resíduo desprezível. Vinte e nove células de
-1 km de 2010 foram substituídas por mais de setecentas células de 200 m em 2022, em áreas que se
-urbanizaram no período. Um *join* direto por `id_unico` simplesmente perderia essas células e abriria
-buracos no mapa de variação, exatamente onde o município cresceu.
+O teste mostra que Anápolis tem subdivisões relevantes de quadrículas de 1 km para 200 m. Vinte e nove células de 1 km de 2010 foram substituídas por mais de setecentas células de 200 m em 2022, em áreas que se urbanizaram no período. Um *join* direto por `id_unico` simplesmente perderia essas células e abriria buracos no mapa de variação, exatamente onde o município cresceu.
 
-A solução é agregar. Antes do *join*, montamos uma chave para cada célula de 2022, que é o próprio
-`id_unico` quando há correspondência direta e o `nome_1km` quando a célula é filha de uma subdivisão.
-Somando por essa chave, as células de 200 m de 2022 voltam ao nível de 1 km de 2010 e a comparação
+A solução é agregar. Antes do *join*, montamos uma chave para cada célula de 2022, que é o próprio `id_unico` quando há correspondência direta e o `nome_1km` quando a célula é filha de uma subdivisão. Somando por essa chave, as células de 200 m de 2022 voltam ao nível de 1 km de 2010 e a comparação
 passa a ser legítima. A geometria usada é a de 2010, que é o denominador comum das duas edições.
 
 ```{r}
@@ -259,34 +238,11 @@ anp_grade |>
   )
 ```
 
-::: {.callout-warning}
-## Três cuidados ao comparar edições da grade
+Note que as células sem par recebem `NA` na variação e são desenhadas em cinza. Dois ajustes cartográficos são necessários antes de mapear, e ambos valem para qualquer município que não seja compacto.
 
-**A subdivisão é a regra, não a exceção**, em municípios que se urbanizaram no período, e ignorá-la
-produz buracos no mapa justamente nas áreas de crescimento.
+O decisivo é a **escala de cor**. Metade das células variou uma pessoa ou menos, enquanto a maior variação passa de mil. Uma escala esticada até esse extremo pinta de branco tudo o que interessa, e o mapa fica vazio. Fixamos então o limite no percentil 98 do valor absoluto e usamos `oob = scales::squish`, que desenha na cor do extremo tudo o que ultrapassa o limite, em vez de descartar. A paleta divergente `"RdBu"` com limites simétricos garante que o branco central corresponda sempre ao zero.
 
-**Testar a resolução pelo prefixo do identificador não basta.** Comparar apenas os conjuntos de
-células de 1 km e supor que as que sumiram foram subdivididas mistura fenômenos distintos. A
-verificação confiável procura as células filhas de 200 m pelo campo `nome_1km`.
-
-**O `geobr` descarta células sem município.** O pacote calcula o centroide de cada célula e o cruza
-com a malha municipal. Células cujo centroide cai fora de qualquer polígono, tipicamente sobre
-lagoas, baías e o mar, ficam sem `code_muni` e não aparecem em consulta alguma. É parte da explicação
-para o resíduo sem correspondência dos testes acima.
-:::
-
-As células sem par recebem `NA` na variação e são desenhadas em cinza. Dois ajustes cartográficos
-são necessários antes de mapear, e ambos valem para qualquer município que não seja compacto.
-
-O decisivo é a **escala de cor**. Metade das células variou uma pessoa ou menos, enquanto a maior
-variação passa de mil. Uma escala esticada até esse extremo pinta de branco tudo o que interessa, e
-o mapa fica vazio. Fixamos então o limite no percentil 98 do valor absoluto e usamos
-`oob = scales::squish`, que desenha na cor do extremo tudo o que ultrapassa o limite, em vez de
-descartar. A paleta divergente `"RdBu"` com limites simétricos garante que o branco central
-corresponda sempre ao zero.
-
-O segundo ajuste, menor, é o enquadramento. Recortamos a visualização à caixa que contém as células
-com população, com `coord_sf()`, o que apara a moldura vazia sem descartar dado algum.
+O segundo ajuste, menor, é o enquadramento. Recortamos a visualização à caixa que contém as células com população, com `coord_sf()`, o que apara a moldura vazia sem descartar dado algum.
 
 ```{r}
 #| label: fig-grade-variacao
@@ -294,7 +250,7 @@ com população, com `coord_sf()`, o que apara a moldura vazia sem descartar dad
 #| fig-subcap:
 #|   - "População total"
 #|   - "Domicílios ocupados"
-#| layout-ncol: 2
+#| layout-nrow: 2
 #| fig-width: 5
 #| fig-height: 5
 #| message: false
@@ -303,13 +259,14 @@ caixa <- anp_grade |>
   filter(pop_2010 > 0 | pop_2022 > 0) |>
   st_bbox()
 
-mapa_var <- function(dados, variavel, titulo) {
-  lim <- quantile(abs(dados[[variavel]]), 0.98, na.rm = TRUE)
-  ggplot(dados) +
-    geom_sf(aes(fill = .data[[variavel]]), color = NA) +
+## Variação da população:
+lim_pop <- quantile(abs(anp_grade$varpop), 0.98, na.rm = TRUE)
+
+ggplot(anp_grade) +
+    geom_sf(aes(fill = varpop), color = NA) +
     scale_fill_distiller(
-      palette = "RdBu", direction = 1, limits = c(-lim, lim),
-      oob = scales::squish, name = titulo, na.value = "gray90",
+      palette = "RdBu", direction = 1, limits = c(-lim_pop, lim_pop),
+      oob = scales::squish, name = "Var. população", na.value = "gray90",
       labels = scales::label_number(big.mark = ".", decimal.mark = ",",
                                     style_positive = "plus")
     ) +
@@ -318,47 +275,25 @@ mapa_var <- function(dados, variavel, titulo) {
     theme_minimal() +
     theme(axis.text = element_blank(), axis.ticks = element_blank(),
           panel.grid = element_blank())
-}
 
-mapa_var(anp_grade, "varpop", "Var. população")
-mapa_var(anp_grade, "vardom", "Var. domicílios")
+## Variação dos domicílios:
+lim_dom <- quantile(abs(anp_grade$vardom), 0.98, na.rm = TRUE)
+
+ggplot(anp_grade) +
+    geom_sf(aes(fill = vardom), color = NA) +
+    scale_fill_distiller(
+      palette = "RdBu", direction = 1, limits = c(-lim_dom, lim_dom),
+      oob = scales::squish, name = "Var. domicílios", na.value = "gray90",
+      labels = scales::label_number(big.mark = ".", decimal.mark = ",",
+                                    style_positive = "plus")
+    ) +
+    coord_sf(xlim = caixa[c("xmin", "xmax")], ylim = caixa[c("ymin", "ymax")],
+             expand = FALSE) +
+    theme_minimal() +
+    theme(axis.text = element_blank(), axis.ticks = element_blank(),
+          panel.grid = element_blank())
 ```
 
-O padrão é nítido e tem nome. O miolo consolidado da cidade aparece em vermelho, perdendo
-população, e um anel azul de crescimento o cerca, mais forte a norte, a leste e a sul, no desenho
-clássico da expansão por loteamento periférico. Fora da mancha urbana, algumas células isoladas de
-1 km ganham população de forma expressiva, provavelmente condomínios e povoados que se adensaram no
-período.
+O padrão que conseguimos observar é impressionante, combinando redução de população em áreas centralizadas e espraiamento urbano bastante nítido, sobretudo nas regiões Nordeste, Leste e Sudeste do município. Essa evidência é duplamente constatada na variação tanto da população quanto dos domicílios. Para o planejamento de transportes, sabemos que esse padrão é, em geral, bastante associado a uma elevação da motorização individual, que pode implicar em cidades menos sustentáveis.
 
-O mapa de domicílios repete a geografia com intensidade menor, e a razão fica clara ao confrontar
-os dois totais.
-
-```{r}
-#| label: balanco-domicilios
-#| message: false
-
-anp_grade |>
-  st_drop_geometry() |>
-  summarize(
-    var_pop         = sum(varpop, na.rm = TRUE),
-    var_dom         = sum(vardom, na.rm = TRUE),
-    moradores_2010  = sum(pop_2010, na.rm = TRUE) / sum(dom_2010, na.rm = TRUE),
-    moradores_2022  = sum(pop_2022, na.rm = TRUE) / sum(dom_2022, na.rm = TRUE)
-  )
-```
-
-Anápolis ganhou cerca de 65 mil habitantes e cerca de 39 mil domicílios, e a média de moradores por
-domicílio caiu de 3,2 para 2,8. Ou seja, o município cresceu por novas moradias na borda e, ao mesmo
-tempo, esvaziou por dentro, com domicílios cada vez menores em toda parte. Para transportes isso
-importa duplamente, porque a demanda se desloca para a periferia enquanto a infraestrutura instalada
-continua servindo um centro que perde gente.
-
-Vale registrar que essa leitura não seria possível com os outros produtos do Censo. Com os agregados
-por setor censitário, a comparação temporal esbarraria na mudança dos códigos entre edições. Com os
-microdados, a área de ponderação seria grossa demais para separar bairro de bairro. A grade é o
-único produto que sustenta a comparação direta nessa resolução.
-
-A grade também é o insumo natural da Parte 2, porque entrega origens de análise com peso
-populacional e geometria uniforme. A diferença é que lá usaremos a grade hexagonal H3, construída no
-[Capítulo 3](3-agregados.qmd) com o `cnefetools`, que tem a vantagem de células de forma regular e
-distâncias iguais entre vizinhos.
+Apresentada a grade estatística e o seu potencial, vamos fechar essa primeira com os dados do CNEFE no próximo capítulo. Vale frisar que diferente dos outros produtos do Censo que apresentamos até aqui, o CNEFE consiste em um arquivo geográfico de pontos e não de polígonos.

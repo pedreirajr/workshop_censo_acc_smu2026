@@ -456,7 +456,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>O setor censitário muda de tamanho, de forma e de código entre as edições do Censo, o que dificulta qualquer comparação ao longo do tempo. A grade estatística resolve isso ao distribuir a informação em células regulares de dimensão fixa, com identificador estável entre censos. É o único produto do Censo que permite perguntar, com resolução de 200 metros, onde a cidade cresceu e onde ela esvaziou.</p>
+<p>Os setores censitários e as áreas de ponderação mudam de tamanho, de forma e de código entre as edições do Censo, o que dificulta qualquer comparação ao longo do tempo. A grade estatística resolve isso ao distribuir a informação em células regulares de dimensão fixa, com identificador estável entre censos. É o único produto do Censo que permite perguntar, com resolução bastante alta, em quadrículas de 200 metros, onde a cidade cresceu e onde ela esvaziou.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -511,19 +511,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         7354         8092 </code></pre>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Dica
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>O argumento <code>code_muni</code> aceita mais do que um município. Com a sigla ou o código de dois dígitos de uma UF, baixa o estado inteiro, e com <code>"all"</code>, o país. Para o estado ou o país, porém, o volume não cabe na memória, e aí o argumento <code>output</code> aceita <code>"duckdb"</code> ou <code>"arrow"</code>, que devolvem uma tabela espacial preguiçosa para filtrar e agregar antes de trazer para a sessão.</p>
-</div>
-</div>
 </section>
 <section id="resolução-das-células-e-quadrante" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="resolução-das-células-e-quadrante"><span class="header-section-number">5.2</span> Resolução das células e quadrante</h2>
@@ -573,15 +560,11 @@ Dica
 1 1KME           666      636
 2 200M          6688     7456</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(anp_ge22<span class="sc">$</span>quadrante)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "ID_45"</code></pre>
 </div>
-</div>
-<p>Anápolis cabe inteira em um único quadrante de 500 por 500 km, o <code>ID_45</code>. Entre 2010 e 2022, as células de 1 km caíram e as de 200 m aumentaram, o que é o registro cartográfico da urbanização do município e terá consequência direta na comparação entre as edições.</p>
+<p>Entre 2010 e 2022, as células de 1 km caíram e as de 200 m aumentaram, o que é o registro cartográfico da urbanização do município e terá consequência direta na comparação entre as edições.</p>
 <p>Os dois mapas abaixo mostram apenas o desenho das células, sem dado algum, para tornar essa mudança visível.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(anp_ge10) <span class="sc">+</span> <span class="fu">geom_sf</span>(<span class="at">linewidth =</span> <span class="fl">0.05</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(anp_ge22) <span class="sc">+</span> <span class="fu">geom_sf</span>(<span class="at">linewidth =</span> <span class="fl">0.05</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(anp_ge10) <span class="sc">+</span> <span class="fu">geom_sf</span>(<span class="at">linewidth =</span> <span class="fl">0.05</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(anp_ge22) <span class="sc">+</span> <span class="fu">geom_sf</span>(<span class="at">linewidth =</span> <span class="fl">0.05</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div id="fig-grade-resolucao" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-grade-resolucao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -617,25 +600,46 @@ Figura&nbsp;5.1: Resolução das células da grade estatística em Anápolis (GO
 </div>
 </figure>
 </div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Aviso
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note que algumas quadrículas no contorno do município aparecem em uma edição, mas em outra não (observe atentamente no canto Noroeste a diferença). Isso ocorre porque o <code>geobr</code> obtém todas aquelas quadrículas cujos centroides caem no interior das fronteiras do município e essa própria fronteira pode mudar de uma edição para outra do Censo.</p>
+</div>
+</div>
 </section>
 <section id="população-por-célula" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="população-por-célula"><span class="header-section-number">5.3</span> População por célula</h2>
-<p>O <code>geobr</code> padroniza o nome da população total como <code>pop_total</code> nas duas edições, o que poupa lidar com os nomes originais do IBGE e permite reaproveitar o mesmo código trocando apenas o objeto de entrada.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>mapa_pop <span class="ot">&lt;-</span> <span class="cf">function</span>(dados) {</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(dados) <span class="sc">+</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> pop_total), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_distiller</span>(</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">palette =</span> <span class="st">"Reds"</span>, <span class="at">direction =</span> <span class="dv">1</span>, <span class="at">name =</span> <span class="st">"Pop. total"</span>, <span class="at">na.value =</span> <span class="st">"gray90"</span>,</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_number</span>(<span class="at">big.mark =</span> <span class="st">"."</span>, <span class="at">decimal.mark =</span> <span class="st">","</span>)</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_sf</span>(<span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="fu">mapa_pop</span>(anp_ge10)</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="fu">mapa_pop</span>(anp_ge22)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Apesar de os arquivos originais apresentarem nomenclaturas diferentes entre os censos, o <code>geobr</code> padroniza o nome da população total como <code>pop_total</code> nas duas edições. Isso poupa lidar com os nomes originais do IBGE e permite reaproveitar o mesmo código trocando apenas o objeto de entrada.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Grade 2010:</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(anp_ge10) <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> pop_total), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_distiller</span>(</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">palette =</span> <span class="st">"Reds"</span>, <span class="at">direction =</span> <span class="dv">1</span>, <span class="at">name =</span> <span class="st">"Pop. total"</span>, <span class="at">na.value =</span> <span class="st">"gray90"</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_number</span>(<span class="at">big.mark =</span> <span class="st">"."</span>, <span class="at">decimal.mark =</span> <span class="st">","</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_sf</span>(<span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Grade 2022:</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(anp_ge22) <span class="sc">+</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> pop_total), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_distiller</span>(</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">palette =</span> <span class="st">"Reds"</span>, <span class="at">direction =</span> <span class="dv">1</span>, <span class="at">name =</span> <span class="st">"Pop. total"</span>, <span class="at">na.value =</span> <span class="st">"gray90"</span>,</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_number</span>(<span class="at">big.mark =</span> <span class="st">"."</span>, <span class="at">decimal.mark =</span> <span class="st">","</span>)</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_sf</span>(<span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div id="fig-grade-pop" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-grade-pop-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -674,97 +678,97 @@ Figura&nbsp;5.2: População total por célula da grade estatística, Anápolis 
 </section>
 <section id="comparando-as-duas-edições" class="level2" data-number="5.4">
 <h2 data-number="5.4" class="anchored" data-anchor-id="comparando-as-duas-edições"><span class="header-section-number">5.4</span> Comparando as duas edições</h2>
-<p>A estabilidade do <code>id_unico</code> é a vantagem mais distintiva da grade, e é tentador partir direto para um <em>join</em> por esse campo. Antes disso é obrigatório verificar se a correspondência é completa, e ela raramente é. Há dois motivos. O primeiro é a <strong>subdivisão</strong>, quando uma célula de 1 km de 2010 vira um conjunto de células de 200 m em 2022 por ter sido reclassificada como urbana. A correspondência existe, mas em hierarquia diferente, e a chave que a revela é o campo <code>nome_1km</code>, que registra a célula de 1 km à qual cada célula de 200 m pertence. O segundo é a ausência pura e simples de correspondente.</p>
+<p>A estabilidade do <code>id_unico</code> é a vantagem mais distintiva da grade, e é tentador partir direto para um <em>join</em> por esse campo. Antes disso é obrigatório verificar se a correspondência é completa. Há duas razões principais. A primeira é a <strong>subdivisão</strong>, quando uma célula de 1 km de 2010 vira um conjunto de células de 200 m em 2022 por ter sido reclassificada como urbana. A correspondência existe, mas em hierarquia diferente, e a chave que a revela é o campo <code>nome_1km</code>, que registra a célula de 1 km à qual cada célula de 200 m pertence. O segundo é a ausência pura e simples de correspondente, resultado de quadrículas que existem em um ano, mas não no outro devido a mudanças no contorno das fronteiras do município entre as edições do Censo<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <p>Classificamos então cada célula de 2022 em três situações.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ids_2010     <span class="ot">&lt;-</span> anp_ge10<span class="sc">$</span>id_unico</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>ids_1km_2010 <span class="ot">&lt;-</span> ids_2010[<span class="fu">str_starts</span>(ids_2010, <span class="st">"1KM"</span>)]</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>niveis <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"direta"</span>, <span class="st">"subdividida"</span>, <span class="st">"sem correspondência"</span>)</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>anp_ge22 <span class="sc">|&gt;</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">situacao =</span> <span class="fu">case_when</span>(</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>      id_unico <span class="sc">%in%</span> ids_2010                                    <span class="sc">~</span> <span class="st">"direta"</span>,</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_starts</span>(id_unico, <span class="st">"200M"</span>) <span class="sc">&amp;</span> nome_1km <span class="sc">%in%</span> ids_1km_2010 <span class="sc">~</span> <span class="st">"subdividida"</span>,</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">.default                                                  =</span> <span class="st">"sem correspondência"</span></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">situacao =</span> <span class="fu">factor</span>(situacao, <span class="at">levels =</span> niveis)</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(situacao, <span class="at">.drop =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">celulas =</span> <span class="fu">n</span>(), <span class="at">pop =</span> <span class="fu">sum</span>(pop_total), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ids_2010     <span class="ot">&lt;-</span> anp_ge10<span class="sc">$</span>id_unico</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>ids_1km_2010 <span class="ot">&lt;-</span> ids_2010[<span class="fu">str_starts</span>(ids_2010, <span class="st">"1KM"</span>)]</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>niveis <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"direta"</span>, <span class="st">"subdividida"</span>, <span class="st">"sem correspondência"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>anp_ge22 <span class="sc">|&gt;</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">situacao =</span> <span class="fu">case_when</span>(</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>      id_unico <span class="sc">%in%</span> ids_2010                                    <span class="sc">~</span> <span class="st">"direta"</span>,</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_starts</span>(id_unico, <span class="st">"200M"</span>) <span class="sc">&amp;</span> nome_1km <span class="sc">%in%</span> ids_1km_2010 <span class="sc">~</span> <span class="st">"subdividida"</span>,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">.default                                                  =</span> <span class="st">"sem correspondência"</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">situacao =</span> <span class="fu">factor</span>(situacao, <span class="at">levels =</span> niveis)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(situacao, <span class="at">.drop =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n_celulas =</span> <span class="fu">n</span>(), <span class="at">pop =</span> <span class="fu">sum</span>(pop_total), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 3
-  situacao            celulas    pop
-  &lt;fct&gt;                 &lt;int&gt;  &lt;dbl&gt;
-1 direta                 7302 395856
-2 subdividida             717   2384
-3 sem correspondência      73    610</code></pre>
+  situacao            n_celulas    pop
+  &lt;fct&gt;                   &lt;int&gt;  &lt;dbl&gt;
+1 direta                   7302 395856
+2 subdividida               717   2384
+3 sem correspondência        73    610</code></pre>
 </div>
 </div>
 <p>E repetimos no sentido inverso, partindo de 2010.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>filhas_2022 <span class="ot">&lt;-</span> anp_ge22 <span class="sc">|&gt;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_starts</span>(id_unico, <span class="st">"200M"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(nome_1km)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>anp_ge10 <span class="sc">|&gt;</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">situacao =</span> <span class="fu">case_when</span>(</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>      id_unico <span class="sc">%in%</span> anp_ge22<span class="sc">$</span>id_unico <span class="sc">~</span> <span class="st">"direta"</span>,</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>      id_unico <span class="sc">%in%</span> filhas_2022       <span class="sc">~</span> <span class="st">"subdividida"</span>,</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">.default                        =</span> <span class="st">"sem correspondência"</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">situacao =</span> <span class="fu">factor</span>(situacao, <span class="at">levels =</span> niveis)</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(situacao, <span class="at">.drop =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">celulas =</span> <span class="fu">n</span>(), <span class="at">pop =</span> <span class="fu">sum</span>(pop_total), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>filhas_2022 <span class="ot">&lt;-</span> anp_ge22 <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_starts</span>(id_unico, <span class="st">"200M"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(nome_1km)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>anp_ge10 <span class="sc">|&gt;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">situacao =</span> <span class="fu">case_when</span>(</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>      id_unico <span class="sc">%in%</span> anp_ge22<span class="sc">$</span>id_unico <span class="sc">~</span> <span class="st">"direta"</span>,</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>      id_unico <span class="sc">%in%</span> filhas_2022       <span class="sc">~</span> <span class="st">"subdividida"</span>,</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">.default                        =</span> <span class="st">"sem correspondência"</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">situacao =</span> <span class="fu">factor</span>(situacao, <span class="at">levels =</span> niveis)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(situacao, <span class="at">.drop =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n_celulas =</span> <span class="fu">n</span>(), <span class="at">pop =</span> <span class="fu">sum</span>(pop_total), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 3
-  situacao            celulas    pop
-  &lt;fct&gt;                 &lt;int&gt;  &lt;int&gt;
-1 direta                 7302 331901
-2 subdividida              29   1221
-3 sem correspondência      23     41</code></pre>
+  situacao            n_celulas    pop
+  &lt;fct&gt;                   &lt;int&gt;  &lt;int&gt;
+1 direta                   7302 331901
+2 subdividida                29   1221
+3 sem correspondência        23     41</code></pre>
 </div>
 </div>
-<p>O teste mostra que Anápolis <strong>tem subdivisão</strong>, e não é resíduo desprezível. Vinte e nove células de 1 km de 2010 foram substituídas por mais de setecentas células de 200 m em 2022, em áreas que se urbanizaram no período. Um <em>join</em> direto por <code>id_unico</code> simplesmente perderia essas células e abriria buracos no mapa de variação, exatamente onde o município cresceu.</p>
+<p>O teste mostra que Anápolis tem subdivisões relevantes de quadrículas de 1 km para 200 m. Vinte e nove células de 1 km de 2010 foram substituídas por mais de setecentas células de 200 m em 2022, em áreas que se urbanizaram no período. Um <em>join</em> direto por <code>id_unico</code> simplesmente perderia essas células e abriria buracos no mapa de variação, exatamente onde o município cresceu.</p>
 <p>A solução é agregar. Antes do <em>join</em>, montamos uma chave para cada célula de 2022, que é o próprio <code>id_unico</code> quando há correspondência direta e o <code>nome_1km</code> quando a célula é filha de uma subdivisão. Somando por essa chave, as células de 200 m de 2022 voltam ao nível de 1 km de 2010 e a comparação passa a ser legítima. A geometria usada é a de 2010, que é o denominador comum das duas edições.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pop_2022_por_chave <span class="ot">&lt;-</span> anp_ge22 <span class="sc">|&gt;</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">chave =</span> <span class="fu">case_when</span>(</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>      id_unico <span class="sc">%in%</span> ids_2010                                    <span class="sc">~</span> id_unico,</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_starts</span>(id_unico, <span class="st">"200M"</span>) <span class="sc">&amp;</span> nome_1km <span class="sc">%in%</span> ids_1km_2010 <span class="sc">~</span> nome_1km,</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">.default                                                  =</span> <span class="cn">NA_character_</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(chave)) <span class="sc">|&gt;</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(chave) <span class="sc">|&gt;</span></span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">pop_2022 =</span> <span class="fu">sum</span>(pop_total), <span class="at">dom_2022 =</span> <span class="fu">sum</span>(total_dom), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>anp_grade <span class="ot">&lt;-</span> anp_ge10 <span class="sc">|&gt;</span></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id_unico, <span class="at">pop_2010 =</span> pop_total, <span class="at">dom_2010 =</span> dom_ocu) <span class="sc">|&gt;</span></span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(pop_2022_por_chave, <span class="at">by =</span> <span class="fu">join_by</span>(id_unico <span class="sc">==</span> chave)) <span class="sc">|&gt;</span></span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">varpop =</span> pop_2022 <span class="sc">-</span> pop_2010,</span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">vardom =</span> dom_2022 <span class="sc">-</span> dom_2010</span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>anp_grade <span class="sc">|&gt;</span></span>
-<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span></span>
-<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
-<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">celulas    =</span> <span class="fu">n</span>(),</span>
-<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">sem_par    =</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(pop_2022)),</span>
-<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">pop_2010   =</span> <span class="fu">sum</span>(pop_2010, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">pop_2022   =</span> <span class="fu">sum</span>(pop_2022, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">perderam   =</span> <span class="fu">sum</span>(varpop <span class="sc">&lt;</span> <span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">ganharam   =</span> <span class="fu">sum</span>(varpop <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pop_2022_por_chave <span class="ot">&lt;-</span> anp_ge22 <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">chave =</span> <span class="fu">case_when</span>(</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>      id_unico <span class="sc">%in%</span> ids_2010                                    <span class="sc">~</span> id_unico,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_starts</span>(id_unico, <span class="st">"200M"</span>) <span class="sc">&amp;</span> nome_1km <span class="sc">%in%</span> ids_1km_2010 <span class="sc">~</span> nome_1km,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">.default                                                  =</span> <span class="cn">NA_character_</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(chave)) <span class="sc">|&gt;</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(chave) <span class="sc">|&gt;</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">pop_2022 =</span> <span class="fu">sum</span>(pop_total), <span class="at">dom_2022 =</span> <span class="fu">sum</span>(total_dom), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>anp_grade <span class="ot">&lt;-</span> anp_ge10 <span class="sc">|&gt;</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id_unico, <span class="at">pop_2010 =</span> pop_total, <span class="at">dom_2010 =</span> dom_ocu) <span class="sc">|&gt;</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(pop_2022_por_chave, <span class="at">by =</span> <span class="fu">join_by</span>(id_unico <span class="sc">==</span> chave)) <span class="sc">|&gt;</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">varpop =</span> pop_2022 <span class="sc">-</span> pop_2010,</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">vardom =</span> dom_2022 <span class="sc">-</span> dom_2010</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>anp_grade <span class="sc">|&gt;</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">celulas    =</span> <span class="fu">n</span>(),</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">sem_par    =</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(pop_2022)),</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">pop_2010   =</span> <span class="fu">sum</span>(pop_2010, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">pop_2022   =</span> <span class="fu">sum</span>(pop_2022, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">perderam   =</span> <span class="fu">sum</span>(varpop <span class="sc">&lt;</span> <span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">ganharam   =</span> <span class="fu">sum</span>(varpop <span class="sc">&gt;</span> <span class="dv">0</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 6
   celulas sem_par pop_2010 pop_2022 perderam ganharam
@@ -772,47 +776,47 @@ Figura&nbsp;5.2: População total por célula da grade estatística, Anápolis 
 1    7354      23   333163   398240     1684     2125</code></pre>
 </div>
 </div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Aviso</span>Três cuidados ao comparar edições da grade
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><strong>A subdivisão é a regra, não a exceção</strong>, em municípios que se urbanizaram no período, e ignorá-la produz buracos no mapa justamente nas áreas de crescimento.</p>
-<p><strong>Testar a resolução pelo prefixo do identificador não basta.</strong> Comparar apenas os conjuntos de células de 1 km e supor que as que sumiram foram subdivididas mistura fenômenos distintos. A verificação confiável procura as células filhas de 200 m pelo campo <code>nome_1km</code>.</p>
-<p><strong>O <code>geobr</code> descarta células sem município.</strong> O pacote calcula o centroide de cada célula e o cruza com a malha municipal. Células cujo centroide cai fora de qualquer polígono, tipicamente sobre lagoas, baías e o mar, ficam sem <code>code_muni</code> e não aparecem em consulta alguma. É parte da explicação para o resíduo sem correspondência dos testes acima.</p>
-</div>
-</div>
-<p>As células sem par recebem <code>NA</code> na variação e são desenhadas em cinza. Dois ajustes cartográficos são necessários antes de mapear, e ambos valem para qualquer município que não seja compacto.</p>
+<p>Note que as células sem par recebem <code>NA</code> na variação e são desenhadas em cinza. Dois ajustes cartográficos são necessários antes de mapear, e ambos valem para qualquer município que não seja compacto.</p>
 <p>O decisivo é a <strong>escala de cor</strong>. Metade das células variou uma pessoa ou menos, enquanto a maior variação passa de mil. Uma escala esticada até esse extremo pinta de branco tudo o que interessa, e o mapa fica vazio. Fixamos então o limite no percentil 98 do valor absoluto e usamos <code>oob = scales::squish</code>, que desenha na cor do extremo tudo o que ultrapassa o limite, em vez de descartar. A paleta divergente <code>"RdBu"</code> com limites simétricos garante que o branco central corresponda sempre ao zero.</p>
 <p>O segundo ajuste, menor, é o enquadramento. Recortamos a visualização à caixa que contém as células com população, com <code>coord_sf()</code>, o que apara a moldura vazia sem descartar dado algum.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>caixa <span class="ot">&lt;-</span> anp_grade <span class="sc">|&gt;</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pop_2010 <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">|</span> pop_2022 <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_bbox</span>()</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>mapa_var <span class="ot">&lt;-</span> <span class="cf">function</span>(dados, variavel, titulo) {</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  lim <span class="ot">&lt;-</span> <span class="fu">quantile</span>(<span class="fu">abs</span>(dados[[variavel]]), <span class="fl">0.98</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(dados) <span class="sc">+</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> .data[[variavel]]), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_distiller</span>(</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">palette =</span> <span class="st">"RdBu"</span>, <span class="at">direction =</span> <span class="dv">1</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span>lim, lim),</span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">oob =</span> scales<span class="sc">::</span>squish, <span class="at">name =</span> titulo, <span class="at">na.value =</span> <span class="st">"gray90"</span>,</span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_number</span>(<span class="at">big.mark =</span> <span class="st">"."</span>, <span class="at">decimal.mark =</span> <span class="st">","</span>,</span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">style_positive =</span> <span class="st">"plus"</span>)</span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_sf</span>(<span class="at">xlim =</span> caixa[<span class="fu">c</span>(<span class="st">"xmin"</span>, <span class="st">"xmax"</span>)], <span class="at">ylim =</span> caixa[<span class="fu">c</span>(<span class="st">"ymin"</span>, <span class="st">"ymax"</span>)],</span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span>
-<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="fu">mapa_var</span>(anp_grade, <span class="st">"varpop"</span>, <span class="st">"Var. população"</span>)</span>
-<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="fu">mapa_var</span>(anp_grade, <span class="st">"vardom"</span>, <span class="st">"Var. domicílios"</span>)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell" data-layout-nrow="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>caixa <span class="ot">&lt;-</span> anp_grade <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(pop_2010 <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">|</span> pop_2022 <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_bbox</span>()</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Variação da população:</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>lim_pop <span class="ot">&lt;-</span> <span class="fu">quantile</span>(<span class="fu">abs</span>(anp_grade<span class="sc">$</span>varpop), <span class="fl">0.98</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(anp_grade) <span class="sc">+</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> varpop), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_distiller</span>(</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">palette =</span> <span class="st">"RdBu"</span>, <span class="at">direction =</span> <span class="dv">1</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span>lim_pop, lim_pop),</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">oob =</span> scales<span class="sc">::</span>squish, <span class="at">name =</span> <span class="st">"Var. população"</span>, <span class="at">na.value =</span> <span class="st">"gray90"</span>,</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_number</span>(<span class="at">big.mark =</span> <span class="st">"."</span>, <span class="at">decimal.mark =</span> <span class="st">","</span>,</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">style_positive =</span> <span class="st">"plus"</span>)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_sf</span>(<span class="at">xlim =</span> caixa[<span class="fu">c</span>(<span class="st">"xmin"</span>, <span class="st">"xmax"</span>)], <span class="at">ylim =</span> caixa[<span class="fu">c</span>(<span class="st">"ymin"</span>, <span class="st">"ymax"</span>)],</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>             <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="do">## Variação dos domicílios:</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>lim_dom <span class="ot">&lt;-</span> <span class="fu">quantile</span>(<span class="fu">abs</span>(anp_grade<span class="sc">$</span>vardom), <span class="fl">0.98</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(anp_grade) <span class="sc">+</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> vardom), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_distiller</span>(</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>      <span class="at">palette =</span> <span class="st">"RdBu"</span>, <span class="at">direction =</span> <span class="dv">1</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span>lim_dom, lim_dom),</span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>      <span class="at">oob =</span> scales<span class="sc">::</span>squish, <span class="at">name =</span> <span class="st">"Var. domicílios"</span>, <span class="at">na.value =</span> <span class="st">"gray90"</span>,</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_number</span>(<span class="at">big.mark =</span> <span class="st">"."</span>, <span class="at">decimal.mark =</span> <span class="st">","</span>,</span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">style_positive =</span> <span class="st">"plus"</span>)</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_sf</span>(<span class="at">xlim =</span> caixa[<span class="fu">c</span>(<span class="st">"xmin"</span>, <span class="st">"xmax"</span>)], <span class="at">ylim =</span> caixa[<span class="fu">c</span>(<span class="st">"ymin"</span>, <span class="st">"ymax"</span>)],</span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>             <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>          <span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div id="fig-grade-variacao" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-grade-variacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -820,7 +824,7 @@ Figura&nbsp;5.3: Variação entre os Censos de 2010 e 2022 por célula da grade 
 </figcaption>
 <div aria-describedby="fig-grade-variacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="quarto-layout-row">
-<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-grade-variacao" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-grade-variacao" style="flex-basis: 100.0%;justify-content: flex-start;">
 <div id="fig-grade-variacao-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-fig" id="fig-grade-variacao-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -832,7 +836,9 @@ Figura&nbsp;5.3: Variação entre os Censos de 2010 e 2022 por célula da grade 
 </figure>
 </div>
 </div>
-<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-grade-variacao" style="flex-basis: 50.0%;justify-content: flex-start;">
+</div>
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-grade-variacao" style="flex-basis: 100.0%;justify-content: flex-start;">
 <div id="fig-grade-variacao-2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-fig" id="fig-grade-variacao-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -848,29 +854,17 @@ Figura&nbsp;5.3: Variação entre os Censos de 2010 e 2022 por célula da grade 
 </div>
 </figure>
 </div>
-<p>O padrão é nítido e tem nome. O miolo consolidado da cidade aparece em vermelho, perdendo população, e um anel azul de crescimento o cerca, mais forte a norte, a leste e a sul, no desenho clássico da expansão por loteamento periférico. Fora da mancha urbana, algumas células isoladas de 1 km ganham população de forma expressiva, provavelmente condomínios e povoados que se adensaram no período.</p>
-<p>O mapa de domicílios repete a geografia com intensidade menor, e a razão fica clara ao confrontar os dois totais.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>anp_grade <span class="sc">|&gt;</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">var_pop         =</span> <span class="fu">sum</span>(varpop, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">var_dom         =</span> <span class="fu">sum</span>(vardom, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">moradores_2010  =</span> <span class="fu">sum</span>(pop_2010, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span> <span class="fu">sum</span>(dom_2010, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">moradores_2022  =</span> <span class="fu">sum</span>(pop_2022, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span> <span class="fu">sum</span>(dom_2022, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 4
-  var_pop var_dom moradores_2010 moradores_2022
-    &lt;dbl&gt;   &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;
-1   65118   38867           3.22           2.80</code></pre>
 </div>
-</div>
-<p>Anápolis ganhou cerca de 65 mil habitantes e cerca de 39 mil domicílios, e a média de moradores por domicílio caiu de 3,2 para 2,8. Ou seja, o município cresceu por novas moradias na borda e, ao mesmo tempo, esvaziou por dentro, com domicílios cada vez menores em toda parte. Para transportes isso importa duplamente, porque a demanda se desloca para a periferia enquanto a infraestrutura instalada continua servindo um centro que perde gente.</p>
-<p>Vale registrar que essa leitura não seria possível com os outros produtos do Censo. Com os agregados por setor censitário, a comparação temporal esbarraria na mudança dos códigos entre edições. Com os microdados, a área de ponderação seria grossa demais para separar bairro de bairro. A grade é o único produto que sustenta a comparação direta nessa resolução.</p>
-<p>A grade também é o insumo natural da Parte 2, porque entrega origens de análise com peso populacional e geometria uniforme. A diferença é que lá usaremos a grade hexagonal H3, construída no <a href="./3-agregados.html">Capítulo 3</a> com o <code>cnefetools</code>, que tem a vantagem de células de forma regular e distâncias iguais entre vizinhos.</p>
+<p>O padrão que conseguimos observar é impressionante, combinando redução de população em áreas centralizadas e espraiamento urbano bastante nítido, sobretudo nas regiões Nordeste, Leste e Sudeste do município. Essa evidência é duplamente constatada na variação tanto da população quanto dos domicílios. Para o planejamento de transportes, sabemos que esse padrão é, em geral, bastante associado a uma elevação da motorização individual, que pode implicar em cidades menos sustentáveis.</p>
+<p>Apresentada a grade estatística e o seu potencial, vamos fechar essa primeira com os dados do CNEFE no próximo capítulo. Vale frisar que diferente dos outros produtos do Censo que apresentamos até aqui, o CNEFE consiste em um arquivo geográfico de pontos e não de polígonos.</p>
 
 
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>conforme explicação da caixa de aviso anterior<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
