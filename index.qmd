@@ -60,7 +60,7 @@ Parte dos dados é obtida em tempo real pelos pacotes `censobr` e `geobr`, sem n
 ::: {.instrutor}
 ### Jorge Ubirajara Pedreira Junior {.unnumbered}
 
-Doutor em Engenharia de Transportes e docente da Universidade Federal da Bahia (UFBA). Atua no ensino e pesquisa em planejamento de transportes e desenvolve soluções para R, a exemplo dos pacotes {cnefetools}, {tripdistmodels} e {geohazards}. Autor de *Censo Demográfico no R*.
+Doutor em Engenharia de Transportes e docente da Universidade Federal da Bahia (UFBA). Atua no ensino e pesquisa em planejamento de transportes e desenvolve soluções para R, a exemplo dos pacotes {cnefetools}, {tripdistmodels} e {geohazards}. Autor de *Censo Demográfico no R: Conceitos e aplicações para a análise do território brasileiro*.
 
 [Página pessoal](https://pedreirajr.github.io/website/) | [Lattes](http://lattes.cnpq.br/7602862678306492) |
 [GitHub](https://github.com/pedreirajr)
