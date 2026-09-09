@@ -62,7 +62,7 @@ Parte dos dados é obtida em tempo real pelos pacotes `censobr` e `geobr`, sem n
 
 Doutor em Engenharia de Transportes e docente da Universidade Federal da Bahia (UFBA). Atua no ensino e pesquisa em planejamento de transportes e desenvolve soluções para R, a exemplo dos pacotes {cnefetools}, {tripdistmodels} e {geohazards}. Autor de *Censo Demográfico no R*.
 
-[Página pessoal](https://pedreirajr.github.io/website/) | [Lattes](http://lattes.cnpq.br/7602862678306492)
+[Página pessoal](https://pedreirajr.github.io/website/) | [Lattes](http://lattes.cnpq.br/7602862678306492) |
 [GitHub](https://github.com/pedreirajr)
 :::
 
@@ -71,7 +71,7 @@ Doutor em Engenharia de Transportes e docente da Universidade Federal da Bahia (
 
 Doutor em Engenharia de Transportes pela Universidade de São Paulo e University of Twente, em regime de cotutela. Engenheiro Civil e Mestre em Engenharia de Transportes pela Universidade Estadual de Londrina. Atualmente, consultor de mobilidade na empresa URBTEC, em Curitiba-PR.
 
-[Lattes](http://lattes.cnpq.br/2619402198229137)
+[Lattes](http://lattes.cnpq.br/2619402198229137) |
 [GitHub](https://github.com/lucasbrnd)
 :::
 
@@ -80,7 +80,7 @@ Doutor em Engenharia de Transportes pela Universidade de São Paulo e University
 
 Doutor em Engenharia de Transportes pela Universidade de São Paulo e engenheiro da mobilidade, atua nas áreas de acessibilidade a equipamentos urbanos e de avaliação de projetos cicloviários. Atualmente, é Professor Temporário e Pós-doutorando no Departamento de Engenharia de Transportes da EESC-USP.
 
-[Lattes](http://lattes.cnpq.br/3026929259853023)
+[Lattes](http://lattes.cnpq.br/3026929259853023) |
 [GitHub](https://github.com/thiagolouro25)
 :::
 
