@@ -2,26 +2,22 @@
 title: "CNEFE"
 ---
 
-O Cadastro Nacional de Endereços para Fins Estatísticos é o produto que mais mudou o que se pode
-fazer com o Censo em escala fina. Ele lista os endereços visitados na operação censitária, com
-coordenadas e com a indicação da espécie de cada um, o que permite localizar domicílios,
-estabelecimentos de ensino, de saúde e outras edificações no território. Para acessibilidade isso é
-decisivo, porque resolve o problema recorrente de onde estão as oportunidades.
+O Cadastro Nacional de Endereços para Fins Estatísticos é o produto que mais mudou o que se pode fazer com o Censo em escala fina. Ele lista os endereços visitados na operação censitária, com coordenadas e com a indicação da espécie de cada um, o que permite localizar domicílios, estabelecimentos de ensino, de saúde e outras edificações no território. Para acessibilidade isso é decisivo, porque resolve o problema recorrente de onde estão as oportunidades.
 
 ::: {.callout-note}
-## Nesta seção você vai
+## Nesta seção você vai:
 
 - ler o CNEFE de Anápolis com o `cnefetools`
 - contar os registros por espécie de endereço
 - filtrar e mapear estabelecimentos específicos pelo campo de texto livre
 - agregar contagens em grade hexagonal H3 e em polígonos próprios
+- construir o índice ICE para contrastar estabelecimentos de ensino e religiosos
 :::
 
 ::: {.callout-tip}
 ## Script deste capítulo
 
-Abra o arquivo `scripts/6-cnefe.R` no projeto da oficina. É nele que vai o código
-apresentado a seguir. Se ainda não tiver o projeto, volte ao
+Abra o arquivo `scripts/6-cnefe.R` no projeto da oficina. É nele que vai o código apresentado a seguir. Se ainda não tiver o projeto, volte ao
 [Capítulo 1](1-instalacao.qmd).
 :::
 
@@ -39,15 +35,9 @@ library(mapview)
 
 ## Leitura dos dados
 
-Duas funções do `cnefetools` [@pedreira2026cnefetools] dão conta de quase tudo. A `read_cnefe()`
-baixa e lê os dados de um município, e a `cnefe_counts()` baixa, lê e já agrega as contagens por
-espécie em qualquer malha de polígonos. Acompanham ainda a `cnefe_dictionary()`, que abre o
-dicionário, e a `cnefe_doc()`, que abre a nota metodológica.
+Duas funções do `cnefetools` [@pedreira2026cnefetools] dão conta de quase tudo. A `read_cnefe()` baixa e lê os dados de um município, e a `cnefe_counts()` baixa, lê e já agrega as contagens por espécie em qualquer malha de polígonos. Acompanham ainda a `cnefe_dictionary()`, que abre o dicionário, e a `cnefe_doc()`, que abre a nota metodológica.
 
-A `read_cnefe()` recebe o código IBGE e devolve dois formatos, conforme o argumento `output`. O
-padrão `"arrow"` entrega uma tabela preguiçosa, útil porque o arquivo é grande nos municípios
-maiores. O `"sf"` entrega os registros como pontos em SIRGAS 2000, prontos para análise espacial. O
-`cache = TRUE` baixa uma única vez e relê nas execuções seguintes.
+A `read_cnefe()` recebe o código IBGE e devolve dois formatos, conforme o argumento `output`. O padrão `"arrow"` entrega uma tabela preguiçosa, útil porque o arquivo é grande nos municípios maiores. O `"sf"` entrega os registros como pontos em SIRGAS 2000, prontos para análise espacial. O `cache = TRUE` baixa uma única vez e relê nas execuções seguintes.
 
 ```{r}
 #| label: leitura-cnefe
@@ -98,9 +88,7 @@ anp_cnefe |>
 
 ## Mapeando estabelecimentos específicos
 
-O campo `DSC_ESTABELECIMENTO` é texto aberto, preenchido pelo recenseador, e permite descer ao nome
-do equipamento. Abaixo filtramos os estabelecimentos de saúde, de código 5, e dentro deles os que
-têm "hospital" no nome, com `grepl()` e `ignore.case = TRUE`.
+O campo `DSC_ESTABELECIMENTO` é texto aberto, preenchido pelo recenseador, e permite descer ao nome do equipamento. Abaixo filtramos os estabelecimentos de saúde, de código 5, e dentro deles os que têm "hospital" no nome, com `grepl()` e `ignore.case = TRUE`.
 
 ```{r}
 #| label: filtra-saude
@@ -136,17 +124,12 @@ ggplot() +
 ::: {.callout-note}
 ## Buscas por texto no DSC_ESTABELECIMENTO
 
-O campo é texto livre coletado em campo, então a mesma instituição pode aparecer grafada de formas
-diferentes, com abreviação, sem acento ou com erro de digitação. Ao filtrar por palavra-chave, vale
-testar variações da busca para não perder registros relevantes.
+O campo é texto livre coletado em campo, então a mesma instituição pode aparecer grafada de formas diferentes, com abreviação, sem acento ou com erro de digitação. Ao filtrar por palavra-chave, vale testar variações da busca para não perder registros relevantes.
 :::
 
 ## Agregando contagens por recorte espacial
 
-Em análise territorial quase sempre se quer o recorte, e não o ponto. A `cnefe_counts()` faz a
-agregação e devolve um `sf` com oito colunas de contagem, uma por espécie, de `addr_type1` a
-`addr_type8`. Os argumentos principais são `code_muni`, `polygon_type`, que aceita `"hex"` para
-grade H3 ou `"user"` para polígonos próprios, `h3_resolution` e `polygon`.
+Em análise territorial quase sempre se quer o recorte, e não o ponto. A `cnefe_counts()` faz a agregação e devolve um `sf` com oito colunas de contagem, uma por espécie, de `addr_type1` a `addr_type8`. Os argumentos principais são `code_muni`, `polygon_type`, que aceita `"hex"` para grade H3 ou `"user"` para polígonos próprios, `h3_resolution` e `polygon`.
 
 Começamos pela grade hexagonal na resolução 8, com células de cerca de 0,7 km².
 
@@ -172,9 +155,7 @@ nrow(anp_hex)
 #| fig-subcap:
 #|   - "Estabelecimentos de ensino"
 #|   - "Estabelecimentos religiosos"
-#| layout-ncol: 2
-#| fig-width: 5
-#| fig-height: 5
+#| layout-nrow: 2
 #| message: false
 
 ggplot(anp_hex) +
@@ -190,28 +171,36 @@ ggplot(anp_hex) +
   theme_minimal()
 ```
 
-A partir dessas contagens dá para construir índices comparativos entre usos. Abaixo, a proporção de
-estabelecimentos de ensino sobre o total de ensino mais religiosos em cada célula. Valores próximos
-de 1 indicam predomínio de ensino, e próximos de 0, predomínio religioso.
+A partir dessas contagens dá para construir índices comparativos entre usos. A documentação do `cnefetools` traz um deles, o *Index of Concentration at the Extremes* (ICE), proposto por @massey2001 para medir a concentração espacial entre dois grupos e adaptado ali ao contraste entre estabelecimentos de ensino e religiosos.
+
+$$
+\text{ICE} = \frac{n_{\text{ensino}} - n_{\text{religiosos}}}{n_{\text{ensino}} + n_{\text{religiosos}}}
+$$ {#eq-ice}
+
+O índice da @eq-ice varia de -1 a +1. O valor +1 marca a célula em que todo o estoque é de ensino, o 0 marca o equilíbrio entre os dois usos e o -1 marca a célula inteiramente religiosa. O cálculo vale apenas onde há ao menos um estabelecimento de um dos dois tipos, porque nas demais células o denominador é zero.
 
 ```{r}
-#| label: map-prop-ensino
+#| label: map-ice-ensino
 #| message: false
 
-anp_hex_ratio <- anp_hex |>
-  filter((addr_type4 + addr_type8) > 0) |>
-  mutate(prop_ensino = addr_type4 / (addr_type4 + addr_type8))
+anp_hex_ice <- anp_hex |>
+  filter(addr_type4 > 0 | addr_type8 > 0) |>
+  mutate(ice = (addr_type4 - addr_type8) / (addr_type4 + addr_type8))
+
+summary(anp_hex_ice$ice)
 
 mapview(
-  anp_hex_ratio,
-  zcol       = "prop_ensino",
-  layer.name = "Predominancia de ensino",
-  legend     = TRUE
+  anp_hex_ice,
+  zcol        = "ice",
+  col.regions = colorRampPalette(c("red", "white", "blue")),
+  layer.name  = "ICE H3 res 8",
+  legend      = TRUE
 )
 ```
 
-A mesma função agrega em qualquer malha, bastando `polygon_type = "user"` e o `sf` no argumento
-`polygon`. Usamos a malha de bairros da prefeitura, a mesma do [Capítulo 3](3-agregados.qmd).
+A escala divergente organiza a leitura, com o vermelho no predomínio religioso, o branco no equilíbrio e o azul no predomínio de ensino.
+
+A mesma função agrega em qualquer malha, bastando `polygon_type = "user"` e o `sf` no argumento `polygon`. Usamos a malha de bairros da prefeitura, a mesma do [Capítulo 3](3-agregados.qmd).
 
 ```{r}
 #| label: cnefe-counts-bairros
@@ -243,11 +232,7 @@ mapview(
 ```
 
 ::: {.callout-warning}
-A `cnefe_counts()` informa, ao rodar, a fração dos pontos do CNEFE capturada pelos polígonos. Com a
-malha de bairros, que cobre só a área urbana, ela fica em torno de 95%. Confira sempre esse número,
-porque o que cai fora dos polígonos some da contagem sem aviso.
+A `cnefe_counts()` informa, ao rodar, a fração dos pontos do CNEFE capturada pelos polígonos. Com a malha de bairros, que cobre só a área urbana, ela fica em torno de 95%. Confira sempre esse número, porque o que cai fora dos polígonos some da contagem sem aviso.
 :::
 
-Os pontos do CNEFE são a matéria-prima dos destinos que a Parte 2 vai usar. Escolas, unidades de
-saúde e estabelecimentos de outras finalidades deixam de ser um total municipal e passam a ter
-coordenada, que é o que uma matriz de tempo de viagem exige.
+Finalizamos esta primeira etapa e estamos prontos para avançar em análises de acessibilidade usam muito do que produzimos até aqui. Nos próximos capítulos abordaremos esse importante tema tendo ainda Anápolis-GO como pano de fundo para não haver solução de continuidade.
