@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>6&nbsp; Grade estatística – Dados Censitários e Acessibilidade Urbana em R</title>
+<title>5&nbsp; Grade estatística – Dados Censitários e Acessibilidade Urbana em R</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -68,18 +68,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./7-instalacao-r5r.html" rel="next">
-<link href="./5-cnefe.html" rel="prev">
+<link href="./6-cnefe.html" rel="next">
+<link href="./4-microdados.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-ec8eff129d6f50c8392963982e963180.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-ec8eff129d6f50c8392963982e963180.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-f725026034374060f4de44a7d1da3a6e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-ec8eff129d6f50c8392963982e963180.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -110,15 +114,177 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="custom.css">
-<meta property="og:title" content="6&nbsp; Grade estatística – Dados Censitários e Acessibilidade Urbana em R">
+<meta property="og:title" content="5&nbsp; Grade estatística – Dados Censitários e Acessibilidade Urbana em R">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://pedreirajr.github.io/workshop_censo_acc_smu2026/6-grade-estatistica_files/figure-html/fig-grade-resolucao-1.png">
+<meta property="og:image" content="https://pedreirajr.github.io/workshop_censo_acc_smu2026/5-grade-estatistica_files/figure-html/fig-grade-resolucao-1.png">
 <meta property="og:site_name" content="Dados Censitários e Acessibilidade Urbana em R">
 <meta property="og:image:height" content="960">
 <meta property="og:image:width" content="960">
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -127,7 +293,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1-instalacao.html">PARTE 1: DADOS CENSITÁRIOS</a></li><li class="breadcrumb-item"><a href="./6-grade-estatistica.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Grade estatística</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1-instalacao.html">PARTE 1: DADOS CENSITÁRIOS</a></li><li class="breadcrumb-item"><a href="./5-grade-estatistica.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Grade estatística</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
@@ -145,6 +311,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <a href="./">Dados Censitários e Acessibilidade Urbana em R</a> 
         <div class="sidebar-tools-main">
     <a href="https://github.com/pedreirajr/workshop_censo_acc_smu2026" title="Código fonte" class="quarto-navigation-tool px-1" aria-label="Código fonte"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Alternar modo escuro"><i class="bi"></i></a>
 </div>
     </div>
       </div>
@@ -196,14 +363,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./5-cnefe.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">CNEFE</span></span></a>
+  <a href="./5-grade-estatistica.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Grade estatística</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./6-grade-estatistica.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Grade estatística</span></span></a>
+  <a href="./6-cnefe.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">CNEFE</span></span></a>
   </div>
 </li>
       </ul>
@@ -259,19 +426,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Índice do Capítulo</h2>
    
   <ul>
-  <li><a href="#obtenção-da-grade" id="toc-obtenção-da-grade" class="nav-link active" data-scroll-target="#obtenção-da-grade"><span class="header-section-number">6.1</span> Obtenção da grade</a></li>
-  <li><a href="#resolução-das-células-e-quadrante" id="toc-resolução-das-células-e-quadrante" class="nav-link" data-scroll-target="#resolução-das-células-e-quadrante"><span class="header-section-number">6.2</span> Resolução das células e quadrante</a></li>
-  <li><a href="#população-por-célula" id="toc-população-por-célula" class="nav-link" data-scroll-target="#população-por-célula"><span class="header-section-number">6.3</span> População por célula</a></li>
-  <li><a href="#comparando-as-duas-edições" id="toc-comparando-as-duas-edições" class="nav-link" data-scroll-target="#comparando-as-duas-edições"><span class="header-section-number">6.4</span> Comparando as duas edições</a></li>
+  <li><a href="#obtenção-da-grade" id="toc-obtenção-da-grade" class="nav-link active" data-scroll-target="#obtenção-da-grade"><span class="header-section-number">5.1</span> Obtenção da grade</a></li>
+  <li><a href="#resolução-das-células-e-quadrante" id="toc-resolução-das-células-e-quadrante" class="nav-link" data-scroll-target="#resolução-das-células-e-quadrante"><span class="header-section-number">5.2</span> Resolução das células e quadrante</a></li>
+  <li><a href="#população-por-célula" id="toc-população-por-célula" class="nav-link" data-scroll-target="#população-por-célula"><span class="header-section-number">5.3</span> População por célula</a></li>
+  <li><a href="#comparando-as-duas-edições" id="toc-comparando-as-duas-edições" class="nav-link" data-scroll-target="#comparando-as-duas-edições"><span class="header-section-number">5.4</span> Comparando as duas edições</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1-instalacao.html">PARTE 1: DADOS CENSITÁRIOS</a></li><li class="breadcrumb-item"><a href="./6-grade-estatistica.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Grade estatística</span></a></li></ol></nav>
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1-instalacao.html">PARTE 1: DADOS CENSITÁRIOS</a></li><li class="breadcrumb-item"><a href="./5-grade-estatistica.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Grade estatística</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Grade estatística</span></h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Grade estatística</span></h1>
 </div>
 
 
@@ -318,7 +486,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Abra o arquivo <code>scripts/6-grade.R</code> no projeto da oficina. É nele que vai o código apresentado a seguir. Se ainda não tiver o projeto, volte ao <a href="./1-instalacao.html">Capítulo 1</a>.</p>
+<p>Abra o arquivo <code>scripts/5-grade.R</code> no projeto da oficina. É nele que vai o código apresentado a seguir. Se ainda não tiver o projeto, volte ao <a href="./1-instalacao.html">Capítulo 1</a>.</p>
 </div>
 </div>
 <div class="cell">
@@ -328,8 +496,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="obtenção-da-grade" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="obtenção-da-grade"><span class="header-section-number">6.1</span> Obtenção da grade</h2>
+<section id="obtenção-da-grade" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="obtenção-da-grade"><span class="header-section-number">5.1</span> Obtenção da grade</h2>
 <p>A partir da versão 2.0.0 do <code>geobr</code>, a função <code>read_statistical_grid()</code> entrega a grade já recortada por município. Bastam o ano da edição em <code>year</code> e o código IBGE em <code>code_muni</code>. Duas linhas substituem todo o trabalho de identificar quadrantes, baixar arquivos compactados, empilhá-los e recortá-los.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>anp_code <span class="ot">&lt;-</span> <span class="fu">lookup_muni</span>(<span class="at">year =</span> <span class="dv">2022</span>, <span class="at">name_muni =</span> <span class="st">"Anápolis"</span>)<span class="sc">$</span>code_muni</span>
@@ -357,8 +525,8 @@ Dica
 </div>
 </div>
 </section>
-<section id="resolução-das-células-e-quadrante" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="resolução-das-células-e-quadrante"><span class="header-section-number">6.2</span> Resolução das células e quadrante</h2>
+<section id="resolução-das-células-e-quadrante" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="resolução-das-células-e-quadrante"><span class="header-section-number">5.2</span> Resolução das células e quadrante</h2>
 <p>Cada polígono é uma célula de 200 m, em área urbana, ou de 1 km, em área rural. O próprio identificador diz qual é, pelo prefixo do campo <code>id_unico</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>anp_ge10 <span class="sc">|&gt;</span></span>
@@ -417,7 +585,7 @@ Dica
 <div id="fig-grade-resolucao" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-grade-resolucao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;6.1: Resolução das células da grade estatística em Anápolis (GO).
+Figura&nbsp;5.1: Resolução das células da grade estatística em Anápolis (GO).
 </figcaption>
 <div aria-describedby="fig-grade-resolucao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="quarto-layout-row">
@@ -428,7 +596,7 @@ Figura&nbsp;6.1: Resolução das células da grade estatística em Anápolis (GO
 (a) Censo 2010
 </figcaption>
 <div aria-describedby="fig-grade-resolucao-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="6-grade-estatistica_files/figure-html/fig-grade-resolucao-1.png" class="img-fluid figure-img" data-ref-parent="fig-grade-resolucao" width="480">
+<img src="5-grade-estatistica_files/figure-html/fig-grade-resolucao-1.png" class="img-fluid figure-img" data-ref-parent="fig-grade-resolucao" width="480">
 </div>
 </figure>
 </div>
@@ -440,7 +608,7 @@ Figura&nbsp;6.1: Resolução das células da grade estatística em Anápolis (GO
 (b) Censo 2022
 </figcaption>
 <div aria-describedby="fig-grade-resolucao-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="6-grade-estatistica_files/figure-html/fig-grade-resolucao-2.png" class="img-fluid figure-img" data-ref-parent="fig-grade-resolucao" width="480">
+<img src="5-grade-estatistica_files/figure-html/fig-grade-resolucao-2.png" class="img-fluid figure-img" data-ref-parent="fig-grade-resolucao" width="480">
 </div>
 </figure>
 </div>
@@ -450,8 +618,8 @@ Figura&nbsp;6.1: Resolução das células da grade estatística em Anápolis (GO
 </figure>
 </div>
 </section>
-<section id="população-por-célula" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="população-por-célula"><span class="header-section-number">6.3</span> População por célula</h2>
+<section id="população-por-célula" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="população-por-célula"><span class="header-section-number">5.3</span> População por célula</h2>
 <p>O <code>geobr</code> padroniza o nome da população total como <code>pop_total</code> nas duas edições, o que poupa lidar com os nomes originais do IBGE e permite reaproveitar o mesmo código trocando apenas o objeto de entrada.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>mapa_pop <span class="ot">&lt;-</span> <span class="cf">function</span>(dados) {</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(dados) <span class="sc">+</span></span>
@@ -471,7 +639,7 @@ Figura&nbsp;6.1: Resolução das células da grade estatística em Anápolis (GO
 <div id="fig-grade-pop" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-grade-pop-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;6.2: População total por célula da grade estatística, Anápolis (GO).
+Figura&nbsp;5.2: População total por célula da grade estatística, Anápolis (GO).
 </figcaption>
 <div aria-describedby="fig-grade-pop-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="quarto-layout-row">
@@ -482,7 +650,7 @@ Figura&nbsp;6.2: População total por célula da grade estatística, Anápolis 
 (a) Censo 2010
 </figcaption>
 <div aria-describedby="fig-grade-pop-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="6-grade-estatistica_files/figure-html/fig-grade-pop-1.png" class="img-fluid figure-img" data-ref-parent="fig-grade-pop" width="480">
+<img src="5-grade-estatistica_files/figure-html/fig-grade-pop-1.png" class="img-fluid figure-img" data-ref-parent="fig-grade-pop" width="480">
 </div>
 </figure>
 </div>
@@ -494,7 +662,7 @@ Figura&nbsp;6.2: População total por célula da grade estatística, Anápolis 
 (b) Censo 2022
 </figcaption>
 <div aria-describedby="fig-grade-pop-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="6-grade-estatistica_files/figure-html/fig-grade-pop-2.png" class="img-fluid figure-img" data-ref-parent="fig-grade-pop" width="480">
+<img src="5-grade-estatistica_files/figure-html/fig-grade-pop-2.png" class="img-fluid figure-img" data-ref-parent="fig-grade-pop" width="480">
 </div>
 </figure>
 </div>
@@ -504,8 +672,8 @@ Figura&nbsp;6.2: População total por célula da grade estatística, Anápolis 
 </figure>
 </div>
 </section>
-<section id="comparando-as-duas-edições" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="comparando-as-duas-edições"><span class="header-section-number">6.4</span> Comparando as duas edições</h2>
+<section id="comparando-as-duas-edições" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="comparando-as-duas-edições"><span class="header-section-number">5.4</span> Comparando as duas edições</h2>
 <p>A estabilidade do <code>id_unico</code> é a vantagem mais distintiva da grade, e é tentador partir direto para um <em>join</em> por esse campo. Antes disso é obrigatório verificar se a correspondência é completa, e ela raramente é. Há dois motivos. O primeiro é a <strong>subdivisão</strong>, quando uma célula de 1 km de 2010 vira um conjunto de células de 200 m em 2022 por ter sido reclassificada como urbana. A correspondência existe, mas em hierarquia diferente, e a chave que a revela é o campo <code>nome_1km</code>, que registra a célula de 1 km à qual cada célula de 200 m pertence. O segundo é a ausência pura e simples de correspondente.</p>
 <p>Classificamos então cada célula de 2022 em três situações.</p>
 <div class="cell">
@@ -648,7 +816,7 @@ Figura&nbsp;6.2: População total por célula da grade estatística, Anápolis 
 <div id="fig-grade-variacao" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-grade-variacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;6.3: Variação entre os Censos de 2010 e 2022 por célula da grade estatística, Anápolis (GO). Vermelho indica redução e azul, aumento. Recorte na área com população e escala truncada no percentil 98.
+Figura&nbsp;5.3: Variação entre os Censos de 2010 e 2022 por célula da grade estatística, Anápolis (GO). Vermelho indica redução e azul, aumento. Recorte na área com população e escala truncada no percentil 98.
 </figcaption>
 <div aria-describedby="fig-grade-variacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="quarto-layout-row">
@@ -659,7 +827,7 @@ Figura&nbsp;6.3: Variação entre os Censos de 2010 e 2022 por célula da grade 
 (a) População total
 </figcaption>
 <div aria-describedby="fig-grade-variacao-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="6-grade-estatistica_files/figure-html/fig-grade-variacao-1.png" class="img-fluid figure-img" data-ref-parent="fig-grade-variacao" width="480">
+<img src="5-grade-estatistica_files/figure-html/fig-grade-variacao-1.png" class="img-fluid figure-img" data-ref-parent="fig-grade-variacao" width="480">
 </div>
 </figure>
 </div>
@@ -671,7 +839,7 @@ Figura&nbsp;6.3: Variação entre os Censos de 2010 e 2022 por célula da grade 
 (b) Domicílios ocupados
 </figcaption>
 <div aria-describedby="fig-grade-variacao-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="6-grade-estatistica_files/figure-html/fig-grade-variacao-2.png" class="img-fluid figure-img" data-ref-parent="fig-grade-variacao" width="480">
+<img src="5-grade-estatistica_files/figure-html/fig-grade-variacao-2.png" class="img-fluid figure-img" data-ref-parent="fig-grade-variacao" width="480">
 </div>
 </figure>
 </div>
@@ -708,6 +876,19 @@ Figura&nbsp;6.3: Variação entre os Censos de 2010 e 2022 por célula da grade 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {
@@ -1113,13 +1294,13 @@ Figura&nbsp;6.3: Variação entre os Censos de 2010 e 2022 por célula da grade 
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./5-cnefe.html" class="pagination-link" aria-label="CNEFE">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">CNEFE</span></span>
+      <a href="./4-microdados.html" class="pagination-link" aria-label="Microdados da amostra">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Microdados da amostra</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./7-instalacao-r5r.html" class="pagination-link" aria-label="Instalação e ajustes iniciais">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Instalação e ajustes iniciais</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./6-cnefe.html" class="pagination-link" aria-label="CNEFE">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">CNEFE</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

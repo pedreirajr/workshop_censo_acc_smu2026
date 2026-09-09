@@ -18,7 +18,7 @@ São 8 horas de atividade, divididas em dois blocos de 4 horas. Cada bloco tem 2
 
 **Este material cobre apenas as partes práticas**, e o conteúdo teórico é apresentado em sala, com material próprio. O que está aqui é o roteiro de código, pensado para ser acompanhado ao vivo e, depois, reexecutado por conta própria.
 
-A **Parte 1** percorre os principais produtos do Censo Demográfico, começando pela preparação do ambiente e pelos recortes territoriais do IBGE e avançando pelos agregados por setor censitário, pelos microdados da amostra, pelo CNEFE e pela grade estatística. Os agregados incluem uma seção dedicada às características urbanísticas do entorno dos domicílios, com recorte voltado a
+A **Parte 1** percorre os principais produtos do Censo Demográfico, começando pela preparação do ambiente e pelos recortes territoriais do IBGE e avançando pelos agregados por setor censitário, pelos microdados da amostra, pela grade estatística e pelo CNEFE. Os agregados incluem uma seção dedicada às características urbanísticas do entorno dos domicílios, com recorte voltado a
 transportes.
 
 A **Parte 2** monta uma análise de acessibilidade do zero, com a preparação do ambiente de roteamento, a leitura dos insumos e a construção da rede multimodal, o cálculo dos indicadores a pé, de bicicleta, de carro e por transporte público e, por fim, a avaliação da distribuição social dessa acessibilidade, com medidas de desigualdade e de pobreza de acesso.

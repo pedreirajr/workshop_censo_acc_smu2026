@@ -47,7 +47,7 @@ Em função da análise intramunicipal de transportes exige descer abaixo do mun
 ## A solução do censobr para 2022
 <!-- Checar se é ipeaGit mesmo abaixo-->
 
-O `censobr` acompanhou a mudança. A versão em desenvolvimento^[instale-a com `remotes::install_github("ipeaGit/censobr")` ou `pak::pak("ipeaGit/censobr")`] traz a função `import_microdata22_controlado()`, que recebe o caminho do `.zip` que **você** obteve junto ao IBGE, processa os arquivos e os guarda no cache local em formato *parquet*. Feita a importação uma única vez, as funções de leitura de sempre, como `read_population(year = 2022)` e `read_households(year = 2022)`, passam a funcionar para 2022. O procedimento está documentado em <https://ipea.github.io/censobr/dev/articles/microdata_2022.html>.
+O `censobr` acompanhou a mudança. A versão em desenvolvimento^[instale-a com `remotes::install_github("ipea/censobr")` ou `pak::pak("ipea/censobr")`] traz a função `import_microdata22_controlado()`, que recebe o caminho do `.zip` que **você** obteve junto ao IBGE, processa os arquivos e os guarda no cache local em formato *parquet*. Feita a importação uma única vez, as funções de leitura de sempre, como `read_population(year = 2022)` e `read_households(year = 2022)`, passam a funcionar para 2022. O procedimento está documentado em <https://ipea.github.io/censobr/dev/articles/microdata_2022.html>.
 :::
 
 Nesta oficina ficamos com **2010**, por três razões. Os arquivos são de acesso livre, o `censobr` os baixa sozinho, e o detalhe geográfico desce até a área de ponderação, que é o recorte de que precisamos. Vale registrar que os dados têm quinze anos e não descrevem a Anápolis de hoje. O que eles ensinam é o método, e o método é o mesmo que você aplicará aos arquivos de 2022 quando os obtiver.

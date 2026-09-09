@@ -20,13 +20,13 @@ decisivo, porque resolve o problema recorrente de onde estão as oportunidades.
 ::: {.callout-tip}
 ## Script deste capítulo
 
-Abra o arquivo `scripts/5-cnefe.R` no projeto da oficina. É nele que vai o código
+Abra o arquivo `scripts/6-cnefe.R` no projeto da oficina. É nele que vai o código
 apresentado a seguir. Se ainda não tiver o projeto, volte ao
 [Capítulo 1](1-instalacao.qmd).
 :::
 
 ```{r}
-#| label: pacotes-cap5
+#| label: pacotes-cap6
 #| message: false
 #| warning: false
 library(cnefetools)

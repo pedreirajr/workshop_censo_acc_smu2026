@@ -3,6 +3,7 @@
    Derivada da identidade visual do Simpósio de Mobilidade Urbana
    ======================================== */
 
+/* Cores fixas da identidade do evento */
 :root {
   --smu-azul: #16233d;
   --smu-azul-claro: #2f4f7a;
@@ -10,16 +11,36 @@
   --smu-cinza: #6b7280;
 }
 
+/* Papéis de cor no tema claro. O tema escuro redefine só estes,
+   logo abaixo, de modo que nenhuma regra precisa ser duplicada. */
+:root {
+  --smu-titulo: var(--smu-azul);
+  --smu-link: var(--smu-azul-claro);
+  --smu-realce: var(--smu-dourado);
+  --smu-borda-cartao: rgba(22, 35, 61, 0.15);
+  --smu-fundo-cartao: rgba(22, 35, 61, 0.02);
+}
+
+/* Tema escuro. O Quarto marca o body com .quarto-dark quando o leitor
+   troca no botão da barra de navegação. */
+body.quarto-dark {
+  --smu-titulo: #cdd8e8;
+  --smu-link: #8fb3e0;
+  --smu-realce: #e2b155;
+  --smu-borda-cartao: rgba(205, 216, 232, 0.22);
+  --smu-fundo-cartao: rgba(205, 216, 232, 0.05);
+}
+
 a {
-  color: var(--smu-azul-claro);
+  color: var(--smu-link);
 }
 
 a:hover {
-  color: var(--smu-dourado);
+  color: var(--smu-realce);
 }
 
 h1, h2, h3, h4 {
-  color: var(--smu-azul);
+  color: var(--smu-titulo);
 }
 
 /* ========================================
@@ -172,7 +193,7 @@ table.table {
   font-size: 1.3em;
   line-height: 1.5;
   font-style: italic;
-  border-left: 4px solid var(--smu-dourado);
+  border-left: 4px solid var(--smu-realce);
   margin: 1.8em 0;
   padding: 0.3em 0 0.3em 1.3em;
 }
@@ -202,11 +223,11 @@ table.table {
 
 .instrutor {
   flex: 1 1 260px;
-  border: 1px solid rgba(22, 35, 61, 0.15);
-  border-top: 3px solid var(--smu-dourado);
+  border: 1px solid var(--smu-borda-cartao);
+  border-top: 3px solid var(--smu-realce);
   border-radius: 4px;
   padding: 1em 1.2em;
-  background: rgba(22, 35, 61, 0.02);
+  background: var(--smu-fundo-cartao);
 }
 
 .instrutor h3 {

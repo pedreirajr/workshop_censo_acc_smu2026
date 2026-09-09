@@ -31,8 +31,8 @@ book:
         - 2-recortes-territoriais.qmd
         - 3-agregados.qmd
         - 4-microdados.qmd
-        - 5-cnefe.qmd
-        - 6-grade-estatistica.qmd
+        - 5-grade-estatistica.qmd
+        - 6-cnefe.qmd
 
     - part: "PARTE 2: ACESSIBILIDADE URBANA"
       chapters:
@@ -45,7 +45,9 @@ book:
 
 format:
   html:
-    theme: cosmo
+    theme:
+      light: cosmo
+      dark: darkly
     css: custom.css
     number-sections: true
     toc: true
